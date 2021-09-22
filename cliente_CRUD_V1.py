@@ -45,9 +45,9 @@ def gera_response(status, nome_conteudo, conteudo, mensagem=False):
  #Query One
 @app.route("/pessoa/<id>", methods=["GET"])
 def seleciona_pessoa(id):
-   pessoa_carro = Pessoas.query.filter_by(id=id).first()
-   pessoa_carro = pessoa_carro.to_json()
-   return gera_response(200, "pessoa", pessoa_carro)
+   pessoa = Pessoas.query.filter_by(id=id).first()
+   pessoa = pessoa_carro.to_json()
+   return gera_response(200, "pessoa", pessoa)
 
 #Create
 @app.route("/pessoa", methods=["POST"])
