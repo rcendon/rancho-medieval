@@ -3,11 +3,17 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import json
 
+####################################################################################
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:121312@localhost:5432/funcionarios'
-db = SQLAlchemy(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://hkuxpjcwuldatj:8a0d2ed471b0e35e8aa4b8d123186db7c263dc22c6a49e33fc86578ea91bd660@ec2-44-195-201-3.compute-1.amazonaws.com:5432/dc60qmfkulhdc5'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://User:Password@Host:5432/Database'
+db = SQLAlchemy(app) #db recebe o app Flask para automatização.
 migrate = Migrate(app, db)
+
+######################### Modelo Funcionários ######################################
+
 
 class Funcionarios(db.Model):
    __tablename__ = 'funcionarios'
@@ -25,7 +31,9 @@ class Funcionarios(db.Model):
    def to_json(self):
        return{"funcionario_id": self.id, "nome": self.nome, "login": self.login, "rg": self.rg, "cpf": self.cpf,
        "email": self.email, "endereco": self.endereco, "senha": self.senha, "funcao":self.funcao}
-   
+
+####################################################################################
+
 #Query All
 @app.route("/funcionarios", methods = ["GET"])
 def seleciona_funcionarios():
@@ -42,12 +50,16 @@ def gera_response(status, nome_conteudo, conteudo, mensagem=False):
          body ["mensagem"] = mensagem
       return Response(json.dumps(body), status=status, mimetype="application/json")
 
+####################################################################################
+
 #Query One
 @app.route("/funcionario/<id>", methods=["GET"])
 def seleciona_funcionario(id):
    funcionario = Funcionarios.query.filter_by(id=id).first()
    funcionario_json = funcionario.to_json()
    return gera_response(200, "funcionario", funcionario_json)
+
+####################################################################################
 
 #Create
 @app.route("/funcionario", methods=["POST"])
@@ -64,8 +76,9 @@ def cria_funcionario():
       print(e)
       return gera_response(400, "cliente", {}, "Erro ao cadastrar")
 
-#Update
+####################################################################################
 
+#Update
 @app.route("/funcionario/<id>", methods=["PUT"])
 def atualiza(id):
    # usuario a ser modificado
@@ -91,7 +104,9 @@ def atualiza(id):
    except Exception as e:
       print(e)
       return gera_response(400, "funcionario", {}, "Erro ao atualizar")
-    
+
+####################################################################################
+
 #delete
 @app.route("/funcionario/<id>", methods=["DELETE"])
 def delete(id):
@@ -105,5 +120,7 @@ def delete(id):
    except Exception as e:
       print(e)
       return gera_response(400, "funcionario", {}, "Erro ao excluir")
+
+####################################################################################
 
 app.run(debug=True)

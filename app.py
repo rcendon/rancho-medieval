@@ -1,6 +1,21 @@
-#Servidor Flask
-#Teste Push Git
-################################################################################################
+
+#Não ensquecer de instalar os requerimentos:   
+#pip install flask
+#pip install flask_sqlalchemy
+#pip install flask_migrate
+#
+#
+#https://github.com/rcendon/rancho-medieval
+#
+#No Git Bash: https://git-scm.com/downloads
+#
+#git config --global user.name 
+#git config --global user.email 
+#git config --global github.token
+#git clone https://github.com/rcendon/rancho-medieval.git .
+#
+#
+################################   Servidor Flask    ###############################################
 
 #Importar o flask e do objeto Flask importar o render_template eo redirect 
 from flask import Flask, render_template, redirect 

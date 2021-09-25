@@ -1,16 +1,21 @@
-from flask import Flask, Response, request
+from flask import Flask, Response, request #Response = Classe de Retorno da API / request = Comunicação com o body (post)
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import json
 
+####################################################################################  
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:121312@localhost:5432/pessoas'
-db = SQLAlchemy(app)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://hkuxpjcwuldatj:8a0d2ed471b0e35e8aa4b8d123186db7c263dc22c6a49e33fc86578ea91bd660@ec2-44-195-201-3.compute-1.amazonaws.com:5432/dc60qmfkulhdc5'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://User:Password@Host:5432/Database'
+db = SQLAlchemy(app) #db recebe o app Flask para automatização.
 migrate = Migrate(app, db)
 
+################################ Modelo Pessoas ######################################
+
 class Pessoas(db.Model):
-   __tablename__ = 'pessoas'
+   __tablename__ = 'pessoas' 
     
    id = db.Column('pessoa_id', db.Integer, autoincrement=True, primary_key=True)
    nome = db.Column(db.VARCHAR(50), nullable=False, unique=True)
@@ -25,6 +30,7 @@ class Pessoas(db.Model):
       return{"pessoa_id": self.id, "nome": self.nome, "login": self.login, "rg": self.rg, "cpf":self.cpf, "tipo": self.tipo,
       "endereco": self.endereco, "senha": self.senha}
    
+####################################################################################
    
 #Query All
 @app.route("/pessoas", methods = ["GET"])
@@ -41,7 +47,9 @@ def gera_response(status, nome_conteudo, conteudo, mensagem=False):
       if mensagem:
          body ["mensagem"] = mensagem
       return Response(json.dumps(body), status=status, mimetype="application/json")  
- 
+
+####################################################################################
+  
  #Query One
 @app.route("/pessoa/<id>", methods=["GET"])
 def seleciona_pessoa(id):
@@ -63,9 +71,10 @@ def cria_pessoa():
    except Exception as e:
       print(e)
       return gera_response(400, "pessoa", {}, "Erro ao cadastrar")
+
+####################################################################################      
    
 #Update
-
 @app.route("/pessoa/<id>", methods=["PUT"])
 def atualiza_pessoa(id):
    # usuario a ser modificado
@@ -91,6 +100,8 @@ def atualiza_pessoa(id):
       print(e)
       return gera_response(400, "pessoa", {}, "Erro ao atualizar")
 
+####################################################################################      
+
 #delete
 @app.route("/pessoa/<id>", methods=["DELETE"])
 def delete_pessoa(id):
@@ -104,5 +115,7 @@ def delete_pessoa(id):
    except Exception as e:
       print(e)
       return gera_response(400, "pessoa", {}, "Erro ao excluir")
+
+####################################################################################      
 
 app.run(debug=True)
