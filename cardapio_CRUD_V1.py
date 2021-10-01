@@ -55,6 +55,8 @@ def seleciona_cardapio(id):
    cardapio = cardapio.to_json()
    return gera_response(200, "cardapio",cardapio )
 
+####################################################################################
+
 #Create
 @app.route("/cardapio", methods=["POST"])
 def cria_cardapio():

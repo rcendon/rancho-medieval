@@ -34,7 +34,7 @@ class Pessoas(db.Model):
 #Query All
 @app.route("/pessoas", methods = ["GET"])
 def seleciona_pessoas():
-   pessoas = Pessoas.query.all()
+   pessoas = Pessoas.query.all() #Select * from
    pessoas = [pessoas.to_json() for pessoa in pessoas]
   
    return gera_response(200, "pessoas", pessoas)
@@ -55,6 +55,8 @@ def seleciona_pessoa(id):
    pessoa = Pessoas.query.filter_by(id=id).first()
    pessoa = pessoa.to_json()
    return gera_response(200, "pessoa", pessoa)
+
+####################################################################################
 
 #Create
 @app.route("/pessoa", methods=["POST"])

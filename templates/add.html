@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro Cliente</title>
+    
+    <!--Importa os estilos da biblioteca bootstrap padrão--> 
+    <!--https://getbootstrap.com/--> 
+    <!--https://github.com/twbs/bootstrap/releases/download/v5.1.1/bootstrap-5.1.1-dist.zip--> 
+    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.css">
+
+</head>
+<body>
+
+    <h1 style="text-align:center;">Novo Cadastro</h1>
+    <!--#################   from ADD Cliente ################-->  
+    <!--nome, login, rg, cpf, tipo, senha-->     
+
+    <form action="/add" class="container" method="POST">  <!--###### POST #########-->  
+        <div class="row">
+            <div class="col-md-6">
+                <input type="text" name="nome" id="nome" placeholder="nome" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <input type="text" name="login" id="login" placeholder="login" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <input type="text" name="rg" id="rg" placeholder="rg" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <input type="text" name="cpf" id="cpf" placeholder="cpf" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <input type="text" name="tipo" id="tipo" placeholder="tipo" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <input type="text" name="senha" id="senha" placeholder="senha" class="form-control">
+            </div> 
+        </div>
+        <br>
+         <!--### Botão Enviar ###--> 
+        <div class="row col-xs-12">
+            <button type="submit" class="btn btn-block btn-success">Enviar</button>            
+        </div>
+    </form>
+
+    <!--###################################################-->  
+    
+</body>
+</html>

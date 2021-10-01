@@ -50,6 +50,8 @@ def seleciona_insumo(id):
    insumo = Insumos.query.filter_by(id=id).first()
    insumo = insumo.to_json()
    return gera_response(200, "insumo",insumo )
+   
+####################################################################################
 
 #Create
 @app.route("/insumo", methods=["POST"])

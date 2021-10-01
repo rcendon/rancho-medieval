@@ -27,14 +27,16 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://hkuxpjcwuldatj:8a0d2ed471b0e35e8aa4b8d123186db7c263dc22c6a49e33fc86578ea91bd660@ec2-44-195-201-3.compute-1.amazonaws.com:5432/dc60qmfkulhdc5'
 db = SQLAlchemy(app) #db recebe o app Flask para automatização.
 
-class Pessoas(db.Model):
+################################ Modelo Pessoas ######################################
+
+class Pessoas(db.Model): #Modelo Pessoas
    __tablename__ = 'pessoas' 
     
    id = db.Column(db.Integer, autoincrement=True, primary_key=True)
    nome = db.Column(db.VARCHAR(50))
    login = db.Column(db.VARCHAR(10))  
-   rg = db.Column(db.String(10), unique=True)
-   cpf = db.Column(db.String(12), unique=True)
+   rg = db.Column(db.String(10))
+   cpf = db.Column(db.String(12))
    tipo = db.Column(db.CHAR(1))
    #endereco = db.Column(db.Integer)
    senha = db.Column(db.VARCHAR(64))
@@ -48,11 +50,39 @@ class Pessoas(db.Model):
        #self.endereco = endereco
        self.senha = senha
 
+#######################################################################################
+
+#Create
+@app.route('/add', methods=['GET', 'POST'])
+def add():
+    if request.method == 'POST': #SE POST
+        pessoa = Pessoas(
+            request.form['nome'],
+            request.form['login'], 
+            request.form['rg'], 
+            request.form['cpf'], 
+            request.form['tipo'], 
+            request.form['senha'], )
+        db.session.add(pessoa) #Recebe os dados restornados do POST 
+        db.session.commit() #Salva os dados no banco 
+        return redirect(url_for('index')) #Se o metodo POST for OK retornar para o INDEX
+    return render_template('add.html') #ELSE mostra pagina ADD
+
+#######################################################################################
+
+#Update
+
+#######################################################################################
+
+#delete
+
+#######################################################################################
+
 #Rota para renderizar a pagina
 @app.route('/')
 #Função da Rota
 def index():
-    pessoas = Pessoas.query.all()
+    pessoas = Pessoas.query.all() #Select * from
     return render_template('index.html', pessoas=pessoas)
 
 #Para aumentar a segurança o app.run() só roda se ele estiver no arquivo principal 
