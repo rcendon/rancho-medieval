@@ -8,9 +8,10 @@
 #https://github.com/rcendon/rancho-medieval
 #
 #No Git Bash: https://git-scm.com/downloads
-
-#git config --global user.email 
-#git config --global github.token
+#
+#git config --global user.name SEU_USUARIO
+#git config --global user.email SEU_EMAIL
+#git config --global github.token SEU_TOKEN
 #git clone https://github.com/rcendon/rancho-medieval.git .
 #
 #

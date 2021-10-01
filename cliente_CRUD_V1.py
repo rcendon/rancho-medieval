@@ -17,18 +17,17 @@ migrate = Migrate(app, db)
 class Pessoas(db.Model):
    __tablename__ = 'pessoas' 
     
-   id = db.Column('pessoa_id',db.Integer, autoincrement=True, primary_key=True)
+   id = db.Column(db.Integer, autoincrement=True, primary_key=True)
    nome = db.Column(db.VARCHAR(50), nullable=False, unique=True)
    login = db.Column(db.VARCHAR(10), nullable=False)  
    rg = db.Column(db.String(10), nullable=True)
    cpf = db.Column(db.String(12), nullable=True)
    tipo = db.Column(db.CHAR)
-   endereco = db.Column(db.Integer)
+   #endereco = db.Column(db.Integer)
    senha = db.Column(db.VARCHAR(54), nullable=False)
 
    def to_json(self):
-      return{"pessoa_id": self.id, "nome": self.nome, "login": self.login, "rg": self.rg, "cpf":self.cpf, "tipo": self.tipo,
-      "endereco": self.endereco, "senha": self.senha}
+      return{"pessoa_id": self.id, "nome": self.nome, "login": self.login, "rg": self.rg, "cpf":self.cpf, "tipo": self.tipo, "senha": self.senha}
    
 ####################################################################################
    
@@ -89,7 +88,7 @@ def atualiza_pessoa(id):
       pessoa.rg = body["rg"]
       pessoa.cpf = body["cpf"]
       pessoa.tipo = body["tipo"]
-      pessoa.endereco = body["endereco"]
+      #pessoa.endereco = body["endereco"]
       pessoa.senha = body["senha"]
 
       db.session.add(pessoa)
