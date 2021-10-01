@@ -8,8 +8,8 @@ import json
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://hkuxpjcwuldatj:8a0d2ed471b0e35e8aa4b8d123186db7c263dc22c6a49e33fc86578ea91bd660@ec2-44-195-201-3.compute-1.amazonaws.com:5432/dc60qmfkulhdc5'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:8442@localhost:5432/pessoas'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://hkuxpjcwuldatj:8a0d2ed471b0e35e8aa4b8d123186db7c263dc22c6a49e33fc86578ea91bd660@ec2-44-195-201-3.compute-1.amazonaws.com:5432/dc60qmfkulhdc5'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:8442@localhost:5432/pessoas'
 db = SQLAlchemy(app) #db recebe o app Flask para automatização.
 migrate = Migrate(app, db)
 

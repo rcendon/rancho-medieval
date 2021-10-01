@@ -1,4 +1,4 @@
-from flask import Flask, Response, request #Response = Classe de Retorno da API / request = Comunicação com o body (post)
+from flask import Flask, render_template, Response, request,  redirect  #Response = Classe de Retorno da API / request = Comunicação com o body (post)
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import json
@@ -36,7 +36,7 @@ class Pessoas(db.Model):
 @app.route("/pessoas", methods = ["GET"])
 def seleciona_pessoas():
    pessoas = Pessoas.query.all()
-   pessoas = [pessoa.to_json() for pessoa in pessoas]
+   pessoas = [pessoas.to_json() for pessoa in pessoas]
   
    return gera_response(200, "pessoas", pessoas)
 
@@ -54,7 +54,7 @@ def gera_response(status, nome_conteudo, conteudo, mensagem=False):
 @app.route("/pessoa/<id>", methods=["GET"])
 def seleciona_pessoa(id):
    pessoa = Pessoas.query.filter_by(id=id).first()
-   pessoa = pessoa_carro.to_json()
+   pessoa = pessoa.to_json()
    return gera_response(200, "pessoa", pessoa)
 
 #Create
@@ -118,4 +118,14 @@ def delete_pessoa(id):
 
 ####################################################################################      
 
-app.run(debug=True)
+#Rota para renderizar a pagina
+@app.route('/')
+#Função da Rota
+def index():   
+    pessoas = Pessoas.query.all()
+    return render_template('clientes.html', pessoas=pessoas)
+
+#Para aumentar a segurança o app.run() só roda se ele estiver no arquivo principal 
+if __name__ == '__main__': 
+    app.run(debug=True) #Roda o aplicativo 
+    # Obs: debug=True Modo desenvolvedor para atualizar os templates automaticamente.

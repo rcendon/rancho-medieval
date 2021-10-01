@@ -1,4 +1,4 @@
-from flask import Flask, Response, request
+from flask import Flask, render_template, Response, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import json
@@ -123,4 +123,13 @@ def delete(id):
 
 ####################################################################################
 
-app.run(debug=True)
+#Rota para renderizar a pagina
+@app.route('/')
+#Função da Rota
+def index():
+    return render_template('index.html')
+
+#Para aumentar a segurança o app.run() só roda se ele estiver no arquivo principal 
+if __name__ == '__main__': 
+    app.run(debug=True) #Roda o aplicativo 
+    # Obs: debug=True Modo desenvolvedor para atualizar os templates automaticamente.
