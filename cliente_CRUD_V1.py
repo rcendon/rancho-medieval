@@ -17,7 +17,7 @@ migrate = Migrate(app, db)
 class Pessoas(db.Model):
    __tablename__ = 'pessoas' 
     
-   id = db.Column('pessoa_id', db.Integer, autoincrement=True, primary_key=True)
+   id = db.Column('pessoa_id',db.Integer, autoincrement=True, primary_key=True)
    nome = db.Column(db.VARCHAR(50), nullable=False, unique=True)
    login = db.Column(db.VARCHAR(10), nullable=False)  
    rg = db.Column(db.String(10), nullable=True)
@@ -123,7 +123,7 @@ def delete_pessoa(id):
 #Função da Rota
 def index():   
     pessoas = Pessoas.query.all()
-    return render_template('clientes.html', pessoas=pessoas)
+    return render_template('clientes.html')
 
 #Para aumentar a segurança o app.run() só roda se ele estiver no arquivo principal 
 if __name__ == '__main__': 

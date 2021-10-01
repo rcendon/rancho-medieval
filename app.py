@@ -3,13 +3,12 @@
 #pip install flask
 #pip install flask_sqlalchemy
 #pip install flask_migrate
-#
+#pip install psycopg2
 #
 #https://github.com/rcendon/rancho-medieval
 #
 #No Git Bash: https://git-scm.com/downloads
-#
-#git config --global user.name 
+
 #git config --global user.email 
 #git config --global github.token
 #git clone https://github.com/rcendon/rancho-medieval.git .
@@ -28,24 +27,24 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://hkuxpjcwuldatj:8a0d2ed471b
 db = SQLAlchemy(app) #db recebe o app Flask para automatização.
 
 class Pessoas(db.Model):
-   #__tablename__ = 'pessoas' 
+   __tablename__ = 'pessoas' 
     
-   id = db.Column('pessoa_id', db.Integer, autoincrement=True, primary_key=True)
-   nome = db.Column(db.VARCHAR(50), nullable=False, unique=True)
-   login = db.Column(db.VARCHAR(10), nullable=False)  
-   rg = db.Column(db.String(10), nullable=True)
-   cpf = db.Column(db.String(12), nullable=True)
-   tipo = db.Column(db.CHAR)
-   endereco = db.Column(db.Integer)
-   senha = db.Column(db.VARCHAR(54), nullable=False)
+   id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+   nome = db.Column(db.VARCHAR(50))
+   login = db.Column(db.VARCHAR(10))  
+   rg = db.Column(db.String(10), unique=True)
+   cpf = db.Column(db.String(12), unique=True)
+   tipo = db.Column(db.CHAR(1))
+   #endereco = db.Column(db.Integer)
+   senha = db.Column(db.VARCHAR(64))
 
-   def __init__(self, nome, login, rg, cpf, tipo, endereco, senha):
+   def __init__(self, nome, login, rg, cpf, tipo, senha):
        self.nome = nome
        self.login = login
        self.rg = rg
        self.cpf = cpf
        self.tipo = tipo
-       self.endereco = endereco
+       #self.endereco = endereco
        self.senha = senha
 
 #Rota para renderizar a pagina
@@ -56,8 +55,9 @@ def index():
     return render_template('index.html', pessoas=pessoas)
 
 #Para aumentar a segurança o app.run() só roda se ele estiver no arquivo principal 
-if __name__ == '__main__': 
-    app.run(debug=True) #Roda o aplicativo 
+#if __name__ == '__main__': 
+    #db.create_all()
+app.run(debug=True) #Roda o aplicativo 
     # Obs: debug=True Modo desenvolvedor para atualizar os templates automaticamente.
 
 ##################################################################################################
