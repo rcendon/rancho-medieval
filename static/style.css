@@ -118,13 +118,13 @@ html, body /*Aplica em todo o HTML e BODY os comandos abaixo*/
 /*Chama a section id="principal" para aplicar as configurações*/
 section#principal 
 {
-    /*background-image: url("./img/Foto_Fundo3.jpg"); */
-    /*background-repeat: no-repeat; /*não repdetir a imagem*/
-    /*background-size: cover; /*Imagem ocupar todo o espaço*/
-    /*background-attachment: fixed; /*Fixa a imagem*/
-    /*background-position: center;*/
-    /*width: 100%;*/
-    /*height: 100vh; /*Independentemente do tamanho da tela a imagem ira ocupar 100%*/
+    background-image: url("./img/Foto_Fundo3.jpg"); 
+    background-repeat: no-repeat; /*não repdetir a imagem*/
+    background-size: cover; /*Imagem ocupar todo o espaço*/
+    background-attachment: fixed; /*Fixa a imagem*/
+    background-position: center;
+    width: 100%;
+    height: 100vh; /*Independentemente do tamanho da tela a imagem ira ocupar 100%*/
 }
 
 /*Configurações do h2 da section principal do main - DIV Texto*/
@@ -259,6 +259,9 @@ i.menu-mobile
 
   /*###################################################################################*/
 
+  /*########### Configurações do menu cadastro cliente ##################################*/
 
 
+ /*###################################################################################*/
 
+    

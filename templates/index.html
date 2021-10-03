@@ -67,7 +67,7 @@
 
                 <li class="nav-item">
                     <!--Link do icone https://icons.getbootstrap.com/icons/house/-->
-                    <a class="nav-link active" aria-current="page" href="#"><i class="bi bi-house"></i> Home</a>
+                    <a class="nav-link active" aria-current="page" href="/"><i class="bi bi-house"></i> Home</a>
                 </li>
 
                 <li class="nav-item">
@@ -123,50 +123,32 @@
             <!--d-flex justify-content-center align-items-center... = Comandos do bootstrap-->
             <div class="col-md-5 d-flex justify-content-between align-items-baseline flex-column">                
                 <h2>Atendimento de Segunda à Domingo das 18h00 às 23h00</h2>                 
-            </div>  
-            
-            <!--########### Form Cadastro ################-->
-            <div class="container">
-                <div class="row">
-                    
-                 <!--### Botão ADD ###-->   
-                 <div class="col-xs-12">
-                    <a href="/add">Adicionar</a>  
-                 </div>   
-  
-                  <div class="col-xs-12"></div>
-                    <table class="table">
-                      <thead>
-                        <tr> 
-                          <th>nome</th>
-                          <th>rg</th>
-                          <th>cpf</th>                          
-                          <th>tipo</th>
-                          <th>login</th>
-                          <th>senha</th>                        
-                        </tr> 
-                      </thead>
-                      <tbody>
-                      {% for e in pessoas %} <!--For percorre toda tabela-->
-                        <tr>
-                          <td>{{e.nome}}</td>
-                          <td>{{e.rg}}</td>
-                          <td>{{e.cpf}}</td>                          
-                          <td>{{e.tipo}}</td>
-                          <td>{{e.login}}</td>
-                          <td>{{e.senha}}</td>
-                          <td>
-                            <a href="/edit/{{e.id}}">Editar</a> |
-                            <a href="/delete/{{e.id}}">Excluir</a>
-                          </td>
-                        </tr> 
-                      {% endfor %}    
-                      </tbody>
-                    </table>
+            </div>          
+          
+            <!--#### From Login ######################################-->
+            <!--https://getbootstrap.com.br/docs/4.1/components/forms/-->        
+            <form>
+                <div class="form-group col-md-6">
+                    <h1><font color="#ffffff">Olá, faça seu login</font></h1>
+                    <h4><font color="#ffffff">ou cadastre-se</font></h4>
                 </div>
-              </div>
-
-              <!--#####################################-->
+                <div class="form-group col-md-6">
+                  <label for="exampleInputEmail1"><font color="#ffffff">Endereço de email</font></label>
+                  <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Seu email">
+                  <small id="emailHelp" class="form-text text-muted"><font color="#ffffff">Nunca vamos compartilhar seu email, com ninguém.</font></small>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="exampleInputPassword1"><font color="#ffffff">Senha</font></label>
+                  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Senha">
+                </div>
+                <div class="form-group form-check col-md-6">
+                  <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                  <label class="form-check-label" for="exampleCheck1"><font color="#ffffff">Clique em mim</font></label>
+                </div>
+                <button type="submit" class="btn btn-primary">Entrar</button>           
+                <a class="btn btn-primary" href="/add">Cadastrar</a>                  
+            </form>
+             <!--#### FIM From Login ######################################-->
 
             <div class="col-md-7 d-flex justify-content-end align-items-end">                
                 <div id="arraste" class="d-flex align-items-center">

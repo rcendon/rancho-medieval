@@ -125,45 +125,48 @@
                 <h2>Atendimento de Segunda à Domingo das 18h00 às 23h00</h2>                 
             </div>  
             
-            <!--### Form Cadastro ###-->
+            <!--########### Form Cadastro ################-->
             <div class="container">
-              <div class="row">
-
-               <div class="col-xs-12">
-                  <a href="/add">Adicionar</a>  
-               </div>   
-
-                <div class="col-xs-12"></div>
-                  <table class="table">
-                    <thead>
-                      <tr> 
-                        <th>nome</th>
-                        <th>rg</th>
-                        <th>cpf</th>                        
-                        <th>tipo</th>
-                        <th>login</th>
-                        <th>senha</th>                        
-                      </tr> 
-                    </thead>
-                    <tbody>
-                    {% for e in pessoas %}
-                      <tr>
-                        <td>e.nome</td>
-                        <td>e.rg</td>
-                        <td>e.cpf</td>                        
-                        <td>e.tipo</td>
-                        <td>e.login</td>
-                        <td>e.senha</td>
-                        <td>
-                          <a href="/edit/{{e.id}}">Editar</a> |
-                          <a href="/delete/{{e.id}}">Excluir</a>
-                        </td>
-                      </tr> 
-                    {% endfor %}    
-                    </tbody>
-                  </table>
-              </div>
+                <div class="row">
+                    
+                 <!--### Botão ADD ###-->   
+                 <div class="col-xs-12">
+                    <a href="/add">Adicionar</a>  
+                 </div>   
+  
+                  <div class="col-xs-12"></div>
+                    <table class="table">
+                      <thead>
+                        <tr> 
+                          <th>nome</th>
+                          <th>rg</th>
+                          <th>cpf</th>                          
+                          <th>tipo</th>
+                          <th>login</th>
+                          <th>senha</th>                        
+                        </tr> 
+                      </thead>
+                      <tbody>
+                      {% for e in pessoas %} <!--For percorre toda tabela-->
+                        <tr>
+                          <td>{{e.nome}}</td>
+                          <td>{{e.rg}}</td>
+                          <td>{{e.cpf}}</td>                          
+                          <td>{{e.tipo}}</td>
+                          <td>{{e.login}}</td>
+                          <td>{{e.senha}}</td>
+                          <td>
+                            <a href="/edit/{{e.id}}">Editar</a> |
+                            <a href="/delete/{{e.id}}">Excluir</a>
+                          </td>
+                        </tr> 
+                      {% endfor %}    
+                      </tbody>
+                    </table>
+                </div>
             </div>
+
+              <!--#####################################-->
 
             <div class="col-md-7 d-flex justify-content-end align-items-end">                
                 <div id="arraste" class="d-flex align-items-center">
