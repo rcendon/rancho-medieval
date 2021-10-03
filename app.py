@@ -87,7 +87,7 @@ def index():
 
 #Para aumentar a segurança o app.run() só roda se ele estiver no arquivo principal 
 #if __name__ == '__main__': 
-    #db.create_all()
+db.create_all()
 app.run(debug=True) #Roda o aplicativo 
     # Obs: debug=True Modo desenvolvedor para atualizar os templates automaticamente.
 
