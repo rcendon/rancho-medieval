@@ -184,7 +184,46 @@
                     </table>
                 </div>
             </div>
-            <!--#####################################-->
+            <!--###############################################-->
+
+            <!--########### Form Lista Cardapio ###############-->
+            <div class="lista-cli">
+                <div class="row">   
+                  <div class="col-xs-12"></div>
+                    <table class="table">
+                      <thead>
+                        <tr> 
+                          <th>nome</th>
+                          <th>valor</th>                       
+                        </tr> 
+                      </thead>
+                      <tbody>
+                      {% for i in pessoas %} <!--For percorre toda tabela-->
+                        <tr>
+                          <td>{{i.nome}}</td>
+                          <td>{{i.valor}}</td>
+                          <td>
+                            <a href="/add/{{i.id_produto}}">Adicionar</a>
+                          </td>
+                          <td>
+                            <input type="button" name="mais" id="mais" value="+" />
+                            <input type="button" name="menos" id="menos" value="-" />
+                            <br />
+                            Quantidade: <input type="text" name="format" value="0" id="format" size="2" /> x 20,00                            
+                            <br /><br />
+                            Total: <input type="text" name="total" id="total" value="" />
+                          </td>
+                          <td>
+                            <img src="../static/img/ham.jpg" alt="some text" width=120 height=80>
+                          </td>
+                        </tr> 
+                      {% endfor %}    
+                      </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--################################################-->
+            
 
             <div class="col-md-7 d-flex justify-content-end align-items-end">                
                 <div id="arraste" class="d-flex align-items-center">
