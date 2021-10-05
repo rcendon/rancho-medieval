@@ -53,35 +53,8 @@ class Pessoas(db.Model): #Modelo Pessoas
        #self.endereco = endereco
        self.senha = senha
 
-########################################################################################################
-
-#Create Pessoas
-@app.route('/add', methods=['GET', 'POST'])
-def add():
-    if request.method == 'POST': #SE POST
-        pessoa = Pessoas(
-            request.form['nome'],
-            request.form['login'], 
-            request.form['rg'], 
-            request.form['cpf'], 
-            request.form['tipo'], 
-            request.form['senha'], )
-        db.session.add(pessoa) #Recebe os dados restornados do POST 
-        db.session.commit() #Salva os dados no banco 
-        return redirect(url_for('index')) #Se o metodo POST for OK retornar para o INDEX
-    return render_template('add.html') #ELSE mostra pagina ADD
-
-########################################################################################################
-
-#Update Pessoas
-
-########################################################################################################
-
-#Delete Pessoas 
-
 ############################### Fim Modelo Pessoas #####################################################
 ########################################################################################################
-
 
 
 ################################ Modelo Cardápio ########################################################
@@ -91,9 +64,9 @@ class Cardapio(db_cardapio.Model):
    __tablename__ = 'cardapio' 
     
    id_produto = db_cardapio.Column(db_cardapio.Integer, autoincrement=True, primary_key=True)
-   nome = db_cardapio.Column(db_cardapio.VARCHAR(50), nullable=False, unique=True)
-   quantidade_estoque_produto = db_cardapio.Column(db_cardapio.VARCHAR(10), nullable=False)
-   permite_estocagem = db_cardapio.Column(db.Boolean)
+   nome = db_cardapio.Column(db_cardapio.VARCHAR(50))
+   quantidade_estoque_produto = db_cardapio.Column(db.Integer)
+   permite_estocagem = db_cardapio.Column(db_cardapio.CHAR(1))
    valor = db_cardapio.Column(DOUBLE_PRECISION)
    
    def __init__(self, nome, quantidade_estoque_produto, permite_estocagem, valor):
@@ -105,16 +78,55 @@ class Cardapio(db_cardapio.Model):
 ############################### Fim Modelo Cardápio #####################################################
 ########################################################################################################
 
-#Rota para renderizar a pagina
-@app.route('/')
+
+########################################################################################################
+
+#Rota para renderizar a pagina INDEX.HTML
+@app.route('/') 
 #Função da Rota
 def index():
-    pessoas = Pessoas.query.all() #Select * from Pessoas
     cardapio = Cardapio.query.all() #Select * from Cardapio
+    return render_template('index.html', cardapio=cardapio)
 
-    return render_template('index.html', pessoas=pessoas, cardapio=cardapio)
+########################################################################################################
 
-    
+#Rota para renderizar a pagina ADD.HTML 
+@app.route('/addcliente', methods=['GET', 'POST'])
+
+###### Create Pessoas ######
+def add_pessoa():
+    pessoas = Pessoas.query.all() #Select * from Cardapio
+    if request.method == 'POST': #SE POST
+        pessoarequest = Pessoas(
+            request.form['nome'],
+            request.form['login'], 
+            request.form['rg'], 
+            request.form['cpf'], 
+            request.form['tipo'], 
+            request.form['senha'],)
+        db.session.add(pessoarequest) #Recebe os dados restornados do POST 
+        db.session.commit() #Salva os dados no banco 
+        return redirect(url_for('index')) #Se o metodo POST for OK retornar para o INDEX
+    return render_template('addcliente.html', pessoas=pessoas) #ELSE mostra pagina ADD
+
+########################################################################################################
+
+#Rota para renderizar a pagina ADDCARDAPIO.HTML 
+@app.route('/addcardapio', methods=['GET', 'POST'])
+
+###### Create Cardapio ######
+def add_cardapio():
+    cardapio = Cardapio.query.all() #Select * from Cardapio
+    if request.method == 'POST': #SE POST
+        cardapioRequest = Cardapio(
+            request.form['nome'],
+            request.form['quantidade_estoque_produto'],
+            request.form['permite_estocagem'],
+            request.form['valor'],)        
+        db.session.add(cardapioRequest) #Recebe os dados restornados do POST 
+        db.session.commit() #Salva os dados no banco 
+        return redirect(url_for('index')) #Se o metodo POST for OK retornar para o INDEX
+    return render_template('addcardapio.html') #ELSE mostra pagina ADD
 
 #Para aumentar a segurança o app.run() só roda se ele estiver no arquivo principal 
 #if __name__ == '__main__': 

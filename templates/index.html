@@ -72,7 +72,7 @@
 
                 <li class="nav-item">
                     <!--Link do icone https://icons.getbootstrap.com/icons/journal-text/-->
-                    <a class="nav-link" href="#cardapio"><i class="bi bi-journal-text"></i> Cardápio</a>
+                    <a class="nav-link" href="/addcardapio"><i class="bi bi-journal-text"></i> Cardápio</a>
                 </li>
 
                 <li class="nav-item">
@@ -146,45 +146,10 @@
                   <label class="form-check-label" for="exampleCheck1"><font color="#ffffff">Clique em mim</font></label>
                 </div>
                 <button type="submit" class="btn btn-primary">Entrar</button>           
-                <a class="btn btn-primary" href="/add">Cadastrar</a>                  
+                <a class="btn btn-primary" href="/addcliente">Cadastrar</a>                  
             </form>
              <!--#### FIM From Login ######################################-->
 
-            <!--########### Form Lista Cadastro ################-->
-            <div class="lista-cli">
-                <div class="row">   
-                  <div class="col-xs-12"></div>
-                    <table class="table">
-                      <thead>
-                        <tr> 
-                          <th>nome</th>
-                          <th>rg</th>
-                          <th>cpf</th>                          
-                          <th>tipo</th>
-                          <th>login</th>
-                          <th>senha</th>                        
-                        </tr> 
-                      </thead>
-                      <tbody>
-                      {% for e in pessoas %} <!--For percorre toda tabela-->
-                        <tr>
-                          <td>{{e.nome}}</td>
-                          <td>{{e.rg}}</td>
-                          <td>{{e.cpf}}</td>                          
-                          <td>{{e.tipo}}</td>
-                          <td>{{e.login}}</td>
-                          <td>{{e.senha}}</td>
-                          <td>
-                            <a href="/edit/{{e.id}}">Editar</a> |
-                            <a href="/delete/{{e.id}}">Excluir</a>
-                          </td>
-                        </tr> 
-                      {% endfor %}    
-                      </tbody>
-                    </table>
-                </div>
-            </div>
-            <!--###############################################-->
 
             <!--########### Form Lista Cardapio ###############-->
             <div class="lista-cli">
@@ -198,7 +163,7 @@
                         </tr> 
                       </thead>
                       <tbody>
-                      {% for i in pessoas %} <!--For percorre toda tabela-->
+                      {% for i in cardapio %} <!--For percorre toda tabela-->
                         <tr>
                           <td>{{i.nome}}</td>
                           <td>{{i.valor}}</td>

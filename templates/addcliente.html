@@ -127,7 +127,7 @@
               
             <!--#################   from ADD Cliente ################-->  
             <!--nome, login, rg, cpf, tipo, senha-->             
-            <form action="/add" class="form-group col-md-12" method="POST">  <!--###### POST #########-->                                     
+            <form action="/addcliente" class="form-group col-md-12" method="POST">  <!--###### POST #########-->                                     
 
                 <div class="form-group col-md-10">
                     <h1><font color="#ffffff">Novo Cadastro</font></h1>
@@ -164,6 +164,43 @@
                 </div>
             </form>
             <!--################# FIM from ADD Cliente ################--> 
+
+            <!--########### Form Lista Cadastro ################-->
+            <div class="lista-cli">
+                <div class="row">   
+                  <div class="col-xs-12"></div>
+                    <table class="table">
+                      <thead>
+                        <tr> 
+                          <th>nome</th>
+                          <th>rg</th>
+                          <th>cpf</th>                          
+                          <th>tipo</th>
+                          <th>login</th>
+                          <th>senha</th>                        
+                        </tr> 
+                      </thead>
+                      <tbody>
+                      {% for e in pessoas %} <!--For percorre toda tabela-->
+                        <tr>
+                          <td>{{e.nome}}</td>
+                          <td>{{e.rg}}</td>
+                          <td>{{e.cpf}}</td>                          
+                          <td>{{e.tipo}}</td>
+                          <td>{{e.login}}</td>
+                          <td>{{e.senha}}</td>
+                          <td>
+                            <a href="/edit/{{e.id}}">Editar</a> |
+                            <a href="/delete/{{e.id}}">Excluir</a>
+                          </td>
+                        </tr> 
+                      {% endfor %}    
+                      </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--###############################################-->            
+            
 
             <div class="col-md-7 d-flex justify-content-end align-items-end">                
                 <div id="arraste" class="d-flex align-items-center">
