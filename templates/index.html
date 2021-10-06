@@ -121,7 +121,7 @@
             <!--DIV texto-->
             <!--5 cinco Colunas para englobar o texto-->
             <!--d-flex justify-content-center align-items-center... = Comandos do bootstrap-->
-            <div class="col-md-5 d-flex justify-content-between align-items-baseline flex-column">                
+            <div class="form-group col-md-5 d-flex justify-content-between align-items-baseline flex-column">                
                 <h2>Atendimento de Segunda à Domingo das 18h00 às 23h00</h2>                 
             </div>          
           
@@ -145,12 +145,28 @@
                   <input type="checkbox" class="form-check-input" id="exampleCheck1">
                   <label class="form-check-label" for="exampleCheck1"><font color="#ffffff">Clique em mim</font></label>
                 </div>
-                <button type="submit" class="btn btn-primary">Entrar</button>           
-                <a class="btn btn-primary" href="/addcliente">Cadastrar</a>                  
+                <button type="submit" class="form-group btn btn-primary">Entrar</button>           
+                <a class="form-group btn btn-primary" href="/addcliente">Cadastrar</a>                  
             </form>
-             <!--#### FIM From Login ######################################-->
+             <!--#### FIM From Login ######################################-->            
 
+            <div class="form-group col-md-7 d-flex justify-content-end align-items-end">                
+                <div id="arraste" class="d-flex align-items-center">
+                    <i class="bi bi-person-circle text-white pe-2 fs-2" aria-hidden="true"></i>
+                    <a href="#minhaconta">Login</a>
+                </div>
 
+                <div id="arraste" class="d-flex align-items-center">
+                    <i class="bi bi-arrow-down text-white pe-2 fs-2" aria-hidden="true"></i>
+                    <a href="#cardapio">Arraste para mais</a>
+                </div>
+            </div>
+
+        </section>
+
+        <!--#### Seção Cardapio ######################################-->
+        <section id="cardapio" class="row m-0 p-0">
+            
             <!--########### Form Lista Cardapio ###############-->
             <div class="lista-cli">
                 <div class="row">   
@@ -187,22 +203,9 @@
                     </table>
                 </div>
             </div>
-            <!--################################################-->
-            
+            <!--################################################-->        
 
-            <div class="col-md-7 d-flex justify-content-end align-items-end">                
-                <div id="arraste" class="d-flex align-items-center">
-                    <i class="bi bi-person-circle text-white pe-2 fs-2" aria-hidden="true"></i>
-                    <a href="#minhaconta">Login</a>
-                </div>
-
-                <div id="arraste" class="d-flex align-items-center">
-                    <i class="bi bi-arrow-down text-white pe-2 fs-2" aria-hidden="true"></i>
-                    <a href="#cardapio">Arraste para mais</a>
-                </div>
-            </div>
-
-        </section>
+        </section>       
     </main>
 
     <!--#####################################################################################################################-->

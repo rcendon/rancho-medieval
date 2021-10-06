@@ -95,7 +95,7 @@ def index():
 
 ###### Create Pessoas ######
 def add_pessoa():
-    pessoas = Pessoas.query.all() #Select * from Cardapio
+    pessoas = Pessoas.query.all() #Select * from Pessoas
     if request.method == 'POST': #SE POST
         pessoarequest = Pessoas(
             request.form['nome'],
@@ -116,7 +116,7 @@ def add_pessoa():
 
 ###### Create Cardapio ######
 def add_cardapio():
-    cardapio = Cardapio.query.all() #Select * from Cardapio
+    #cardapio = Cardapio.query.all() #Select * from Cardapio
     if request.method == 'POST': #SE POST
         cardapioRequest = Cardapio(
             request.form['nome'],
@@ -127,6 +127,8 @@ def add_cardapio():
         db.session.commit() #Salva os dados no banco 
         return redirect(url_for('index')) #Se o metodo POST for OK retornar para o INDEX
     return render_template('addcardapio.html') #ELSE mostra pagina ADD
+
+########################################################################################################
 
 #Para aumentar a segurança o app.run() só roda se ele estiver no arquivo principal 
 #if __name__ == '__main__': 

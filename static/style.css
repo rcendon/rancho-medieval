@@ -144,32 +144,16 @@ section#principal div#arraste a {
     color: rgb(230, 230, 230);
 }
 
-
 /*Chama a section id="cardapio" para aplicar as configurações*/
 section#cardapio
 {
-    background-color: #343434;
-}
-
-/*Configurações da imagem do cardápio na seção cardapio*/
-section#cardapio img 
-{
-    margin: 15px auto; 
-    display: block;
-    width: 100%;
-    height: 100%;  
-}
-
-/*Chama a section id="minha" para aplicar as configurações*/
-section#minhaconta
-{
-    background-image: url("./img/Foto_Fundo3.jpg");
+    background-image: url("./img/Foto_Fundo3.jpg"); 
     background-repeat: no-repeat; /*não repdetir a imagem*/
     background-size: cover; /*Imagem ocupar todo o espaço*/
     background-attachment: fixed; /*Fixa a imagem*/
     background-position: center;
     width: 100%;
-    height: 100vh; /*Independentemente do tamanho da tela a imagem ira ocupar 100%*/    
+    height: 100vh; /*Independentemente do tamanho da tela a imagem ira ocupar 100%*/
 }
 
 /*###################################################################################*/
@@ -261,11 +245,24 @@ i.menu-mobile
 
   /*########### Configurações lista temporária dos clientes ###########################*/
 
-  .lista-cli {
+.lista-cli {
     background: #ffffff;
-    }
-
+    opacity: 0.85;    
+}  
 
  /*###################################################################################*/
 
-  
+.form-group {
+    animation: go-back 1s
+}
+
+/*########### Animação go-back ###########################*/
+
+@keyframes go-back {
+    from {
+      transform: translateX(100px);
+    }
+    to {
+      transform: translateX(0);
+    }
+  } 

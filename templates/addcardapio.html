@@ -121,16 +121,17 @@
             <!--DIV texto-->
             <!--5 cinco Colunas para englobar o texto-->
             <!--d-flex justify-content-center align-items-center... = Comandos do bootstrap-->
-            <div class="col-md-5 d-flex justify-content-between align-items-baseline flex-column">                
-                <h2>Atendimento de Segunda à Domingo das 18h00 às 23h00</h2>                 
+            
+            <div class="form-group">      
+                <h2>Bem Vindo</h2>          
+                <h1><font color="#ffffff">Cadastro de Produtos</font></h1>             
             </div>       
               
             <!--#################   from ADD Cliente ################-->  
             <!--nome, login, rg, cpf, tipo, senha-->             
-            <form action="/addcardapio" class="form-group col-md-12" method="POST">  <!--###### POST #########-->                                     
+            <form action="/addcardapio" method="POST">  <!--###### POST #########-->                                     
 
-                <div class="form-group col-md-10">
-                    <h1><font color="#ffffff">Cadastro de Produtos</font></h1>
+                <div class="form-group col-md-10">                 
                     
                     <div class="form-group col-md-6" >
                         <label for="exampleInputEmail1"><font color="#ffffff">Nome</font></label>
@@ -148,28 +149,16 @@
                         <label for="exampleInputEmail1"><font color="#ffffff">valor</font></label>
                         <input type="text" name="valor" id="valor" placeholder="valor" class="form-control">
                     </div>
+                    <br>
+                    <!--### Botão Enviar ###--> 
+                   <div class="form-group col-md-12">
+                       <button type="submit" class="btn btn-block btn-success">Enviar</button>            
+                   </div>
+                </div>
 
-                </div>
-                <br>
-                 <!--### Botão Enviar ###--> 
-                <div class="form-group col-md-12">
-                    <button type="submit" class="btn btn-block btn-success">Enviar</button>            
-                </div>
             </form>
-            <!--################# FIM from ADD Cliente ################-->           
-            
+            <!--################# FIM from ADD Cliente ################-->       
 
-            <div class="col-md-7 d-flex justify-content-end align-items-end">                
-                <div id="arraste" class="d-flex align-items-center">
-                    <i class="bi bi-person-circle text-white pe-2 fs-2" aria-hidden="true"></i>
-                    <a href="#minhaconta">Login</a>
-                </div>
-
-                <div id="arraste" class="d-flex align-items-center">
-                    <i class="bi bi-arrow-down text-white pe-2 fs-2" aria-hidden="true"></i>
-                    <a href="#cardapio">Arraste para mais</a>
-                </div>
-            </div>
 
         </section>
     </main>
