@@ -1,130 +1,14 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!--Importa os estilos da biblioteca bootstrap padrão--> 
-    <!--https://getbootstrap.com/--> 
-    <!--https://github.com/twbs/bootstrap/releases/download/v5.1.1/bootstrap-5.1.1-dist.zip--> 
-    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.css"> 
-    
-    <!--Busca os estilos CSS-->   
-    <link rel="stylesheet" href="../static/style.css">  
+{% extends "layouts.html" %}   
 
-     <!--Chama o Icone do Rancho na aba superior -->
-    <link rel="icon" type="image/png" href="../static/img/icone.png">
-
-    <!--Importa os estilos da biblioteca bootstrap icons CDN--> 
-    <!--https://icons.getbootstrap.com/--> 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-    
-    <title>Rancho Medieval</title>
-</head>
-<body>
-
-    <!--Botão do modo Mobile para motrar/ocultar menu bar-->
-    <!--Link do icone https://icons.getbootstrap.com/icons/list/-->
-    <i class="bi bi-list menu-mobile"></i> <!--class menu-mobile-->
-
-    <!--####################  Menu Lateral  #################################################################################-->
-
-    <!--Cria o menu lateral aside com id = header-->
-    <aside id='header'>
-
-        <!--####### Cria a seção profile Logo + Menu links horizontais ######-->
-        <section class="profile">
-            <!--Logo Rancho da section "profile"-->
-            <img src="../static/img/Logo_Colorido.png" alt="Rancho Medieval">
-
-            <h1>Bem Vindo</h1>
-
-            <!--Div Links redes sociais Menu horizontal - Icones do  https://icons.getbootstrap.com/-->
-            <div class="links-menu mt-4 text-center"> <!--mt-4 = margem / text-center = alinhar no centro-->
-
-                <a href="https://github.com/rcendon/rancho-medieval">
-                    <!--Link do icone https://icons.getbootstrap.com/icons/facebook/-->
-                    <i class="bi bi-facebook"></i>
-                </a>
-
-                <a href="https://github.com/rcendon/rancho-medieval">
-                    <!--Link do icone https://icons.getbootstrap.com/icons/instagram/-->
-                    <i class="bi bi-instagram"></i>
-                </a>
-
-                <a href="https://github.com/rcendon/rancho-medieval">
-                    <!--Link do icone https://icons.getbootstrap.com/icons/whatsapp/-->
-                    <i class="bi bi-whatsapp"></i>
-                </a>
-            </div>
-        </section>
-
-         <!--###### Cria a seção do navbar ######-->
-         <nav id='navbar' class="nav-bar">
-            <!--https://getbootstrap.com/docs/5.1/components/navs-tabs/--> 
-            <ul class="nav flex-column">
-
-                <li class="nav-item">
-                    <!--Link do icone https://icons.getbootstrap.com/icons/house/-->
-                    <a class="nav-link active" aria-current="page" href="/"><i class="bi bi-house"></i> Home</a>
-                </li>
-
-                <li class="nav-item">
-                    <!--Link do icone https://icons.getbootstrap.com/icons/journal-text/-->
-                    <a class="nav-link" href="/addcardapio"><i class="bi bi-journal-text"></i> Cardápio</a>
-                </li>
-
-                <li class="nav-item">
-                    <!--Link do icone https://icons.getbootstrap.com/icons/star/-->
-                    <a class="nav-link" href="#"><i class="bi bi-star"></i> Promoções</a>
-                </li>
-
-                <li class="nav-item">
-                    <!--Link do icone https://icons.getbootstrap.com/icons/cart4/-->
-                    <a class="nav-link" href="#"><i class="bi bi-cart4"></i> Meu Pedido</a>
-                </li>
-
-                <li class="nav-item">
-                    <!--Link do icone https://icons.getbootstrap.com/icons/person-circle/-->
-                    <a class="nav-link" href="#minhaconta"><i class="bi bi-person-circle"></i> Minha Conta</a>
-                </li>
-
-                <li class="nav-item">
-                    <!--Link do icone https://icons.getbootstrap.com/icons/map/-->
-                    <a class="nav-link" href="#"><i class="bi bi-map"></i> Área de Entrega</a>
-                </li>
-
-                <li class="nav-item">
-                    <!--Link do icone https://icons.getbootstrap.com/icons/gift/-->
-                    <a class="nav-link" href="#"><i class="bi bi-gift"></i> Programa de Fidelidade</a>
-                </li>
-
-                <li class="nav-item">
-                    <!--Link do icone https://icons.getbootstrap.com/icons/chat-left-text/-->
-                    <a class="nav-link" href="#"><i class="bi bi-chat-left-text"></i> Críticas e Sugestões</a>
-                </li>
-            </ul>
-         </nav>
-
-    </aside>
-
-    <!--#####################################################################################################################-->     
-    
-    <!--####################   Main   #######################################################################################-->    
-    
-    <!--Codigos da estrutura principal do página-->
-    <main id="main">
-         
-        <!--#### Seção principal ######################################-->
-        <section id="principal" class="row m-0 p-0"> <!-- class row = linha / m-0 = Tirar Margem / p-0 = Sem espaçamento-->            
+{% block content %}
+        
             <!--DIV texto-->
             <!--5 cinco Colunas para englobar o texto-->
             <!--d-flex justify-content-center align-items-center... = Comandos do bootstrap-->
             <div class="form-group col-md-5 d-flex justify-content-between align-items-baseline flex-column">                
                 <h2>Atendimento de Segunda à Domingo das 18h00 às 23h00</h2>                 
-            </div>          
-          
+            </div> 
+
             <!--#### From Login ######################################-->
             <!--https://getbootstrap.com.br/docs/4.1/components/forms/-->        
             <form>
@@ -160,61 +44,7 @@
                     <i class="bi bi-arrow-down text-white pe-2 fs-2" aria-hidden="true"></i>
                     <a href="#cardapio">Arraste para mais</a>
                 </div>
-            </div>
+            </div>  
+ 
 
-        </section>
-
-        <!--#### Seção Cardapio ######################################-->
-        <section id="cardapio" class="row m-0 p-0">
-            
-            <!--########### Form Lista Cardapio ###############-->
-            <div class="lista-cli">
-                <div class="row">   
-                  <div class="col-xs-12"></div>
-                    <table class="table">
-                      <thead>
-                        <tr> 
-                          <th>nome</th>
-                          <th>valor</th>                       
-                        </tr> 
-                      </thead>
-                      <tbody>
-                      {% for i in cardapio %} <!--For percorre toda tabela-->
-                        <tr>
-                          <td>{{i.nome}}</td>
-                          <td>{{i.valor}}</td>
-                          <td>
-                            <a href="/add/{{i.id_produto}}">Adicionar</a>
-                          </td>
-                          <td>
-                            <input type="button" name="mais" id="mais" value="+" />
-                            <input type="button" name="menos" id="menos" value="-" />
-                            <br />
-                            Quantidade: <input type="text" name="format" value="0" id="format" size="2" /> x 20,00                            
-                            <br /><br />
-                            Total: <input type="text" name="total" id="total" value="" />
-                          </td>
-                          <td>
-                            <img src="../static/img/ham.jpg" alt="some text" width=120 height=80>
-                          </td>
-                        </tr> 
-                      {% endfor %}    
-                      </tbody>
-                    </table>
-                </div>
-            </div>
-            <!--################################################-->        
-
-        </section>       
-    </main>
-
-    <!--#####################################################################################################################-->
-
-    <!--Imposta os Scripts JS da biblioteca bootstrap-->
-    <script src="../static/bootstrap/js/bootstrap.bundle.min.js"></script> 
-    
-    <!--Busca os Scripts JS-->
-    <script src="../static/script.js"></script> 
-
-</body>
-</html>
+{% endblock content %}
