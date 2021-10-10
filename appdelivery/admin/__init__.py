@@ -1,1 +1,1 @@
-#__init__.py do Admin.
+#__init__.py do admin.
