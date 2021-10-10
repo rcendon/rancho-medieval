@@ -1,5 +1,5 @@
 from flask import render_template, session, request, url_for 
-from loja import app, db #Importa a variaveis APP e DB do "__init__.py" = (loja).
+from appdelivery import app, db #Importa a variaveis APP e DB do "__init__.py" = (loja).
 
 ##################################################################################
 
