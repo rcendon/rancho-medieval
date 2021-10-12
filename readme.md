@@ -36,9 +36,13 @@ terativo.
 Não ensquecer de instalar os requerimentos:   
 pip install flask
 pip install flask_sqlalchemy
+
 pip install flask_migrate
+
 pip install psycopg2
+
 pip install flask-wtf
+pip install flask-bcrypt
 
 https://github.com/rcendon/rancho-medieval
 

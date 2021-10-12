@@ -2,52 +2,34 @@
 
 {% block content %}
 
-            <!--DIV texto-->
-            <!--5 cinco Colunas para englobar o texto-->
-            <!--d-flex justify-content-center align-items-center... = Comandos do bootstrap-->
-            <div class="form-group col-md-5 d-flex justify-content-between align-items-baseline flex-column">                
-                <h2>Atendimento de Segunda à Domingo das 18h00 às 23h00</h2>                 
-            </div>       
-              
-            <!--#################   from ADD Cliente ################-->  
-            <!--nome, login, rg, cpf, tipo, senha-->             
-            <form action="/addcliente" method="POST">  <!--###### POST #########-->                                     
+    <!--DIV texto-->
+    <!--5 cinco Colunas para englobar o texto-->
+    <!--d-flex justify-content-center align-items-center... = Comandos do bootstrap-->
+    <div class="form-group col-md-5 d-flex justify-content-between align-items-baseline flex-column">                
+        <h2>Atendimento de Segunda à Domingo das 18h00 às 23h00</h2>                 
+    </div>       
+        
+    <!--#################   from ADD Cliente ################-->  
+    <!--nome, login, rg, cpf, tipo, senha-->             
+                                    
+    <!--https://flask.palletsprojects.com/en/2.0.x/patterns/wtforms/ - Forms in Templates-->
+    <div>
+        {% from "_formhelpers.html" import render_field %}
+        <form class="form-group" method=post enctype="multipart/form-data" >
+            <div>
+                {{ render_field(form.nome, class="col-md-6") }}
+                {{ render_field(form.login, class="col-md-6") }}
+                {{ render_field(form.rg, class="col-md-6") }}
+                {{ render_field(form.tipo, class="col-md-6") }}
+                {{ render_field(form.senha, class="col-md-6") }}
+                {{ render_field(form.confirm, class="col-md-6") }}
+            </div>
+            <p><input type=submit value=Resgistrar class="btn btn-success"></p>
+        </form>
+    </div>
 
-                <div class="form-group col-md-10">
-                    <h1><font color="#ffffff">Novo Cadastro</font></h1>
-                    
-                    <div class="form-group col-md-6" >
-                        <label for="exampleInputEmail1"><font color="#ffffff">Nome</font></label>
-                        <input type="text" name="nome" id="nome" placeholder="Nome" class="form-control">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="exampleInputEmail1"><font color="#ffffff">Login</font></label>
-                        <input type="text" name="login" id="login" placeholder="Login" class="form-control">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="exampleInputEmail1"><font color="#ffffff">RG</font></label>
-                        <input type="text" name="rg" id="rg" placeholder="RG" class="form-control">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="exampleInputEmail1"><font color="#ffffff">CPF</font></label>
-                        <input type="text" name="cpf" id="cpf" placeholder="CPF" class="form-control">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="exampleInputEmail1"><font color="#ffffff">Tipo</font></label>
-                        <input type="text" name="tipo" id="tipo" placeholder="Tipo" class="form-control">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="exampleInputEmail1"><font color="#ffffff">Senha</font></label>
-                        <input type="password" name="senha" id="senha" placeholder="Senha" class="form-control">
-                    </div> 
-                </div>
-                <br>
-                 <!--### Botão Enviar ###--> 
-                <div class="form-group col-md-12">
-                    <button type="submit" class="btn btn-block btn-success">Enviar</button>            
-                </div>
-            </form>
-            <!--################# FIM from ADD Cliente ################--> 
+
+    <!--################# FIM from ADD Cliente ################--> 
 
 
 {% endblock content %}
