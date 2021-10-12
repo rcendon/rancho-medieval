@@ -1,4 +1,5 @@
-from flask import render_template, session, request, url_for 
+from flask import render_template, session, request, url_for
+from flask.helpers import flash 
 from appdelivery import app, db #Importa a variaveis APP e DB do "__init__.py" = (loja).
 
 ##################################################################################
@@ -6,7 +7,7 @@ from appdelivery import app, db #Importa a variaveis APP e DB do "__init__.py" =
 #Rota Home
 @app.route('/')
 
-def home():
+def home(): 
     return render_template('index.html')
 
 ##################################################################################    

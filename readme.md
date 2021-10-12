@@ -31,3 +31,21 @@ seu ciclo de vida.
 Nesse esteio, o sistema foi implementado como um site (web app) in-  
 terativo.
 
+### Observações 
+
+Não ensquecer de instalar os requerimentos:   
+pip install flask
+pip install flask_sqlalchemy
+pip install flask_migrate
+pip install psycopg2
+pip install flask-wtf
+
+https://github.com/rcendon/rancho-medieval
+
+#No Git Bash: https://git-scm.com/downloads
+
+#git config --global user.name SEU_USUARIO
+#git config --global user.email SEU_EMAIL
+#git config --global github.token SEU_TOKEN
+#git clone https://github.com/rcendon/rancho-medieval.git .
+

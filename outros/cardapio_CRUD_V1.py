@@ -2,14 +2,20 @@ from flask import Flask, Response, request  #Response = Classe de Retorno da API
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy.dialects.postgresql import DOUBLE_PRECISION
+
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 import os
+
 import json
 
 ####################################################################################  
+#IMG
+
 UPLOAD_FOLDER = 'static/uploads/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
+####################################################################################
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -20,7 +26,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:8442@localhost:54
 db = SQLAlchemy(app) #db recebe o app Flask para automatização.
 migrate = Migrate(app, db)
 
-################################ Modelo Pessoas ######################################
+############################# Upload Imagem ##########################################
+
 def allowed_file(filename):
    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -45,6 +52,8 @@ def excluir_imagem(caminho_antigo_imagem):
 
    if caminho_antigo_imagem != os.path.join(app.config['UPLOAD_FOLDER'], "default.jpg"):
       os.remove(caminho_antigo_imagem)
+
+################################ Modelo Cardapio ######################################
 
 class Cardapio(db.Model):
    __tablename__ = 'cardapio' 
@@ -80,7 +89,7 @@ def seleciona_cardapios():
 def gera_response(status, nome_conteudo, conteudo, mensagem=False):
       body = {}
       body[nome_conteudo] = conteudo
-
+      
       if mensagem:
          body ["mensagem"] = mensagem
       return Response(json.dumps(body), status=status, mimetype="application/json")  
@@ -101,9 +110,12 @@ def seleciona_cardapio(id):
 def cria_cardapio():
    body = request.form.to_dict()
    try:
+
+      #### IMG ####################################################################
       imagem = os.path.join(app.config['UPLOAD_FOLDER'], "default.jpg")
       if len(request.files) > 0:
          imagem = salvar_imagem(request.files['imagem'])
+      #############################################################################
 
       cardapio = Cardapio(nome=body["nome"], 
                           quantidade_estoque_produto=int(body["quantidade_estoque_produto"]), 
@@ -125,6 +137,8 @@ def cria_cardapio():
 #Update
 @app.route("/cardapio/<id>", methods=["PUT"])
 def atualiza_cardapio(id):
+
+   #### IMG #######################################
    # usuario a ser modificado
    cardapio = Cardapio.query.filter_by(id_produto=id).first()
    caminho_imagem_antiga = cardapio.imagem
@@ -134,7 +148,8 @@ def atualiza_cardapio(id):
       imagem_nova = request.files['imagem']
    else:
       imagem_nova = "default.jpg"
-   
+   ###############################################
+
    try:
       
       cardapio.nome = body["nome"]
@@ -142,13 +157,14 @@ def atualiza_cardapio(id):
       cardapio.permite_estocagem = body["permite_estocagem"]
       cardapio.valor = float(body["valor"])
 
+      #### IMG #######################################
       if imagem_nova == "default.jpg":
          excluir_imagem(caminho_imagem_antiga)
          cardapio.imagem = os.path.join(app.config['UPLOAD_FOLDER'], imagem_nova)
       else:
          if caminho_imagem_antiga != os.path.join(app.config['UPLOAD_FOLDER'], imagem_nova.filename):
             cardapio.imagem = atualizar_imagem(caminho_imagem_antiga, imagem_nova)
-
+      ###############################################
 
       db.session.add(cardapio)
       db.session.commit()
