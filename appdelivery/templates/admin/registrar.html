@@ -15,14 +15,14 @@
     <!--https://flask.palletsprojects.com/en/2.0.x/patterns/wtforms/ - Forms in Templates-->
     <div>
         {% from "_formhelpers.html" import render_field %}
-        <form class="form-group" method=post enctype="multipart/form-data" >
+        <form class="form-group" method=POST enctype="multipart/form-data" >
             <div>
                 {{ render_field(form.nome, class="col-md-6") }}
                 {{ render_field(form.login, class="col-md-6") }}
                 {{ render_field(form.rg, class="col-md-6") }}
+                {{ render_field(form.cpf, class="col-md-6") }}
                 {{ render_field(form.tipo, class="col-md-6") }}
-                {{ render_field(form.senha, class="col-md-6") }}
-                {{ render_field(form.confirm, class="col-md-6") }}
+                {{ render_field(form.senha, class="col-md-6") }}              
             </div>
             <p><input type=submit value=Resgistrar class="btn btn-success"></p>
         </form>

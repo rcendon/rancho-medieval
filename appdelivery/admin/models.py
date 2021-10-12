@@ -8,6 +8,8 @@ from appdelivery import db
 ###########self.endereco = endereco
 #self.senha = senha
 
+################################ Modelo Pessoas ##################################################
+
 #https://flask-sqlalchemy.palletsprojects.com/en/2.x/quickstart/
 
 class User(db.Model):
@@ -22,5 +24,15 @@ class User(db.Model):
     #endereco = db.Column(db.Integer)
     senha = db.Column(db.VARCHAR(64))
 
-    def __repr__(self):
-        return '<User %r>' % self.username
+    def __init__(self, nome, login, rg, cpf, tipo, senha):
+       self.nome = nome
+       self.login = login
+       self.rg = rg
+       self.cpf = cpf
+       self.tipo = tipo
+       #self.endereco = endereco
+       self.senha = senha
+
+db.create_all()
+
+################################ FIM Modelo Pessoas ##################################################

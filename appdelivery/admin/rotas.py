@@ -34,14 +34,14 @@ def registrar():
     if request.method == 'POST' and form.validate():
         hash_password = bcrypt.generate_password_hash(form.senha.data)
 
-        user = User(nome=form.nome.data, login=form.login.data, rg=form.rg.data,cpf=form.cpf.data, 
+        user = User(nome=form.nome.data,login=form.login.data,rg=form.rg.data,cpf=form.cpf.data, 
         tipo=form.tipo.data, senha=hash_password)
 
-        db.add(user)
-        
+        db.session.add(user)
+        db.session.commit() #Salva os dados no banco 
         flash('Obrigado pelo registro')
         
-        return redirect(url_for('login'))
+        return redirect(url_for('home'))
     return render_template('admin/registrar.html', form=form)
 
 ###################################################################################
