@@ -119,6 +119,18 @@
         <!--#### Seção principal ######################################-->
         <section id="principal" class="row m-0 p-0"> <!-- class row = linha / m-0 = Tirar Margem / p-0 = Sem espaçamento-->            
             
+            <!--#### Menssagem Flash ######################################--> 
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class=flashes>
+                {% for category, message in messages %}
+                <li class="alert alert-{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+            {% endwith %}   
+            <!--##########################################################--> 
+            
             <!--######## Bloco de códigos ################################-->
             {% block content %}
 

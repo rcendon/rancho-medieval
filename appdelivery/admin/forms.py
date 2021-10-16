@@ -1,22 +1,29 @@
 from wtforms import Form, BooleanField, StringField, PasswordField, validators
 
 #self.nome = nome
-#self.login = login
+#self.email = email
+#self.telefone = telefone
 #self.rg = rg
 #self.cpf = cpf
-#self.tipo = tipo
-###########self.endereco = endereco
+#self.endereco = endereco
 #self.senha = senha
 
 #https://flask.palletsprojects.com/en/2.0.x/patterns/wtforms/ - The Forms
 
+######################### Classe Form Cadastro ##################################################
+
 class RegistrationForm(Form):
     nome = StringField('Nome', [validators.Length(min=4, max=25)])
-    login = StringField('Login', [validators.Length(min=2, max=35)])
+    email = StringField('E-mail', [validators.Length(min=2, max=35)])
+    telefone = StringField('Telefone', [validators.Length(min=2, max=35)])
     rg = StringField('RG', [validators.Length(min=2, max=35)])
     cpf = StringField('CPF', [validators.Length(min=2, max=35)])
-    tipo = StringField('Tipo', [validators.Length(min=2, max=35)])      
+    endereco = StringField('Endereco', [validators.Length(min=2, max=35)])      
     senha = PasswordField('Senha', [validators.Length(min=2, max=35)]) 
    
-    #accept_tos = BooleanField('I accept the TOS', [validators.DataRequired()])
+    
+######################### Classe Form Login ##################################################
 
+class LoginFormulario(Form):    
+    email = StringField('E-mail', [validators.Length(min=2, max=35)])      
+    senha = PasswordField('Senha', [validators.Length(min=2, max=35)]) 
