@@ -4,10 +4,12 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from os import getenv
+from dotenv import load_dotenv
 
 #Construir APP - app recebe o objeto Flask (Instância do objeto Flask)
 app = Flask(__name__)
 
+load_dotenv() # carrega as variáveis de ambiente para o getenv localizá-las
 
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://hkuxpjcwuldatj:8a0d2ed471b0e35e8aa4b8d123186db7c263dc22c6a49e33fc86578ea91bd660@ec2-44-195-201-3.compute-1.amazonaws.com:5432/dc60qmfkulhdc5'
 app.config['SQLALCHEMY_DATABASE_URI'] = getenv('database_URI') #'sqlite:///bancolocal.db' , deve ser colocado no arquivo .env
@@ -22,3 +24,4 @@ from appdelivery.admin import rotas #Importa da pasta appdelivery/admin o arquiv
 from appdelivery.produtos import rotas #Importa da pasta appdelivery/produtos o arquivo rotas.py
 from appdelivery.clientes import rotas #Importa da pasta appdelivery/clientes o arquivo rotas.py
 from appdelivery.diversos import rotas #Importa da pasta appdelivery/diversos o arquivo rotas.py
+from appdelivery.erros import rotas #Importa da pasta appdelivery/erros o arquivo rotas.py
