@@ -33,7 +33,7 @@ class User(db.Model):
        self.endereco = endereco
        self.senha = senha
 
-db.create_all()
+#db.create_all()
 
 ################################ FIM Modelo Pessoas ##################################################
 
@@ -53,5 +53,5 @@ class Produtos(db.Model):
        self.quantidade_estoque = quantidade_estoque
        self.valor = valor
 
-db.create_all()
+#db.create_all()
 ############################### Fim Modelo Cardápio #####################################################

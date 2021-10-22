@@ -33,6 +33,6 @@ class UserCli(db.Model):
        self.endereco = endereco
        self.senha = senha
 
-db.create_all()
+#db.create_all()
 
 ################################ FIM Modelo Pessoas ##################################################

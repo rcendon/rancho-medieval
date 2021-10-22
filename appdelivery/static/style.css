@@ -302,3 +302,20 @@ i.menu-mobile
     position:absolute;
 }
 
+
+/*###################################################################################*/
+
+/*########### Configurações dos formulários da página de pagamentos #################*/
+
+.pagamento {
+    background: linear-gradient(90deg, rgb(141, 189, 130) 0%, rgb(105, 105, 155) 75%, rgb(43, 104, 213) 100%);
+    opacity: 0.8;
+}
+
+.opcoes {
+    opacity: 1.0;
+}
+
+.h2 {
+    font-size: 1.2rem;
+}
