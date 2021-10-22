@@ -3,13 +3,17 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+from os import getenv
 
 #Construir APP - app recebe o objeto Flask (Instância do objeto Flask)
 app = Flask(__name__)
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://hkuxpjcwuldatj:8a0d2ed471b0e35e8aa4b8d123186db7c263dc22c6a49e33fc86578ea91bd660@ec2-44-195-201-3.compute-1.amazonaws.com:5432/dc60qmfkulhdc5'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bancolocal.db'
 
-app.config['SECRET_KEY']='1234' #Chave para criptografar senha
+
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://hkuxpjcwuldatj:8a0d2ed471b0e35e8aa4b8d123186db7c263dc22c6a49e33fc86578ea91bd660@ec2-44-195-201-3.compute-1.amazonaws.com:5432/dc60qmfkulhdc5'
+app.config['SQLALCHEMY_DATABASE_URI'] = getenv('database_URI') #'sqlite:///bancolocal.db' , deve ser colocado no arquivo .env
+
+app.config['SECRET_KEY']= getenv('secret_key') # '1234' Chave para criptografar senha, deve ser colocada no arquivo .env
+
 db = SQLAlchemy(app) #db recebe o app Flask para automatização.
 
 bcrypt = Bcrypt(app)
