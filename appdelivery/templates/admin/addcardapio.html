@@ -1,0 +1,44 @@
+{% extends "layoutsadmlog.html" %}   
+
+{% block content %} 
+    
+    <!--DIV texto-->
+    <!--5 cinco Colunas para englobar o texto-->
+    <!--d-flex justify-content-center align-items-center... = Comandos do bootstrap-->
+    <div class="form-group col-md-5 d-flex justify-content-between align-items-baseline flex-column">                
+        <h2>Atendimento de Segunda à Domingo das 18h00 às 23h00</h2>                 
+    </div>       
+        
+    <!--#################   from ADD Cliente ################-->  
+    <!--nome, email, telefone, rg, cpf, endereço, senha-->     
+                                     
+    <!--https://flask.palletsprojects.com/en/2.0.x/patterns/wtforms/ - Forms in Templates-->
+    <div>
+        
+        <form method="POST" enctype="multipart/form-data" >
+            <div class="form-group col-md-10">
+                <h1><font color="#ffffff">Novo Cadastro</font></h1>
+                
+                <div class="form-group col-md-6" >
+                    <label for="exampleInputEmail1"><font color="#ffffff">Nome</font></label>
+                    <input type="text" name="nome" id="nome" placeholder="Nome" class="form-control">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="exampleInputEmail1"><font color="#ffffff">Quantidade Estoque</font></label>
+                    <input type="text" name="quantidade_estoque" id="quantidade_estoque" placeholder="quantidade_estoque" class="form-control">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="exampleInputEmail1"><font color="#ffffff">Valor</font></label>
+                    <input type="text" name="valor" id="valor" placeholder="valor" class="form-control">
+                </div>
+            </div>
+            <br>
+            <a class="form-group btn btn-primary" href="/usuario">Voltar</a>      
+            <input type=submit value=Resgistrar class="form-group btn btn-success">           
+        </form>
+    </div>
+
+    <!--################# FIM from ADD Cliente ################--> 
+
+{% endblock content %}          
+            

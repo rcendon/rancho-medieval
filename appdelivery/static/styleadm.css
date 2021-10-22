@@ -24,7 +24,7 @@ html, body /*Aplica em todo o HTML e BODY os comandos abaixo*/
     top: 0; /*header preso no topo*/
     left: 0; /*header preso na esquerda*/
     bottom: 0; /*header preso em baixo*/
-    background: rgb(0, 0, 0); /*Fundo do menu aside header*/
+    background: rgb(34, 34, 34); /*Fundo do menu aside header*/
     overflow-y: auto; /*Gera automaticamente o scrol vertical do menu*/
     width: 300px; /*Largura do menu*/
     transition: all ease-in-out 0.5s; /*Transição da ocultação e aparecimento do menu*/
@@ -118,7 +118,7 @@ html, body /*Aplica em todo o HTML e BODY os comandos abaixo*/
 /*Chama a section id="principal" para aplicar as configurações*/
 section#principal 
 {
-    background-image: url("./img/Foto_Fundo3.jpg"); 
+    background-image: url("./img/Foto_Fundo.jpg"); 
     background-repeat: no-repeat; /*não repdetir a imagem*/
     background-size: cover; /*Imagem ocupar todo o espaço*/
     background-attachment: fixed; /*Fixa a imagem*/
@@ -147,7 +147,7 @@ section#principal div#arraste a {
 /*Chama a section id="cardapio" para aplicar as configurações*/
 section#cardapio
 {
-    background-image: url("./img/Foto_Fundo3.jpg"); 
+    background-image: url("./img/Foto_Fundo.jpg"); 
     background-repeat: no-repeat; /*não repdetir a imagem*/
     background-size: cover; /*Imagem ocupar todo o espaço*/
     background-attachment: fixed; /*Fixa a imagem*/
@@ -266,39 +266,3 @@ i.menu-mobile
       transform: translateX(0);
     }
   } 
-
-/*########### Tamanho Objetos ###########################*/
-
-.pequeno {
-    width: 20%;
-}
-
-.medio {
-    width: 30%;    
-    height: 30%;
-    justify-content: center;
-    align-items: center;
-    font-size: 35px;
-}
-
-.grande {
-    width: 80%;
-}
-
-/*########### Maps ###########################*/
-
-.map-responsive{
-    overflow:hidden;
-    padding-bottom:56.25%;
-    position:relative;
-    height:0;
-}
-
-.map-responsive iframe{
-    left:0;
-    top:0;
-    height:100%;
-    width:100%;
-    position:absolute;
-}
-

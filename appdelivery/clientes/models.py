@@ -12,8 +12,8 @@ from appdelivery import db
 
 #https://flask-sqlalchemy.palletsprojects.com/en/2.x/quickstart/
 
-class User(db.Model):
-    __tablename__ = 'usuariosinternos' 
+class UserCli(db.Model):
+    __tablename__ = 'clientes' 
         
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     nome = db.Column(db.VARCHAR(50))
@@ -36,22 +36,3 @@ class User(db.Model):
 db.create_all()
 
 ################################ FIM Modelo Pessoas ##################################################
-
-################################ Modelo Cardápio ########################################################
-
-class Produtos(db.Model):
-   __tablename__ = 'cardapio' 
-    
-   id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-   nome = db.Column(db.VARCHAR(40))
-   quantidade_estoque = db.Column(db.Integer)
-   valor = db.Column(db.Integer)
-   #Upload Imagem
-   
-   def __init__(self, nome, quantidade_estoque, valor):
-       self.nome = nome
-       self.quantidade_estoque = quantidade_estoque
-       self.valor = valor
-
-db.create_all()
-############################### Fim Modelo Cardápio #####################################################

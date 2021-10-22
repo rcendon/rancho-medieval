@@ -14,4 +14,7 @@ db = SQLAlchemy(app) #db recebe o app Flask para automatização.
 
 bcrypt = Bcrypt(app)
 
-from appdelivery.admin import rotas #Importa da pasta appdelivery/admin a arquivo rotas.py
+from appdelivery.admin import rotas #Importa da pasta appdelivery/admin o arquivo rotas.py
+from appdelivery.produtos import rotas #Importa da pasta appdelivery/produtos o arquivo rotas.py
+from appdelivery.clientes import rotas #Importa da pasta appdelivery/clientes o arquivo rotas.py
+from appdelivery.diversos import rotas #Importa da pasta appdelivery/diversos o arquivo rotas.py

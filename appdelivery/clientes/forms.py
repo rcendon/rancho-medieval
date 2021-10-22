@@ -1,4 +1,4 @@
-######## USUÁRIOS INTERNOS ########
+##### CLIENTES ########
 
 from wtforms import Form, BooleanField, StringField, PasswordField, validators
 
@@ -14,7 +14,7 @@ from wtforms import Form, BooleanField, StringField, PasswordField, validators
 
 ######################### Classe Form Cadastro ##################################################
 
-class RegistrationForm(Form):
+class RegistrationFormCli(Form):
     nome = StringField('Nome', [validators.Length(min=4, max=25)])
     email = StringField('E-mail', [validators.Length(min=2, max=35)])
     telefone = StringField('Telefone', [validators.Length(min=2, max=35)])
@@ -26,19 +26,6 @@ class RegistrationForm(Form):
     
 ######################### Classe Form Login ##################################################
 
-class LoginFormulario(Form):    
-    cpf = StringField('CPF', [validators.Length(min=2, max=35)])      
+class LoginFormularioCli(Form):    
+    email = StringField('E-mail', [validators.Length(min=2, max=35)])      
     senha = PasswordField('Senha', [validators.Length(min=2, max=35)]) 
-
-
-######################### Classe Form Login ##################################################
-
-#self.nome = nome
-#self.quantidade_estoque = quantidade_estoque
-#self.valor = valor
-
-class CadastroProdutos(Form):    
-    nome = StringField('Nome', [validators.Length(min=2, max=35)])      
-    quantidade_estoque = StringField('Quantidade Estoque', [validators.Length(min=1, max=10)]) 
-    valor = StringField('Valor', [validators.Length(min=1, max=35)]) 
-    #Upload Imagem

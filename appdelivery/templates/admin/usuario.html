@@ -1,0 +1,27 @@
+{% extends "layoutsadmlog.html" %}   
+
+{% block content %}  
+ <!--DIV texto-->
+  <!--5 cinco Colunas para englobar o texto-->
+  <!--d-flex justify-content-center align-items-center... = Comandos do bootstrap-->
+ 
+  <div class="form-group col-md-5 d-flex justify-content-between align-items-baseline flex-column">                
+    <h2>Painel Administrativo</h2>        
+  </div> 
+  
+  <form>
+    <div class="form-group col-md-6">
+      <a class="form-group btn btn-primary" href="/addcardapio">Adicionar Produtos</a>    
+    </div>
+    <br>
+    <div class="form-group col-md-6">
+      <a class="form-group btn btn-primary" href="/registrar">Cadastrar Usuarios</a>    
+    </div>
+    <br>
+    <div class="form-group col-md-6">
+      <a class="form-group btn btn-primary" href="/addcardapio">Pedidos</a>    
+    </div>
+    <br>   
+</form>     
+
+{% endblock content %}
