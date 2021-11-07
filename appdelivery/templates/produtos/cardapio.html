@@ -7,6 +7,46 @@
   <!--d-flex justify-content-center align-items-center... = Comandos do bootstrap-->
   <div class="form-group col-md-5 d-flex justify-content-between align-items-baseline flex-column">                
       <h2>Cardápio</h2>                      
-  </div>       
+  </div>
+  
+  <!--########### Form Lista Cardapio ###############-->
+
+ <div class="lista-cli">
+    <div class="row">
+      <div class="col-xs-12"></div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Preço</th>
+              <th>Igredientes</th>
+              <th>Carrinho</th>
+              <th>Foto Ilustrativa</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for i in cardapio %} <!--For percorre toda tabela-->
+            <tr>
+              <td>{{i.nome}}</td>
+              <td>{{i.valor}}</td>
+              <td>{{i.descricao}}</td>
+              <td onload="define_quantidade_produto('{{ i.nome }}', '{{ i.id }}')">
+                <!-- <a href="/add/{{i.id_produto}}">Adicionar</a> -->
+                  <p name="{{ i.nome }}" id="{{ i.id }}" onload=""></p>
+                  <button style="display: inline" onclick="adiciona_produto_carrinho('{{ i.nome }}', '{{ i.id }}')">+</button>
+                  <button style="display: inline" onclick="remove_item_carrinho('{{ i.nome }}', '{{ i.id }}')">-</button>
+              </td>
+              <td>
+                <img src="/static/img/ham.jpg" alt="Imagem do Produto" id="container-da-imagem">
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+    </div>
+</div>
+    <a href="/pagamento"><button>Fazer um pedido</button></a>
+<!--################################################-->
+
 
 {% endblock content %}

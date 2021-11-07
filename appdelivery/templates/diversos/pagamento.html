@@ -2,24 +2,36 @@
 
 {% block content %}
 
+    <h1>Falta pouco para finalizar seu pedido!</h1>
 
-    <h1>Pagamento</h1>
+    <p>Para finalizar seu pedido, por favor indique o endereço de entrega e escolha uma forma de pagamento.</p>
 
-    <section name="Informacoes do pedido">
-        <h2 class="h2"> Resumo do pedido </h2>
-    <table>
-        <tr>
-            <th>Produto</th>
-            <th>Quantidade</th>
-            <th>Preço unitário</th>
-            <th>Preço</th>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-            </td>
-        </tr>
-    </table>
+    <section name="Resumo do pedido" id="resumo_pedido">
+
+    <h2>Valor do pedido</h2>
+    <p>Valor total: R$ {{ carrinho_valor_total }}</p>
+
+    <h2>Items do pedido</h2>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Preço unitário</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for produto in carrinho %} <!--For percorre toda tabela-->
+                <tr>
+                    <td>{{ produto['nome'] }}</td>
+                    <td>{{ produto['quantidade'] }}</td>
+                    <td>R$ {{ produto['valor'] }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
     </section>
 
     <section name="Pagamento">
@@ -47,4 +59,5 @@
     </div>
     <div name="detalhes_cartao" id="detalhes_cartao"></div>
     </section>
+
 {% endblock %}

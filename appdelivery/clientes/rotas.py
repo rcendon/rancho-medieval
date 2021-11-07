@@ -85,3 +85,11 @@ def logincliente():
 def logoutcli():
     session.pop('email')
     return redirect(url_for('logincliente'))
+
+################## Rota Carrinho #############################################
+
+app.route("/carrinho")
+def carrinho():
+    if carrinho not in session:
+        return render_template("index.html")
+    return render_template("clientes/carrinho.html")

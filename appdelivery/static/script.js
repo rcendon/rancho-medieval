@@ -25,13 +25,13 @@ function id( el ){
 window.onload = function(){
     id('mais').onclick = function(){
             id('format').value = parseInt( id('format').value )+1;
-            
+
             id('total').value = 20*id('format').value;
     }
     id('menos').onclick = function(){
             if( id('format').value>0 )
                     id('format').value = parseInt( id('format').value )-1;
-            
+
             id('total').value = 20*id('format').value;
     }
 }
@@ -73,5 +73,59 @@ function gera_formulario_para_insercao_de_dados_de_cartao() {
 };
 
 /* ######## carrega a função quando do carregamento da página ####### */
-window.onload = gera_formulario_para_insercao_de_dados_de_cartao()
+
+function adiciona_produto_carrinho(produto, produto_id) {
+    if (valor_cookie(produto) > 0) {
+        let valor = parseInt(valor_cookie(produto)) + 1;
+        document.cookie = produto + "=" +  valor.toString() + ";";
+    } else {
+        document.cookie = produto + "=1;";
+    }
+    define_quantidade_produto(produto, produto_id)
+}
+
+function remove_item_carrinho(produto, produto_id) {
+    if (valor_cookie(produto) > 1) {
+        let valor = parseInt(valor_cookie(produto)) - 1;
+        document.cookie = produto + "=" +  valor.toString() + ";";
+    } else {
+        document.cookie = produto + "=0; expires=Fri, 5 Oct 2018 14:28:00 GMT;";
+    }
+
+    if (valor_cookie(produto) === undefined ) {
+        let produto_contador = document.getElementById(produto_id);
+        produto_contador.innerHTML = '0';
+    } else {
+        define_quantidade_produto(produto, produto_id)
+    }
+}
+
+function valor_cookie(item) {
+    const nome = item + "=";
+    const cookie_decoded = decodeURIComponent(document.cookie);
+    const valores = cookie_decoded.split('; ');
+    let resultado;
+    valores.forEach( valor => {
+        if (valor.indexOf(nome) === 0) resultado = valor.substring(nome.length);
+    })
+    return resultado
+}
+
+function define_quantidade_produto(produto_nome, produto_id) {
+    let produto = document.getElementById(produto_id);
+    produto.innerHTML = valor_cookie(produto_nome)
+}
+
+
+
+window.onload = gera_formulario_para_insercao_de_dados_de_cartao();
+
+window.onload = adiciona_produto_carrinho();
+
+window.onload = valor_cookie();
+
+window.onload = remove_item_carrinho();
+
+window.onload = define_quantidade_produto();
+
 
