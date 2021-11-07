@@ -9,6 +9,7 @@
       <h2>Cardápio</h2>                      
   </div>
   
+<<<<<<< HEAD
   <!--########### Form Lista Cardapio ###############-->
 
  <div class="lista-cli">
@@ -48,5 +49,40 @@
     <a href="/pagamento"><button>Fazer um pedido</button></a>
 <!--################################################-->
 
+=======
+              <!--########### Form Lista Cardapio ###############-->
+              <div class="lista-cli">
+                <div class="row">   
+                  <div class="col-xs-12"></div>
+                    <table class="table">
+                      <thead>
+                        <tr> 
+                          <th>Produto</th>
+                          <th>Preço</th>
+                          <th>Igredientes</th>
+                          <th>Carrinho</th>
+                          <th>Foto Ilustrativa</th>                           
+                        </tr> 
+                      </thead>
+                      <tbody>
+                      {% for i in cardapio %} <!--For percorre toda tabela-->
+                        <tr>
+                          <td>{{i.nome}}</td>
+                          <td>{{i.valor}}</td>
+                          <td>{{i.descricao}}</td>
+                          <td>
+                            <a href="/add/{{i.id_produto}}">Adicionar</a>
+                          </td>
+                          <td>
+                            <img src="/static/img/ham.jpg" alt="Imagem do Produto" id="container-da-imagem">
+                          </td>
+                        </tr> 
+                      {% endfor %}    
+                      </tbody>
+                    </table>
+                </div>
+            </div>
+            <!--################################################-->
+>>>>>>> d0d8dadff8998715407384dbeba1cdfab00a37fb
 
 {% endblock content %}
