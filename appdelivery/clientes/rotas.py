@@ -18,7 +18,7 @@ def minhaconta():
     if 'email' not in session:
         flash(f'Olá, faça o login primeiro', 'danger')    
         return redirect(url_for('logincliente'))
-    return render_template('/clientes/minhaconta.html')
+    return render_template('../templates/clientes/minhaconta.html')
 
 ####################################################################################
 

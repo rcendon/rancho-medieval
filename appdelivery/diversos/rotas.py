@@ -33,6 +33,6 @@ def tela_pagamento():
                 'quantidade': cookies[produto.nome],
                 'valor': valor_total
             })
-            carrinho.sort()
+            # carrinho.sort() # - Rafael : ainda estou investigando o motivo do sort gerar um bug
 
     return render_template('diversos/pagamento.html', carrinho=carrinho, carrinho_valor_total=carrinho_valor_total)

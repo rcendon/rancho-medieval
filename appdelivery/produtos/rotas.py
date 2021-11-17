@@ -9,20 +9,13 @@ from appdelivery.admin.models import Produtos
 ##################### Rota Cardapio ####################################################
 
 @app.route('/cardapio')
-
-def cardapio(): 
+def cardapio():
     cardapio = Produtos.query.all() #Select * from 
-
     return render_template('/produtos/cardapio.html',cardapio=cardapio)
 
 
 ##################### Rota Promoções ####################################################
 
 @app.route('/promocoes')
-
-
-
-
-
-def promocoes(): 
+def promocoes():
     return render_template('/produtos/promocoes.html')
