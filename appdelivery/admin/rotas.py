@@ -10,7 +10,9 @@ from appdelivery import app, db, bcrypt
 
 from .forms import RegistrationForm, LoginFormulario, CadastroProdutos
 
-from .models import User, Produtos
+from .models import Produtos
+
+from ..pessoas.models import Pessoas
 
 ##################### Rota Home ####################################################
 
@@ -36,14 +38,6 @@ def usuario():
 
 ################## Rota Registrar ##################################################   
 
-#self.nome = nome
-#self.email = email
-#self.telefone = telefone
-#self.rg = rg
-#self.cpf = cpf
-#self.endereco = endereco
-#self.senha = senha
-
 #https://flask.palletsprojects.com/en/2.0.x/patterns/wtforms/ - In the View
 
 #RegistrationForm
@@ -58,8 +52,8 @@ def registrar():
     if request.method == "POST" and form.validate():
         hash_password = bcrypt.generate_password_hash(form.senha.data)
 
-        user = User(nome=form.nome.data,email=form.email.data,telefone=form.telefone.data,rg=form.rg.data,cpf=form.cpf.data, 
-        endereco=form.endereco.data, senha=hash_password)
+        user = Pessoas(nome=form.nome.data, email=form.email.data, telefone=form.telefone.data, rg=form.rg.data, cpf=form.cpf.data,
+                       endereco=form.endereco.data, senha=hash_password)
 
         db.session.add(user)
         db.session.commit() #Salva os dados no banco 
@@ -84,7 +78,7 @@ def login():
 
     form=LoginFormulario(request.form) #Retorna valores do forms.py
     if request.method == "POST" and form.validate():
-        user= User.query.filter_by(cpf=form.cpf.data).first()
+        user= Pessoas.query.filter_by(cpf=form.cpf.data).first()
         
         if user and bcrypt.check_password_hash(user.senha, form.senha.data):
             session['cpf'] = form.cpf.data

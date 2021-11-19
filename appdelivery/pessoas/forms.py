@@ -2,14 +2,6 @@
 
 from wtforms import Form, BooleanField, StringField, PasswordField, validators
 
-#self.nome = nome
-#self.email = email
-#self.telefone = telefone
-#self.rg = rg
-#self.cpf = cpf
-#self.endereco = endereco
-#self.senha = senha
-
 #https://flask.palletsprojects.com/en/2.0.x/patterns/wtforms/ - The Forms
 
 ######################### Classe Form Cadastro ##################################################

@@ -17,7 +17,7 @@ create table pessoas (
     cpf int unique not null,
     rg int unique not null,
     tipo char(1) not null,
-    senha varchar(64) not null,
+    senha varchar(128) not null,
     endereco int,
     constraint endereco
         foreign key (endereco) references enderecos(id)

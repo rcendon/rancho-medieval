@@ -22,6 +22,6 @@ bcrypt = Bcrypt(app)
 
 from appdelivery.admin import rotas #Importa da pasta appdelivery/admin o arquivo rotas.py
 from appdelivery.produtos import rotas #Importa da pasta appdelivery/produtos o arquivo rotas.py
-from appdelivery.clientes import rotas #Importa da pasta appdelivery/clientes o arquivo rotas.py
+from appdelivery.pessoas import rotas #Importa da pasta appdelivery/pessoas o arquivo rotas.py
 from appdelivery.diversos import rotas #Importa da pasta appdelivery/diversos o arquivo rotas.py
 from appdelivery.erros import rotas #Importa da pasta appdelivery/erros o arquivo rotas.py
