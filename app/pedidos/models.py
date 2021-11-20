@@ -18,5 +18,3 @@ class Pedidos(db.Model):
     status = db.Column(db.CHAR(1))
 
 ############################### Fim Modelo Pedidos #####################################################
-
-db.create_all()
