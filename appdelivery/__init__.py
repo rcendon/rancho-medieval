@@ -25,3 +25,7 @@ from appdelivery.produtos import rotas #Importa da pasta appdelivery/produtos o 
 from appdelivery.pessoas import rotas #Importa da pasta appdelivery/pessoas o arquivo rotas.py
 from appdelivery.diversos import rotas #Importa da pasta appdelivery/diversos o arquivo rotas.py
 from appdelivery.erros import rotas #Importa da pasta appdelivery/erros o arquivo rotas.py
+
+
+
+# Verificar migrações no banco de dados (migrate e make migrations)

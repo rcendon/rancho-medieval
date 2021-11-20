@@ -25,6 +25,7 @@ class Pessoas(db.Model):
     pedidos = db.relationship('Pedidos', lazy='select', uselist=False)
     endereco = db.relationship('Enderecos', secondary=enderecos, lazy='select', uselist=False)
 
+    # db.create_all()
 
 class Enderecos(db.Model):
     __tablename__ = 'enderecos'
@@ -39,5 +40,6 @@ class Enderecos(db.Model):
     complemento = db.Column(db.VARCHAR(100))
     tipo_endereco = db.Column(db.CHAR(1)) # Valores possíveis -> R - Residencial ; C - Comercial
 
+    # db.create_all()
 
 ################################ FIM Modelo Pessoas ##################################################

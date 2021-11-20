@@ -13,7 +13,9 @@ class Produtos(db.Model):
    descricao = db.Column(db.VARCHAR(40))   
    # imagem = db.Column(db.Text)
    # mimetype = db.Column(db.Text)
-   
+
+# db.create_all()
+
 ############################### Fim Modelo Cardápio #####################################################
 
 ################################ Modelo Cadastro Pedidos ########################################################
@@ -28,6 +30,8 @@ class Pedidos(db.Model):
     descricao = db.Column(db.VARCHAR(40))
     # imagem = db.Column(db.Text)
     # mimetype = db.Column(db.Text)
+
+    # db.create_all()
 
 
 ############################### Fim Modelo Cardápio #####################################################
