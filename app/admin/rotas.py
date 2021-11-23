@@ -76,14 +76,15 @@ def login():
 
     form=LoginFormulario(request.form) #Retorna valores do forms.py
     if request.method == "POST" and form.validate():
-        user= Pessoas.query.filter_by(cpf=form.cpf.data).first()
+        user = Pessoas.query.filter_by(cpf=form.cpf.data).first()
         
         if user and bcrypt.check_password_hash(user.senha, form.senha.data):
+        # if user and user.senha == form.senha.data:
             session['cpf'] = form.cpf.data
             flash(f'Bem Vindo CPF: {form.cpf.data}','success')
             return redirect(request.args.get('next') or url_for('usuario'))
-        else:   
-            flash(f'CPF ou senha incorretos', 'danger')  
+        else:
+            flash(f'CPF ou senha incorretos', 'danger')
     return render_template('admin/login.html', form=form)
 
 

@@ -37,7 +37,6 @@ def registrocliente():
         user = Pessoas(
              nome=form.nome.data,
              email=form.email.data,
-             telefone=form.telefone.data,
              rg=form.rg.data,
              cpf=form.cpf.data,
              senha=hash_password,
@@ -65,7 +64,7 @@ def logincliente():
     form=LoginFormularioCli(request.form) #Retorna valores do forms.py
     if request.method == "POST" and form.validate():
         user = Pessoas.query.filter_by(email=form.email.data).first()
-        
+
         if user and bcrypt.check_password_hash(user.senha, form.senha.data):
             session['email'] = form.email.data
             flash(f'Bem Vindo {form.email.data}','success')

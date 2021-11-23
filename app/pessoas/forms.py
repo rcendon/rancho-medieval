@@ -18,6 +18,7 @@ class RegistrationFormCli(Form):
     
 ######################### Classe Form Login ##################################################
 
-class LoginFormularioCli(Form):    
-    email = StringField('E-mail', [validators.Length(min=2, max=35)])      
-    senha = PasswordField('Senha', [validators.Length(min=2, max=35)]) 
+class LoginFormularioCli(Form):
+    # cpf = StringField('cpf', [validators.Length(min=1, max=35)])
+    email = StringField('E-mail', [validators.Length(min=2, max=35)])
+    senha = PasswordField('senha', [validators.Length(min=1, max=35)])

@@ -1,3 +1,5 @@
+import bcrypt
+
 from app import db
 from ..pedidos.models import Pedidos
 
@@ -76,4 +78,3 @@ class Enderecos(db.Model):
 
 
 ################################ FIM Modelo Endereço ##################################################
-
