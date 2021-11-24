@@ -35,13 +35,14 @@ def registrocliente():
         hash_password = bcrypt.generate_password_hash(form.senha.data)
 
         user = Pessoas(
-             nome=form.nome.data,
-             email=form.email.data,
-             rg=form.rg.data,
-             cpf=form.cpf.data,
-             senha=hash_password,
-             tipo='C') # precisa alterar, junto com o frontend, para cadastrar os dados corretamente, além de adicionar nova variavel para cadastro do endereço que será outro formulario
-
+            nome = form.nome.data,
+            email = form.email.data,
+            rg = int(form.rg.data),
+            cpf = int(form.cpf.data),
+            # registro_diverso= form.registro_diverso.data,
+            # pais_do_registro_diverso = form.pais_do_registro_diverso.data,
+            senha = hash_password,
+            tipo = 'C') # precisa alterar, junto com o frontend, para cadastrar os dados corretamente, além de adicionar nova variavel para cadastro do endereço que será outro formulario
 
         db.session.add(user)
         db.session.commit() #Salva os dados no banco 
