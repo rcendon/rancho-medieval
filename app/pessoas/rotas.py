@@ -89,3 +89,16 @@ def carrinho():
     if carrinho not in session:
         return render_template("index.html")
     return render_template("clientes/historicoDeCompras.html")
+
+
+# admin = Pessoas(
+#     nome = 'Admin',
+#     email = 'admin@email.com',
+#     cpf = 1,
+#     senha = str(bcrypt.generate_password_hash("12345")).encode('utf-8'),
+#     tipo = 'A'
+# )
+#
+# db.session.add(admin)
+#
+# db.session.commit()

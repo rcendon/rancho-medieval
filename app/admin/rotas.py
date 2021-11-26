@@ -32,7 +32,7 @@ def usuario():
     if 'cpf' not in session: ###Controle de Acesso###
         flash(f'Olá, faça o login primeiro', 'danger')    
         return redirect(url_for('login'))
-    return render_template('../templates/admin/usuario.html')
+    return render_template('admin/usuario.html')
 
 ####################################################################################
 
@@ -60,7 +60,7 @@ def registrar():
             # registro_diverso= form.registro_diverso.data,
             # pais_do_registro_diverso = form.pais_do_registro_diverso.data,
             senha = hash_password,
-            tipo = 'A') # precisa alterar, junto com o frontend, para cadastrar os dados corretamente, além de adicionar nova variavel para cadastro do endereço que será outro formulario
+            tipo = 'F') # precisa alterar, junto com o frontend, para cadastrar os dados corretamente, além de adicionar nova variavel para cadastro do endereço que será outro formulario
 
         db.session.add(user)
         db.session.commit() #Salva os dados no banco 
@@ -69,7 +69,7 @@ def registrar():
         flash(f'{form.nome.data}, obrigado pelo registro, realize o login', 'success')        
         return redirect(url_for('login'))
         
-    return render_template('../templates/admin/registrar.html', form=form)
+    return render_template('admin/registrar.html', form=form)
 
 ##################################################################################################
 
@@ -124,7 +124,7 @@ def produtos():
         flash(f'Produto cadastrado com sucesso ', 'success')  
         return redirect(url_for('usuario')) #Se o metodo POST for OK retornar para o INDEX
 
-    return render_template('../templates/admin/addcardapio.html',form=form) #ELSE mostra pagina ADD
+    return render_template('admin/addcardapio.html',form=form) #ELSE mostra pagina ADD
 
 ##################### Rota Logout ####################################################
 
