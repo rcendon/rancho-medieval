@@ -32,7 +32,7 @@ def minhaconta():
 def registrocliente():
     form = RegistrationFormCli(request.form) #Retorna valores do forms.py
     if request.method == "POST" and form.validate():
-        hash_password = bcrypt.generate_password_hash(form.senha.data)
+        hash_password = bcrypt.generate_password_hash(form.senha.data).decode('utf-8')
 
         user = Pessoas(
             nome = form.nome.data,
@@ -70,10 +70,11 @@ def logincliente():
             session['email'] = form.email.data
             flash(f'Bem Vindo {form.email.data}','success')
             return redirect(request.args.get('next') or url_for('minhaconta'))
-        else:   
+        else:
             flash(f'E-mail ou Senha incorretos', 'danger')  
     return render_template('clientes/logincliente.html', form=form)
 
+# redirect(request.args.get('next') or
 ######################################################################################
 
 @app.route("/logoutcli")

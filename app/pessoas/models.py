@@ -38,7 +38,7 @@ class Pessoas(db.Model):
     registro_diverso = db.Column(db.VARCHAR(20), unique=True)
     pais_do_registro_diverso = db.Column(db.VARCHAR(20))
     tipo = db.Column(db.CHAR(1), nullable=False)
-    senha = db.Column(db.VARCHAR(128), nullable=False)
+    senha = db.Column(db.VARCHAR(256), nullable=False)
     pedidos = db.relationship('Pedidos', backref='pessoa', lazy='select', uselist=False)
     endereco = db.relationship('Enderecos', secondary=enderecos, lazy='select', uselist=False)
 
