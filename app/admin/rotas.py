@@ -50,7 +50,7 @@ def registrar():
 
     form = RegistrationForm(request.form) #Retorna valores do forms.py
     if request.method == "POST" and form.validate():
-        hash_password = bcrypt.generate_password_hash(form.senha.data).encode('utf-8')
+        hash_password = bcrypt.generate_password_hash(form.senha.data).decode('utf-8')
 
         user = Pessoas(
             nome = form.nome.data,

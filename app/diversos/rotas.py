@@ -3,6 +3,9 @@ from flask import render_template, session, request, redirect, url_for, flash
 from app import app, db
 
 from ..produtos.models import Produtos
+from ..pedidos.models import Pedidos
+
+from ..pedidos.forms import valida_dados_pagamento, valida_dados_cartao
 
 
 ##################### Rota Área de Entrega ####################################################
@@ -11,28 +14,26 @@ from ..produtos.models import Produtos
 def entrega():
     return render_template('/diversos/entrega.html')
 
-@app.route('/processa_pagamento')
-def processa_pagamento():
-    if request.method == "POST":
-        if 'carrinho' not in session or session['carrinho'] == '':
-            session['carrinho'] = []
+@app.route('/pedido', methods=['POST'])
+def pedido():
+    if 'email' not in session:
+        session['processo_pagamento'] = True
+        return render_template('clientes/loginclientepagamento.html')
+    else:
+        Pedidos.insere_pedido()
+        return render_template('index.html')
+
+# @app.route('/processa_pagamento', methods=['POST'])
+
+
+
+
+
 
 
 @app.route('/pagamento')
 def tela_pagamento():
-    cookies = request.cookies
-    cookies_chaves = cookies.keys()
-    carrinho = []
-    carrinho_valor_total = 0
-    for produto in Produtos.query.all():
-        if produto.nome in cookies_chaves:
-            valor_total = int(cookies[produto.nome]) * produto.valor
-            carrinho_valor_total += valor_total
-            carrinho.append({
-                'nome': produto.nome,
-                'quantidade': cookies[produto.nome],
-                'valor': valor_total
-            })
-            # carrinho.sort() # - Rafael : ainda estou investigando o motivo do sort gerar um bug
+    carrinho = Pedidos.gera_carrinho(request.cookies)
+    carrinho_valor_total = Pedidos.calcula_valor_total_do_carrinhho(carrinho)
 
     return render_template('diversos/pagamento.html', carrinho=carrinho, carrinho_valor_total=carrinho_valor_total)

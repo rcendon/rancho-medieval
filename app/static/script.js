@@ -44,6 +44,7 @@ function gera_formulario_para_insercao_de_dados_de_cartao() {
     let cartao_debito = document.getElementById("cartao_debito");
     let formulario_pagamento =  document.createElement("form");
     formulario_pagamento.setAttribute('class', 'row form-check form-control-lg pagamento')
+    formulario_pagamento.setAttribute('id', 'dados_cartao')
     let elementos_formulario = {
         "1 - numero_do_cartao": "Número do Cartão",
         "2 - titular_do_cartao": "Nome do Titular do Cartão,",

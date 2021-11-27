@@ -1,7 +1,7 @@
 import bcrypt
 
 from app import db
-from ..pedidos.models import Pedidos
+# from ..pedidos.models import Pedidos
 
 enderecos = db.Table(
     'relacao_pessoas_enderecos',
@@ -30,11 +30,11 @@ preco_insumo = db.Table(
 class Pessoas(db.Model):
     __tablename__ = 'pessoas'
 
-    id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    id = db.Column(db.BigInteger, autoincrement=True, primary_key=True)
     nome = db.Column(db.VARCHAR(50), nullable=False)
     email = db.Column(db.VARCHAR(256), unique=True, nullable=False)
-    rg = db.Column(db.Integer, unique=True)
-    cpf = db.Column(db.Integer, unique=True)
+    rg = db.Column(db.BigInteger, unique=True)
+    cpf = db.Column(db.BigInteger, unique=True)
     registro_diverso = db.Column(db.VARCHAR(20), unique=True)
     pais_do_registro_diverso = db.Column(db.VARCHAR(20))
     tipo = db.Column(db.CHAR(1), nullable=False)

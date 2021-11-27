@@ -20,7 +20,6 @@ class RegistrationForm(Form):
     rg = StringField('RG', [validators.Length(min=1, max=35)])
     cpf = StringField('CPF', [validators.Length(min=1, max=35)])
     senha = PasswordField('Senha', [validators.Length(min=1, max=35)])
-    email = StringField('E-mail', [validators.Length(min=2, max=35)])
 
     
 ######################### Classe Form Login ##################################################
