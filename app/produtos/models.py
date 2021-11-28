@@ -208,10 +208,9 @@ class Produtos(db.Model):
 
             return False
 
-############################### Fim Modelo Cardápio #####################################################
+############################### Fim Modelo Cadastro de Produtos #####################################################
 
-################################ Modelo Cadastro Pedidos ########################################################
-
+################################ Modelo Insumos  ########################################################
 
 class Insumos(db.Model):
     __tablename__ = 'insumos'
@@ -219,6 +218,24 @@ class Insumos(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     nome = db.Column(db.VARCHAR(50))
     quantidade_estoque_insumo = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, nome, quantidade):
+        self.nome = nome
+        self.quantidade_estoque_insumo = quantidade
+
+
+    @staticmethod
+    def adiciona_insumo_estoque(insumo):
+
+        if Insumos.query.filter_by(nome=insumo).first():
+
+            return False
+
+        insumo = Insumos(insumo, 0)
+
+        db.session.add(insumo)
+        db.session.comit()
+        return True
 
     @staticmethod
     def adiciona_quantidade_insumo_estoque(insumo, quantidade):
@@ -228,7 +245,6 @@ class Insumos(db.Model):
         db.session.add(estoque)
         db.session.commit()
         return True
-
 
     @staticmethod
     def reduz_quantidade_insumo_estoque(insumo, quantidade):
@@ -246,7 +262,4 @@ class Insumos(db.Model):
             db.session.commit()
             return True
 
-
-
-
-############################### Fim Modelo Cardápio #####################################################
+############################### Fim Modelo Insumos #####################################################

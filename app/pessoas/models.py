@@ -43,6 +43,11 @@ class Pessoas(db.Model):
     endereco = db.relationship('Enderecos', secondary=enderecos, lazy='select', uselist=False)
 
 
+    # @staticmethod
+    # def adiciona_pessoa(dados_pessoais:dict, endereco:dict):
+
+
+
 ################################ FIM Modelo Pessoas ##################################################
 
 ################################ Modelo Fornecedores ##################################################
@@ -59,6 +64,15 @@ class Fornecedores(db.Model):
     email = db.Column(db.VARCHAR(256), unique=True)
     endereco = db.relationship('Enderecos', secondary=enderecos_fornecedores, lazy='select', uselist=False)
     preco_insumo = db.relationship('Insumos', backref='fornecedor', secondary=preco_insumo, lazy='select', uselist=False)
+
+
+    # @staticmethod
+    # def adiciona_fornecedor(dados_fornecedor:dict, endereco:dict):
+    #
+    # @staticmethod
+    # def associa_fornecedor_a_insumo(fornecedor, insumo):
+
+
 
 ################################ FIM Modelo Pessoas ##################################################
 ################################ Modelo Endereço ##################################################
