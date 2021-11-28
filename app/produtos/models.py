@@ -52,8 +52,12 @@ class Produtos(db.Model):
 
         produto = Produtos.adiciona_produto_cardapio(dados_produto)
 
+        if produto == False:
+
+            return 'A inserção do produto não será possível pois já há um produto registrado com o mesmo nome.'
 
         for insumo in dados_produto['insumos']:
+
             if insumo['nome'] == Insumos.query.filter_by(nome=insumo['nome']).first().nome:
 
                     relacao = Receitas(
@@ -62,14 +66,13 @@ class Produtos(db.Model):
                         insumo['quantidade']
                     )
 
-                # else:
-                #     relacao = Receitas(
-                #         0,
-                #         Insumos.query.first().id,
-                #         insumo['quantidade']
-                #     )
+            else:
 
-                # return 'A inserção do produto não será possível pois há insumos não cadastrados. Por favor, realize o cadastro e tente novamente.'
+                return 'A inserção do produto não será possível pois há insumos não cadastrados. Por favor, realize o cadastro e tente novamente.'
+
+            lista_relacoes_produto_insumos.append(relacao)
+
+        for relacao in lista_relacoes_produto_insumos:
 
             db.session.add(relacao)
             db.session.commit()
@@ -88,13 +91,13 @@ class Produtos(db.Model):
             dados_produto['mimetype']
         )
 
-        if Produtos.query.filter_by(nome=dados_produto['nome']):
+        if Produtos.query.filter_by(nome=dados_produto['nome']).first():
+            return False
+
+        else:
             db.session.add(produto)
             db.session.commit()
             return produto
-
-        else:
-            return False
 
 
 
