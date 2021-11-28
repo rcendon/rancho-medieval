@@ -101,7 +101,6 @@ class Produtos(db.Model):
             db.session.commit()
             return produto
 
-
     @staticmethod
     def adiciona_quantidade_produto_estoque(produto, quantidade):
 
@@ -143,7 +142,6 @@ class Produtos(db.Model):
         db.session.commit()
         return True
 
-
     @staticmethod
     def reduz_quantidade_produto_estoque(produto, quantidade):
         estoque = Produtos.query.filter_by(nome=produto).first()
@@ -159,9 +157,56 @@ class Produtos(db.Model):
             db.session.commit()
             return True
 
+    @staticmethod
+    def altera_descricao_produto(produto, nova_descricao):
 
+        produto_localizado = Produtos.query.filter_by(nome=produto).first()
 
+        if produto_localizado:
 
+            produto_localizado.descricao = nova_descricao
+
+            db.session.add(produto_localizado)
+            db.session.commit()
+            return True
+
+        else:
+
+            return False
+
+    @staticmethod
+    def altera_imagem_produto(produto, nova_imagem):
+
+        produto_localizado = Produtos.query.filter_by(nome=produto).first()
+
+        if produto_localizado:
+
+            produto_localizado.imagem = nova_imagem
+
+            db.session.add(produto_localizado)
+            db.session.commit()
+            return True
+
+        else:
+
+            return False
+
+    @staticmethod
+    def altera_valor_produto(produto, novo_valor):
+
+        produto_localizado = Produtos.query.filter_by(nome=produto).first()
+
+        if produto_localizado:
+
+            produto_localizado.valor = novo_valor
+
+            db.session.add(produto_localizado)
+            db.session.commit()
+            return True
+
+        else:
+
+            return False
 
 ############################### Fim Modelo Cardápio #####################################################
 
