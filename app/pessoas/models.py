@@ -1,7 +1,9 @@
 import bcrypt
 
 from app import db
+from ..produtos.models import Insumos
 # from ..pedidos.models import Pedidos
+
 
 enderecos = db.Table(
     'relacao_pessoas_enderecos',
@@ -16,12 +18,26 @@ enderecos_fornecedores = db.Table(
     db.Column('endereco_id', db.Integer, db.ForeignKey('enderecos.id'), primary_key=True)
 )
 
-preco_insumo = db.Table(
-    'preco_insumo',
-    db.Column('id_fornecedor', db.Integer, db.ForeignKey('fornecedores.id'), primary_key=True),
-    db.Column('id_insumo', db.Integer, db.ForeignKey('insumos.id'), primary_key=True),
-    db.Column('valor', db.Float, nullable=False)
-)
+# preco_insumo = db.Table(
+#     'preco_insumo',
+#     db.Column('id_fornecedor', db.Integer, db.ForeignKey('fornecedores.id'), primary_key=True),
+#     db.Column('id_insumo', db.Integer, db.ForeignKey('insumos.id'), primary_key=True),
+#     db.Column('valor', db.Float, nullable=False)
+# )
+
+class Preco_insumo(db.Model):
+    __tablename__ = 'preco_insumo'
+
+    id_insumo = db.Column('id_fornecedor', db.Integer, db.ForeignKey('fornecedores.id'), primary_key=True)
+    id_fornecedor = db.Column('id_insumo', db.Integer, db.ForeignKey('insumos.id'), primary_key=True)
+    valor = db.Column('valor', db.Float, nullable=False)
+    insumo = db.relationship('Insumos', backref='insumo')
+
+    def __init__(self, id_insumo, id_fornecedor, valor):
+        self.id_insumo = id_insumo
+        self.id_fornecedor =id_fornecedor
+        self.valor = valor
+
 
 ################################ Modelo Pessoas ##################################################
 
@@ -40,13 +56,68 @@ class Pessoas(db.Model):
     tipo = db.Column(db.CHAR(1), nullable=False)
     senha = db.Column(db.VARCHAR(256), nullable=False)
     pedidos = db.relationship('Pedidos', backref='pessoa', lazy='select', uselist=False)
-    endereco = db.relationship('Enderecos', secondary=enderecos, lazy='select', uselist=False)
+    endereco = db.relationship('Enderecos', secondary=enderecos, lazy='select', uselist=True)
+
+    def __init__(self, nome, email, rg, cpf, registro_diverso, pais_do_registro_diverso, tipo, senha):
+        self.nome = nome
+        self.email = email
+        self.rg = rg
+        self.cpf = cpf
+        self.registro_diverso = registro_diverso
+        self.pais_do_registro_diverso = pais_do_registro_diverso
+        self.tipo = tipo
+        self.senha = senha
+
+
+    @staticmethod
+    def adiciona_pessoa(dados_pessoais:dict, dados_endereco:dict):
+
+        # if Pessoas.verifica_duplicidade_registro(dados_pessoais):  #or not Enderecos.verifica_possibilidade_endereco(dados_endereco)
+
+        pessoa = Pessoas(
+            dados_pessoais['nome'],
+            dados_pessoais['email'],
+            dados_pessoais['rg'],
+            dados_pessoais['cpf'],
+            dados_pessoais['registro_diverso'],
+            dados_pessoais['pais_do_registro_diverso'],
+            dados_pessoais['tipo'],
+            dados_pessoais['senha']
+        )
+
+        endereco = Enderecos(
+            dados_endereco['rua'],
+            dados_endereco['bairro'],
+            dados_endereco['cidade'],
+            dados_endereco['estado'],
+            dados_endereco['pais'],
+            dados_endereco['numero'],
+            dados_endereco['complemento'],
+            dados_endereco['tipo_endereco']
+        )
+
+        pessoa.endereco.append(endereco)
+        db.session.add(pessoa)
+        db.session.commit()
+
+        return True
+
 
 
     # @staticmethod
-    # def adiciona_pessoa(dados_pessoais:dict, endereco:dict):
+    # def verifica_duplicidade_registro(dados_pessoais):
+    #
+    #     dados_pessoais_essenciais = ['registro_diverso', 'cpf', 'rg', 'email']
+    #
+    #     for key in dados_pessoais_essenciais:
+    #         if :
+    #
+    #             return False
+    #
+    #     return True
 
 
+# teste de inserção de pessoa no banco de dados -> Pessoas.adiciona_pessoa({'nome': 'Teste', 'email': 'teste@email.com', 'rg': 1111111111, 'cpf': 11111111111, 'registro_diverso': None, 'pais_do_registro_diverso': None, 'tipo': 'C', 'senha': '123'}, {'rua': 'Teste', 'bairro': 'Teste', 'cidade': 'Teste', 'estado': 'Teste', 'pais': 'teste', 'numero': 'Teste', 'complemento': 'Teste', 'tipo_endereco': 'R'})
 
 ################################ FIM Modelo Pessoas ##################################################
 
@@ -63,7 +134,7 @@ class Fornecedores(db.Model):
     contato = db.Column(db.Integer)
     email = db.Column(db.VARCHAR(256), unique=True)
     endereco = db.relationship('Enderecos', secondary=enderecos_fornecedores, lazy='select', uselist=False)
-    preco_insumo = db.relationship('Insumos', backref='fornecedor', secondary=preco_insumo, lazy='select', uselist=False)
+    preco_insumo = db.relationship('Preco_insumo', backref='preco_insumo')
 
 
     # @staticmethod
@@ -89,6 +160,43 @@ class Enderecos(db.Model):
     numero = db.Column(db.Integer)
     complemento = db.Column(db.VARCHAR(100))
     tipo_endereco = db.Column(db.CHAR(1), nullable=False) # Valores possíveis -> R - Residencial ; C - Comercial
+
+    def __init__(self, rua, bairro, cidade, estado, pais, numero, complemento, tipo_endereco):
+
+        self.rua = rua
+        self.bairro = bairro
+        self.cidade = cidade
+        self.estado = estado
+        self.pais = pais
+        self.numero = numero
+        self.complemento = complemento
+        self.tipo_endereco = tipo_endereco # Valores possíveis -> R - Residencial ; C - Comercial
+
+    # @staticmethod
+    # def adiciona_endereco(dados_endereco):
+    #
+    #     # if Enderecos.verifica_possibilidade_endereco(dados_endereco):
+    #
+    #     endereco = Enderecos(
+    #         dados_endereco['rua'],
+    #         dados_endereco['bairro'],
+    #         dados_endereco['cidade'],
+    #         dados_endereco['estado'],
+    #         dados_endereco['pais'],
+    #         dados_endereco['numero'],
+    #         dados_endereco['complemento'],
+    #         dados_endereco['tipo_endereco']
+    #     )
+    #
+    #     db.session.add(endereco)
+    #     db.session.commit()
+    #     return True
+
+    # @staticmethod
+    # def verifica_possibilidade_endereco(dados_endereco):
+
+
+
 
 
 ################################ FIM Modelo Endereço ##################################################
