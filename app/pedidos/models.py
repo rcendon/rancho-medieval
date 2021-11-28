@@ -105,5 +105,3 @@ class Pedidos(db.Model):
 
 ############################### Fim Modelo Pedidos #####################################################
 
-
-produto = {'nome': 'teste', 'quantidade_estoque_produto': 2, 'descricao': 'teste', 'imagem': '1', 'mimetype': '1', 'insumos': ['banana', 'maçã'], 'valor': 10}
