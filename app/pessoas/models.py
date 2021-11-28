@@ -7,15 +7,15 @@ from ..produtos.models import Insumos
 
 enderecos = db.Table(
     'relacao_pessoas_enderecos',
-    db.Column('pessoa_id', db.Integer, db.ForeignKey('pessoas.id'), primary_key=True),
-    db.Column('endereco_id', db.Integer, db.ForeignKey('enderecos.id'), primary_key=True)
+    db.Column('pessoa_id', db.BigInteger, db.ForeignKey('pessoas.id'), primary_key=True),
+    db.Column('endereco_id', db.BigInteger, db.ForeignKey('enderecos.id'), primary_key=True)
 )
 
 
 enderecos_fornecedores = db.Table(
     'relacao_fornecedores_enderecos',
-    db.Column('fornecedor_id', db.Integer, db.ForeignKey('fornecedores.id'), primary_key=True),
-    db.Column('endereco_id', db.Integer, db.ForeignKey('enderecos.id'), primary_key=True)
+    db.Column('fornecedor_id', db.BigInteger, db.ForeignKey('fornecedores.id'), primary_key=True),
+    db.Column('endereco_id', db.BigInteger, db.ForeignKey('enderecos.id'), primary_key=True)
 )
 
 # preco_insumo = db.Table(
@@ -28,14 +28,14 @@ enderecos_fornecedores = db.Table(
 class Preco_insumo(db.Model):
     __tablename__ = 'preco_insumo'
 
-    id_insumo = db.Column('id_fornecedor', db.Integer, db.ForeignKey('fornecedores.id'), primary_key=True)
-    id_fornecedor = db.Column('id_insumo', db.Integer, db.ForeignKey('insumos.id'), primary_key=True)
+    id_fornecedor = db.Column('id_fornecedor', db.BigInteger, db.ForeignKey('fornecedores.id'), primary_key=True)
+    id_insumo = db.Column('id_insumo', db.BigInteger, db.ForeignKey('insumos.id'), primary_key=True)
     valor = db.Column('valor', db.Float, nullable=False)
     insumo = db.relationship('Insumos', backref='insumo')
 
     def __init__(self, id_insumo, id_fornecedor, valor):
         self.id_insumo = id_insumo
-        self.id_fornecedor =id_fornecedor
+        self.id_fornecedor = id_fornecedor
         self.valor = valor
 
 
@@ -55,8 +55,8 @@ class Pessoas(db.Model):
     pais_do_registro_diverso = db.Column(db.VARCHAR(20))
     tipo = db.Column(db.CHAR(1), nullable=False)
     senha = db.Column(db.VARCHAR(256), nullable=False)
-    pedidos = db.relationship('Pedidos', backref='pessoa', lazy='select', uselist=False)
     endereco = db.relationship('Enderecos', secondary=enderecos, lazy='select', uselist=True)
+    pedidos = db.relationship('Pedidos', backref='pessoa', lazy='select', uselist=True)
 
     def __init__(self, nome, email, rg, cpf, registro_diverso, pais_do_registro_diverso, tipo, senha):
         self.nome = nome
@@ -102,8 +102,6 @@ class Pessoas(db.Model):
 
         return True
 
-
-
     # @staticmethod
     # def verifica_duplicidade_registro(dados_pessoais):
     #
@@ -128,22 +126,81 @@ class Pessoas(db.Model):
 class Fornecedores(db.Model):
     __tablename__ = 'fornecedores'
 
-    id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    id = db.Column(db.BigInteger, autoincrement=True, primary_key=True)
     nome = db.Column(db.VARCHAR(50))
-    cnpj = db.Column(db.Integer, unique=True)
-    contato = db.Column(db.Integer)
+    cnpj = db.Column(db.BigInteger, unique=True)
+    contato = db.Column(db.BigInteger)
     email = db.Column(db.VARCHAR(256), unique=True)
-    endereco = db.relationship('Enderecos', secondary=enderecos_fornecedores, lazy='select', uselist=False)
+    endereco = db.relationship('Enderecos', secondary=enderecos_fornecedores, lazy='select', uselist=True)
     preco_insumo = db.relationship('Preco_insumo', backref='preco_insumo')
 
+    def __init__(self, nome, cnpj, contato, email):
+        self.nome = nome
+        self.cnpj = cnpj
+        self.contato = contato
+        self.email = email
+
+    @staticmethod
+    def adiciona_fornecedor(dados_fornecedor:dict, dados_endereco:dict):
+
+        # if Pessoas.verifica_duplicidade_registro(dados_pessoais):  #or not Enderecos.verifica_possibilidade_endereco(dados_endereco)
+
+        fornecedor = Fornecedores(
+            dados_fornecedor['nome'],
+            dados_fornecedor['cnpj'],
+            dados_fornecedor['contato'],
+            dados_fornecedor['email'],
+        )
+
+        endereco = Enderecos(
+            dados_endereco['rua'],
+            dados_endereco['bairro'],
+            dados_endereco['cidade'],
+            dados_endereco['estado'],
+            dados_endereco['pais'],
+            dados_endereco['numero'],
+            dados_endereco['complemento'],
+            dados_endereco['tipo_endereco']
+        )
+
+        fornecedor.endereco.append(endereco)
+        db.session.add(fornecedor)
+        db.session.commit()
+
+        return True
+
+    @staticmethod
+    def associa_fornecedor_a_insumo(fornecedor, dados_insumo:dict):
+
+        fornecedor_instancia = Fornecedores.query.filter_by(nome=fornecedor).first()
+
+        insumo_instancia = Insumos.query.filter_by(nome=dados_insumo['nome']).first()
+
+        if not fornecedor_instancia:
+
+            return False
+
+        if not insumo_instancia:
+
+            return False
+
+        relacao = Preco_insumo(
+            insumo_instancia.id,
+            fornecedor_instancia.id,
+            dados_insumo['valor']
+        )
+
+        relacao.insumo = insumo_instancia
+        fornecedor_instancia.preco_insumo.append(relacao)
+        db.session.add(fornecedor_instancia)
+        db.session.commit()
+        return True
+
 
     # @staticmethod
-    # def adiciona_fornecedor(dados_fornecedor:dict, endereco:dict):
-    #
-    # @staticmethod
-    # def associa_fornecedor_a_insumo(fornecedor, insumo):
+    # # def remove_fornecedor():
 
-
+# Fornecedores.adiciona_fornecedor({'nome': 'Teste', 'email': 'teste@email.com', 'cnpj': 11111111111, 'contato': None}, {'rua': 'Teste', 'bairro': 'Teste', 'cidade': 'Teste', 'estado': 'Teste', 'pais': 'teste', 'numero': 123, 'complemento': 'Teste', 'tipo_endereco': 'R'})
 
 ################################ FIM Modelo Pessoas ##################################################
 ################################ Modelo Endereço ##################################################
@@ -151,7 +208,7 @@ class Fornecedores(db.Model):
 class Enderecos(db.Model):
     __tablename__ = 'enderecos'
 
-    id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    id = db.Column(db.BigInteger, autoincrement=True, primary_key=True)
     rua = db.Column(db.VARCHAR(100))
     bairro = db.Column(db.VARCHAR(100))
     cidade = db.Column(db.VARCHAR(50))

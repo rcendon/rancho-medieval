@@ -23,6 +23,13 @@ class Pedidos(db.Model):
     status = db.Column(db.VARCHAR(15)) # 1 - Aguardando confirmação do pagamento ; 2 - Em preparação ; 3 - Preparado ; 4 - A caminho ; 5 - Entregue
     data = db.Column(db.TIMESTAMP, nullable=False)
 
+    def __init__(self, id_cliente, valor, status_pagamento, status, data):
+        self.id_cliente = id_cliente
+        self.valor = valor
+        self. status_pagamento = status_pagamento
+        self.status = status
+        self.data = data
+
     # def insere_pedido(self, carrinho:dict):
     #     for item in carrinho:
     #         if carrinho.keys() in Produtos.query.all():
