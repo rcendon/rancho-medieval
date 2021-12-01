@@ -1,7 +1,7 @@
 import bcrypt
 
 from app import db
-from ..produtos.models import Insumos
+# from ..produtos.models import Insumos
 # from ..pedidos.models import Pedidos
 
 
@@ -14,8 +14,8 @@ enderecos = db.Table(
 
 enderecos_fornecedores = db.Table(
     'relacao_fornecedores_enderecos',
-    db.Column('fornecedor_id', db.BigInteger, db.ForeignKey('fornecedores.id'), primary_key=True),
-    db.Column('endereco_id', db.BigInteger, db.ForeignKey('enderecos.id'), primary_key=True)
+    db.Column('fornecedor_id', db.BigInteger, db.ForeignKey('fornecedores.id', ondelete='CASCADE'), primary_key=True),
+    db.Column('endereco_id', db.BigInteger, db.ForeignKey('enderecos.id', ondelete='CASCADE'), primary_key=True)
 )
 
 # preco_insumo = db.Table(
@@ -28,10 +28,9 @@ enderecos_fornecedores = db.Table(
 class Preco_insumo(db.Model):
     __tablename__ = 'preco_insumo'
 
-    id_fornecedor = db.Column('id_fornecedor', db.BigInteger, db.ForeignKey('fornecedores.id'), primary_key=True)
-    id_insumo = db.Column('id_insumo', db.BigInteger, db.ForeignKey('insumos.id'), primary_key=True)
+    id_fornecedor = db.Column('id_fornecedor', db.BigInteger, db.ForeignKey('fornecedores.id', ondelete='CASCADE'), primary_key=True)
+    id_insumo = db.Column('id_insumo', db.BigInteger, db.ForeignKey('insumos.id', ondelete='CASCADE'), primary_key=True)
     valor = db.Column('valor', db.Float, nullable=False)
-    insumo = db.relationship('Insumos', backref='insumo')
 
     def __init__(self, id_insumo, id_fornecedor, valor):
         self.id_insumo = id_insumo
@@ -114,6 +113,7 @@ class Pessoas(db.Model):
     #
     #     return True
 
+
     # @staticmethod
     # def remove_pessoa():
 
@@ -134,8 +134,8 @@ class Fornecedores(db.Model):
     cnpj = db.Column(db.BigInteger, unique=True)
     contato = db.Column(db.BigInteger)
     email = db.Column(db.VARCHAR(256), unique=True)
-    endereco = db.relationship('Enderecos', secondary=enderecos_fornecedores, lazy='select', uselist=True)
-    preco_insumo = db.relationship('Preco_insumo', backref='preco_insumo')
+    endereco = db.relationship('Enderecos', secondary=enderecos_fornecedores, cascade="all, delete", passive_deletes=True, lazy='select', uselist=True)
+    preco_insumo = db.relationship('Preco_insumo', backref='preco_insumo', cascade="all, delete", passive_deletes=True)
 
     def __init__(self, nome, cnpj, contato, email):
         self.nome = nome
@@ -173,35 +173,33 @@ class Fornecedores(db.Model):
         return True
 
     @staticmethod
-    def associa_fornecedor_a_insumo(fornecedor, dados_insumo:dict):
+    def remove_fornecedor(fornecedor):
 
         fornecedor_instancia = Fornecedores.query.filter_by(nome=fornecedor).first()
 
-        insumo_instancia = Insumos.query.filter_by(nome=dados_insumo['nome']).first()
-
-        if not fornecedor_instancia:
+        if fornecedor_instancia == None:
 
             return False
 
-        if not insumo_instancia:
+        else:
 
-            return False
+            for insumo in Preco_insumo.query.all():
+                if insumo.id_fornecedor == fornecedor_instancia.id:
+                    fornecedor_instancia.preco_insumo.append(insumo)
 
-        relacao = Preco_insumo(
-            insumo_instancia.id,
-            fornecedor_instancia.id,
-            dados_insumo['valor']
-        )
+            # for endereco in enderecos_fornecedores:
+            #
+            #     das
 
-        relacao.insumo = insumo_instancia
-        fornecedor_instancia.preco_insumo.append(relacao)
-        db.session.add(fornecedor_instancia)
-        db.session.commit()
-        return True
+            db.session.delete(fornecedor_instancia)
+            db.session.commit()
+            return True
 
 
-    # @staticmethod
-    # def remove_fornecedor():
+
+
+
+
 
 # Fornecedores.adiciona_fornecedor({'nome': 'Teste', 'email': 'teste@email.com', 'cnpj': 11111111111, 'contato': None}, {'rua': 'Teste', 'bairro': 'Teste', 'cidade': 'Teste', 'estado': 'Teste', 'pais': 'teste', 'numero': 123, 'complemento': 'Teste', 'tipo_endereco': 'R'})
 

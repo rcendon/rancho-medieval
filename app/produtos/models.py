@@ -1,6 +1,7 @@
 from app import db
 from sqlalchemy import func
 from flask import session
+from ..pessoas.models import Fornecedores, Preco_insumo
 
 # receita = db.Table(
 #     "receitas",
@@ -54,7 +55,8 @@ class Produtos(db.Model):
 
         if produto == False:
 
-            return 'A inserção do produto não será possível pois já há um produto registrado com o mesmo nome.'
+            # return 'A inserção do produto não será possível pois já há um produto registrado com o mesmo nome.'
+            return False
 
         for insumo in dados_produto['insumos']:
 
@@ -68,7 +70,8 @@ class Produtos(db.Model):
 
             else:
 
-                return 'A inserção do produto não será possível pois há insumos não cadastrados. Por favor, realize o cadastro e tente novamente.'
+                # return 'A inserção do produto não será possível pois há insumos não cadastrados. Por favor, realize o cadastro e tente novamente.'
+                return False
 
             lista_relacoes_produto_insumos.append(relacao)
 
@@ -77,7 +80,8 @@ class Produtos(db.Model):
             db.session.add(relacao)
             db.session.commit()
 
-        return 'A inserção do produto foi bem sucedida.'
+        return True
+        # return 'A inserção do produto foi bem sucedida.'
 
     @staticmethod
     def adiciona_produto_cardapio(dados_produto:dict):
@@ -208,6 +212,8 @@ class Produtos(db.Model):
 
             return False
 
+
+
 ############################### Fim Modelo Cadastro de Produtos #####################################################
 
 ################################ Modelo Insumos  ########################################################
@@ -218,14 +224,14 @@ class Insumos(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     nome = db.Column(db.VARCHAR(50))
     quantidade_estoque_insumo = db.Column(db.Integer, nullable=False)
+    preco_insumo = db.relationship('Preco_insumo', backref='preco_insumo_insumos', cascade="all, delete", passive_deletes=True)
 
     def __init__(self, nome, quantidade):
         self.nome = nome
         self.quantidade_estoque_insumo = quantidade
 
-
     @staticmethod
-    def adiciona_insumo_estoque(insumo):
+    def cadastra_insumo_estoque(insumo):
 
         if Insumos.query.filter_by(nome=insumo).first():
 
@@ -234,7 +240,7 @@ class Insumos(db.Model):
         insumo = Insumos(insumo, 0)
 
         db.session.add(insumo)
-        db.session.comit()
+        db.session.commit()
         return True
 
     @staticmethod
@@ -259,6 +265,105 @@ class Insumos(db.Model):
 
             estoque.quantidade_estoque_insumo -= quantidade
             db.session.add(estoque)
+            db.session.commit()
+            return True
+
+    @staticmethod
+    def associa_fornecedor_a_insumo(fornecedor, dados_insumo:dict):
+
+        fornecedor_instancia = Fornecedores.query.filter_by(nome=fornecedor).first()
+
+        insumo_instancia = Insumos.query.filter_by(nome=dados_insumo['nome']).first()
+
+        if not fornecedor_instancia:
+
+            return False
+
+        if not insumo_instancia:
+
+            return False
+
+        relacao = Preco_insumo(
+            insumo_instancia.id,
+            fornecedor_instancia.id,
+            dados_insumo['valor']
+        )
+
+        relacao.insumo = insumo_instancia
+        fornecedor_instancia.preco_insumo.append(relacao)
+        db.session.add(fornecedor_instancia)
+        db.session.commit()
+        return True
+
+    @staticmethod
+    def desassocia_fornecedor_a_insumo(fornecedor, insumo):
+
+        if (
+            Fornecedores.query.filter_by(nome=fornecedor).first() == None
+            or
+            Insumos.query.filter_by(nome=insumo).first() == None
+        ):
+
+            return False
+
+        for preco_insumo in Preco_insumo.query.all():
+
+            if (
+                    preco_insumo.id_insumo == Insumos.query.filter_by(nome=insumo).first().id
+                    and
+                    preco_insumo.id_fornecedor == Fornecedores.query.filter_by(nome=fornecedor).first().id
+            ):
+
+                db.session.delete(preco_insumo)
+                db.session.commit()
+
+        return True
+
+    @staticmethod
+    def altera_valor_insumo_por_fornecedor(fornecedor, dados_insumo:dict):
+
+        insumo_localizado = Insumos.query.filter_by(nome=dados_insumo['nome']).first()
+
+        fornecedor_localizado = Fornecedores.query.filter_by(nome=fornecedor).first()
+
+        if(
+                insumo_localizado != None
+                and
+                fornecedor_localizado != None
+        ):
+
+            for preco_insumo in Preco_insumo.query.all():
+
+                if(
+                        preco_insumo.id_insumo == insumo_localizado.id
+                        and
+                        preco_insumo.id_fornecedor == fornecedor_localizado.id
+                ):
+
+                    preco_insumo.valor = dados_insumo['valor']
+                    db.session.add(preco_insumo)
+                    db.session.commit()
+                    return True
+        else:
+
+            return False
+
+    @staticmethod
+    def descadastra_insumo(insumo):
+
+        insumo_instancia = Insumos.query.filter_by(nome=insumo).first()
+
+        if insumo_instancia == None:
+
+            return False
+
+        else:
+
+            for preco_insumo in Preco_insumo.query.all():
+                if preco_insumo.id_insumo == insumo_instancia.id:
+                    insumo_instancia.preco_insumo.append(preco_insumo)
+
+            db.session.delete(insumo_instancia)
             db.session.commit()
             return True
 
