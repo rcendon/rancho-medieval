@@ -114,6 +114,9 @@ class Pessoas(db.Model):
     #
     #     return True
 
+    # @staticmethod
+    # def remove_pessoa():
+
 
 # teste de inserção de pessoa no banco de dados -> Pessoas.adiciona_pessoa({'nome': 'Teste', 'email': 'teste@email.com', 'rg': 1111111111, 'cpf': 11111111111, 'registro_diverso': None, 'pais_do_registro_diverso': None, 'tipo': 'C', 'senha': '123'}, {'rua': 'Teste', 'bairro': 'Teste', 'cidade': 'Teste', 'estado': 'Teste', 'pais': 'teste', 'numero': 'Teste', 'complemento': 'Teste', 'tipo_endereco': 'R'})
 
@@ -198,7 +201,7 @@ class Fornecedores(db.Model):
 
 
     # @staticmethod
-    # # def remove_fornecedor():
+    # def remove_fornecedor():
 
 # Fornecedores.adiciona_fornecedor({'nome': 'Teste', 'email': 'teste@email.com', 'cnpj': 11111111111, 'contato': None}, {'rua': 'Teste', 'bairro': 'Teste', 'cidade': 'Teste', 'estado': 'Teste', 'pais': 'teste', 'numero': 123, 'complemento': 'Teste', 'tipo_endereco': 'R'})
 

@@ -83,7 +83,7 @@ class Pedidos(db.Model):
     #     db.session.commit()
 
     @staticmethod
-    def gera_pedido(carrinho):
+    def gera_pedido(carrinho:dict):
         pedido = {
             'id_cliente': Pessoas.query.filter_by(email = session['email']).id,
             'valor': Pedidos.calcula_valor_total_do_carrinhho(carrinho),
@@ -105,9 +105,6 @@ class Pedidos(db.Model):
                 return 'aprovado'
         else:
             return 'aprovado'
-
-
-
 
 
 ############################### Fim Modelo Pedidos #####################################################
