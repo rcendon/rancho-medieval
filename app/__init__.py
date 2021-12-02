@@ -26,7 +26,7 @@ bcrypt = Bcrypt(app)
 from app.admin import rotas #Importa da pasta app/admin o arquivo rotas.py
 from app.produtos import rotas #Importa da pasta app/produtos o arquivo rotas.py
 from app.pessoas import rotas #Importa da pasta app/pessoas o arquivo rotas.py
-from app.diversos import rotas #Importa da pasta app/diversos o arquivo rotas.py
+from app.pedidos import rotas #Importa da pasta app/pedidos o arquivo rotas.py
 from app.erros import rotas #Importa da pasta app/erros o arquivo rotas.py
 
 migrate = Migrate(app, db)

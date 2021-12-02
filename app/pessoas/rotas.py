@@ -5,7 +5,7 @@ from wtforms.validators import Email
 #Importa a variaveis APP e DB do "__init__.py" = (loja).
 from app import app, db, bcrypt
 
-from .forms import RegistrationFormCli, LoginFormularioCli
+from .forms import FormularioDadosPessoaisPrincipais, FormularioEndereco, LoginFormularioCli
 
 from .models import Pessoas
 
@@ -30,7 +30,8 @@ def minhaconta():
 
 @app.route('/registrocliente', methods=['GET', 'POST'])
 def registrocliente():
-    form = RegistrationFormCli(request.form) #Retorna valores do forms.py
+    teste = FormularioEndereco()
+    form = FormularioDadosPessoaisPrincipais(request.form) #Retorna valores do forms.py
     if request.method == "POST" and form.validate():
         hash_password = bcrypt.generate_password_hash(form.senha.data).decode('utf-8')
 
@@ -51,7 +52,7 @@ def registrocliente():
         flash(f'{form.nome.data}, obrigado pelo registro, realize o login', 'success')        
         return redirect(url_for('logincliente'))
         
-    return render_template('clientes/registrocliente.html', form=form)
+    return render_template('clientes/registrocliente.html', form=form, teste=teste)
 
 ######################################################################################
 
@@ -88,7 +89,7 @@ app.route("/carrinho")
 def carrinho():
     if carrinho not in session:
         return render_template("index.html")
-    return render_template("clientes/historicoDeCompras.html")
+    return render_template("clientes/historico_de_pedidos.html")
 
 
 # admin = Pessoas(

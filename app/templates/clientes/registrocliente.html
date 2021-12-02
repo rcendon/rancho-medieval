@@ -16,6 +16,9 @@
     <div>
         
         <form method="POST" enctype="multipart/form-data" >
+            {{ teste.hidden_tag() }}
+            {{ teste.rua.label("Rua") }}
+
             <div class="form-group col-md-10">
                 <h1><font color="#ffffff">Novo Cadastro</font></h1>
                 

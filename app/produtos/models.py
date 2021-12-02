@@ -3,11 +3,6 @@ from sqlalchemy import func
 from flask import session
 from ..pessoas.models import Fornecedores, Preco_insumo
 
-# receita = db.Table(
-#     "receitas",
-#     db.Column('id_produto', db.Integer, db.ForeignKey('cardapio.id_produto'), primary_key=True),
-#     db.Column('id_insumo', db.Integer, db.ForeignKey('insumos.id'), primary_key=True)
-# )
 
 class Receitas(db.Model):
     __tablename__ = 'receitas'
@@ -22,8 +17,8 @@ class Receitas(db.Model):
         self.id_insumo = id_insumo
         self.quantidade_insumo = quantidade_insumo
 
-
 ################################ Modelo Cadastro Produtos ########################################################
+
 
 class Produtos(db.Model):
     __tablename__ = 'cardapio'
@@ -36,7 +31,6 @@ class Produtos(db.Model):
     imagem = db.Column(db.Text)
     mimetype = db.Column(db.Text)
     receita = db.relationship('Receitas', backref='receita')
-    # receita = db.relationship('Insumos', backref='produto', secondary=receita, lazy='select', uselist=True)
 
     def __init__(self, nome, quantidade_estoque_produto, valor, descricao, imagem, mimetype):
         self.nome = nome
@@ -267,9 +261,6 @@ class Produtos(db.Model):
 
             return produto_instancia.quantidade_estoque_produto
 
-
-
-
 ############################### Fim Modelo Cadastro de Produtos #####################################################
 
 ################################ Modelo Insumos  ########################################################
@@ -325,7 +316,7 @@ class Insumos(db.Model):
             return True
 
     @staticmethod
-    def associa_fornecedor_a_insumo(fornecedor, dados_insumo:dict):
+    def associa_fornecedor_a_insumo(dados_insumo:dict, fornecedor):
 
         fornecedor_instancia = Fornecedores.query.filter_by(nome=fornecedor).first()
 
@@ -352,7 +343,7 @@ class Insumos(db.Model):
         return True
 
     @staticmethod
-    def desassocia_fornecedor_a_insumo(fornecedor, insumo):
+    def desassocia_fornecedor_a_insumo(insumo, fornecedor):
 
         if (
             Fornecedores.query.filter_by(nome=fornecedor).first() == None
@@ -376,7 +367,7 @@ class Insumos(db.Model):
         return True
 
     @staticmethod
-    def altera_valor_insumo_por_fornecedor(fornecedor, dados_insumo:dict):
+    def altera_valor_insumo_por_fornecedor(dados_insumo:dict, fornecedor):
 
         insumo_localizado = Insumos.query.filter_by(nome=dados_insumo['nome']).first()
 

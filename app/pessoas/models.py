@@ -1,8 +1,7 @@
 import bcrypt
 
 from app import db
-# from ..produtos.models import Insumos
-# from ..pedidos.models import Pedidos
+from ..pedidos.models import Pedidos
 
 
 enderecos = db.Table(
@@ -17,13 +16,6 @@ enderecos_fornecedores = db.Table(
     db.Column('fornecedor_id', db.BigInteger, db.ForeignKey('fornecedores.id', ondelete='CASCADE'), primary_key=True),
     db.Column('endereco_id', db.BigInteger, db.ForeignKey('enderecos.id', ondelete='CASCADE'), primary_key=True)
 )
-
-# preco_insumo = db.Table(
-#     'preco_insumo',
-#     db.Column('id_fornecedor', db.Integer, db.ForeignKey('fornecedores.id'), primary_key=True),
-#     db.Column('id_insumo', db.Integer, db.ForeignKey('insumos.id'), primary_key=True),
-#     db.Column('valor', db.Float, nullable=False)
-# )
 
 class Preco_insumo(db.Model):
     __tablename__ = 'preco_insumo'
@@ -92,7 +84,8 @@ class Pessoas(db.Model):
             dados_endereco['pais'],
             dados_endereco['numero'],
             dados_endereco['complemento'],
-            dados_endereco['tipo_endereco']
+            dados_endereco['tipo_endereco'],
+            dados_endereco['cep']
         )
 
         pessoa.endereco.append(endereco)
@@ -118,7 +111,7 @@ class Pessoas(db.Model):
     # def remove_pessoa():
 
 
-# teste de inserção de pessoa no banco de dados -> Pessoas.adiciona_pessoa({'nome': 'Teste', 'email': 'teste@email.com', 'rg': 1111111111, 'cpf': 11111111111, 'registro_diverso': None, 'pais_do_registro_diverso': None, 'tipo': 'C', 'senha': '123'}, {'rua': 'Teste', 'bairro': 'Teste', 'cidade': 'Teste', 'estado': 'Teste', 'pais': 'teste', 'numero': 'Teste', 'complemento': 'Teste', 'tipo_endereco': 'R'})
+            # teste de inserção de pessoa no banco de dados -> Pessoas.adiciona_pessoa({'nome': 'Teste', 'email': 'teste@email.com', 'rg': 1111111111, 'cpf': 11111111111, 'registro_diverso': None, 'pais_do_registro_diverso': None, 'tipo': 'C', 'senha': '123'}, {'rua': 'Teste', 'bairro': 'Teste', 'cidade': 'Teste', 'estado': 'Teste', 'pais': 'teste', 'numero': 'Teste', 'complemento': 'Teste', 'tipo_endereco': 'R'})
 
 ################################ FIM Modelo Pessoas ##################################################
 
@@ -163,7 +156,9 @@ class Fornecedores(db.Model):
             dados_endereco['pais'],
             dados_endereco['numero'],
             dados_endereco['complemento'],
-            dados_endereco['tipo_endereco']
+            dados_endereco['tipo_endereco'],
+            dados_endereco['cep']
+
         )
 
         fornecedor.endereco.append(endereco)
@@ -197,12 +192,6 @@ class Fornecedores(db.Model):
 
 
 
-
-
-
-
-# Fornecedores.adiciona_fornecedor({'nome': 'Teste', 'email': 'teste@email.com', 'cnpj': 11111111111, 'contato': None}, {'rua': 'Teste', 'bairro': 'Teste', 'cidade': 'Teste', 'estado': 'Teste', 'pais': 'teste', 'numero': 123, 'complemento': 'Teste', 'tipo_endereco': 'R'})
-
 ################################ FIM Modelo Pessoas ##################################################
 ################################ Modelo Endereço ##################################################
 
@@ -212,14 +201,15 @@ class Enderecos(db.Model):
     id = db.Column(db.BigInteger, autoincrement=True, primary_key=True)
     rua = db.Column(db.VARCHAR(100))
     bairro = db.Column(db.VARCHAR(100))
-    cidade = db.Column(db.VARCHAR(50))
-    estado = db.Column(db.VARCHAR(50))
-    pais = db.Column(db.VARCHAR(40))
     numero = db.Column(db.Integer)
     complemento = db.Column(db.VARCHAR(100))
     tipo_endereco = db.Column(db.CHAR(1), nullable=False) # Valores possíveis -> R - Residencial ; C - Comercial
+    cep = db.Column(db.BigInteger, nullable=False)
+    cidade = db.Column(db.VARCHAR(50))
+    estado = db.Column(db.VARCHAR(50))
+    pais = db.Column(db.VARCHAR(40))
 
-    def __init__(self, rua, bairro, cidade, estado, pais, numero, complemento, tipo_endereco):
+    def __init__(self, rua, bairro, cidade, estado, pais, numero, complemento, tipo_endereco, cep):
 
         self.rua = rua
         self.bairro = bairro
@@ -229,32 +219,6 @@ class Enderecos(db.Model):
         self.numero = numero
         self.complemento = complemento
         self.tipo_endereco = tipo_endereco # Valores possíveis -> R - Residencial ; C - Comercial
-
-    # @staticmethod
-    # def adiciona_endereco(dados_endereco):
-    #
-    #     # if Enderecos.verifica_possibilidade_endereco(dados_endereco):
-    #
-    #     endereco = Enderecos(
-    #         dados_endereco['rua'],
-    #         dados_endereco['bairro'],
-    #         dados_endereco['cidade'],
-    #         dados_endereco['estado'],
-    #         dados_endereco['pais'],
-    #         dados_endereco['numero'],
-    #         dados_endereco['complemento'],
-    #         dados_endereco['tipo_endereco']
-    #     )
-    #
-    #     db.session.add(endereco)
-    #     db.session.commit()
-    #     return True
-
-    # @staticmethod
-    # def verifica_possibilidade_endereco(dados_endereco):
-
-
-
-
+        self.cep = cep
 
 ################################ FIM Modelo Endereço ##################################################

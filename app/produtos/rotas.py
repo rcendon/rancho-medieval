@@ -1,7 +1,6 @@
 from flask import render_template, session, request, redirect, url_for, flash
 from flask.helpers import flash
 from sqlalchemy import inspect
-
 from app import db, app
 from .models import Produtos
 
@@ -10,7 +9,7 @@ from .models import Produtos
 
 @app.route('/cardapio')
 def cardapio():
-    cardapio = Produtos.query.all() #Select * from 
+    cardapio = Produtos.lista_produtos_em_estoque()
     return render_template('produtos/cardapio.html',cardapio=cardapio)
 
 
