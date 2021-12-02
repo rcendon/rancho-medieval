@@ -1,6 +1,4 @@
 from app import db
-from ..pedidos.forms import valida_dados_pagamento, valida_dados_cartao
-from flask import session
 from datetime import datetime
 
 itens_do_pedido = db.Table(
@@ -103,6 +101,13 @@ class Pedidos(db.Model):
             pedidos = Pedidos.query.filter_by(id_cliente=cliente_id).all()
 
         return pedidos
+
+    @staticmethod
+    def lista_itens_do_pedido(pedido):
+
+        itens = []
+
+        print(Pedidos.query.filter_by(id=pedido).first().produtos)
 
 
 

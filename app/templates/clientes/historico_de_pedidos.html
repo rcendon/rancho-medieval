@@ -2,9 +2,24 @@
 
 {% block content %}
 
-<section name=""> </section>
+<h1>Pedidos</h1>
 
-    <section name="Informacoes do pedido">
+    {% for pedido in lista_pedidos %}
+
+        <table>
+        <tr>
+            <th>Pedido: {{ pedido.id }}</th>
+        </tr>
+        <tr>
+            <th></th>
+        </tr>
+        </table>
+
+
+    {% endfor %}
+
+
+    <section name="Informacoes dos pedidos">
         <h2 class="h2"> Resumo do pedido </h2>
         <table>
             <tr>

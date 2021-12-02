@@ -9,47 +9,92 @@
         <h2>Atendimento de Segunda à Domingo das 18h00 às 23h00</h2>                 
     </div>       
         
-    <!--#################  form ADD Cliente ################-->  
-    <!--nome, email, telefone, rg, cpf, endereço, senha-->     
-                                     
-    <!--https://flask.palletsprojects.com/en/2.0.x/patterns/wtforms/ - Forms in Templates-->
     <div>
-        
-        <form method="POST" enctype="multipart/form-data" >
-            {{ teste.hidden_tag() }}
-            {{ teste.rua.label("Rua") }}
 
-            <div class="form-group col-md-10">
-                <h1><font color="#ffffff">Novo Cadastro</font></h1>
-                
-                <div class="form-group col-md-6" >
-                    <label for="exampleInputEmail1"><font color="#ffffff">Nome</font></label>
-                    <input type="text" name="nome" id="nome" placeholder="Nome" class="form-control">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="exampleInputEmail1"><font color="#ffffff">E-mail</font></label>
-                    <input type="text" name="email" id="email" placeholder="E-mail" class="form-control">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="exampleInputEmail1"><font color="#ffffff">RG</font></label>
-                    <input type="text" name="rg" id="rg" placeholder="RG" class="form-control">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="exampleInputEmail1"><font color="#ffffff">CPF</font></label>
-                    <input type="text" name="cpf" id="cpf" placeholder="CPF" class="form-control">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="exampleInputEmail1"><font color="#ffffff">Endereço</font></label>
-                    <input type="text" name="endereco" id="tipo" placeholder="Endereco" class="form-control">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="exampleInputEmail1"><font color="#ffffff">Senha</font></label>
-                    <input type="password" name="senha" id="senha" placeholder="Senha" class="form-control">
-                </div> 
-            </div>
+        <div class="form-group col-md-10">
+
+            <h1><font color="#ffffff">Novo Cadastro</font></h1>
+
+        <form method="POST" enctype="multipart/form-data" >
+
+            {{ form.hidden_tag() }}
+
+{#        <div name="dados_principais" class="form-group col-md-6">#}
+
+            {{ form.nome.label }}
+            {{ form.nome(placeholder="Nome", class="form-control") }}
+            {% for erro in form.nome.errors %}
+                <p>{{ erro }}</p>
+            {% endfor %}
+            {{ form.email.label }}
+            {{ form.email(placeholder="E-mail", class="form-control") }}
+            {% for erro in form.email.errors %}
+                <p>{{ erro }}</p>
+            {% endfor %}
+            {{ form.rg.label }}
+            {{ form.rg(placeholder="RG", class="form-control") }}
+            {% for erro in form.rg.errors %}
+                <p>{{ erro }}</p>
+            {% endfor %}
+            {{ form.cpf.label }}
+            {{ form.cpf(placeholder="CPF", class="form-control") }}
+            {% for erro in form.cpf.errors %}
+                <p>{{ erro }}</p>
+            {% endfor %}
+            {{ form.senha.label }}
+            {{ form.senha(placeholder="Senha", class="form-control") }}
+            {% for erro in form.senha.errors %}
+                <p>{{ erro }}</p>
+            {% endfor %}
+
+{#        </div>#}
+
+{#        <div name="endereco">#}
+
+            {{ form.rua.label }}
+            {{ form.rua(placeholder="Rua", class="form-control") }}
+            {% for erro in form.rua.errors %}
+                <p>{{ erro }}</p>
+            {% endfor %}
+            {{ form.bairro.label }}
+            {{ form.bairro(placeholder="Bairro", class="form-control") }}
+            {% for erro in form.bairro.errors %}
+                <p>{{ erro }}</p>
+            {% endfor %}
+            {{ form.numero.label }}
+            {{ form.numero(placeholder="Numero", class="form-control") }}
+            {% for erro in form.numero.errors %}
+                <p>{{ erro }}</p>
+            {% endfor %}
+            {{ form.complemento.label }}
+            {{ form.complemento(placeholder="Complemento", class="form-control") }}
+            {% for erro in form.complemento.errors %}
+                <p>{{ erro }}</p>
+            {% endfor %}
+            {{ form.cidade.label }}
+            {{ form.cidade(placeholder="Cidade", class="form-control") }}
+            {% for erro in form.cidade.errors %}
+                <p>{{ erro }}</p>
+            {% endfor %}
+            {{ form.estado.label }}
+            {{ form.estado(placeholder="Estado", class="form-control") }}
+            {% for erro in form.estado.errors %}
+                <p>{{ erro }}</p>
+            {% endfor %}
+            {{ form.pais.label }}
+            {{ form.pais(placeholder="País", class="form-control") }}
+            {% for erro in form.pais.errors %}
+                <p>{{ erro }}</p>
+            {% endfor %}
+            {{ form.cep.label }}
+            {{ form.cep(placeholder="Cep", class="form-control") }}
+            {% for erro in form.cep.errors %}
+                <p>{{ erro }}</p>
+            {% endfor %}
+            {{ form.submit(class="form-group btn btn-success") }}
+{#        </div>#}
             <br>
-            <a class="form-group btn btn-primary" href="/">Voltar</a>      
-            <input type=submit value="Registrar" class="form-group btn btn-success">
+            <a class="form-group btn btn-primary" href="/">Voltar</a>
         </form>
     </div>
 

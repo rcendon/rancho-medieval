@@ -1,7 +1,6 @@
 import bcrypt
 
 from app import db
-from ..pedidos.models import Pedidos
 
 
 enderecos = db.Table(
@@ -42,50 +41,43 @@ class Pessoas(db.Model):
     email = db.Column(db.VARCHAR(256), unique=True, nullable=False)
     rg = db.Column(db.BigInteger, unique=True)
     cpf = db.Column(db.BigInteger, unique=True)
-    registro_diverso = db.Column(db.VARCHAR(20), unique=True)
-    pais_do_registro_diverso = db.Column(db.VARCHAR(20))
     tipo = db.Column(db.CHAR(1), nullable=False)
     senha = db.Column(db.VARCHAR(256), nullable=False)
     endereco = db.relationship('Enderecos', secondary=enderecos, lazy='select', uselist=True)
     pedidos = db.relationship('Pedidos', backref='pessoa', lazy='select', uselist=True)
 
-    def __init__(self, nome, email, rg, cpf, registro_diverso, pais_do_registro_diverso, tipo, senha):
+    def __init__(self, nome, email, rg, cpf, tipo, senha):
         self.nome = nome
         self.email = email
         self.rg = rg
         self.cpf = cpf
-        self.registro_diverso = registro_diverso
-        self.pais_do_registro_diverso = pais_do_registro_diverso
         self.tipo = tipo
         self.senha = senha
 
 
     @staticmethod
-    def adiciona_pessoa(dados_pessoais:dict, dados_endereco:dict):
-
-        # if Pessoas.verifica_duplicidade_registro(dados_pessoais):  #or not Enderecos.verifica_possibilidade_endereco(dados_endereco)
+    def adiciona_pessoa(dados_pessoais):
 
         pessoa = Pessoas(
-            dados_pessoais['nome'],
-            dados_pessoais['email'],
-            dados_pessoais['rg'],
-            dados_pessoais['cpf'],
-            dados_pessoais['registro_diverso'],
-            dados_pessoais['pais_do_registro_diverso'],
-            dados_pessoais['tipo'],
-            dados_pessoais['senha']
+            dados_pessoais.nome.data,
+            dados_pessoais.email.data,
+            dados_pessoais.rg.data,
+            dados_pessoais.cpf.data,
+            'C',
+            123
+            # bcrypt.generate_password_hash(dados_pessoais.senha.data).decode('utf-8')
         )
 
         endereco = Enderecos(
-            dados_endereco['rua'],
-            dados_endereco['bairro'],
-            dados_endereco['cidade'],
-            dados_endereco['estado'],
-            dados_endereco['pais'],
-            dados_endereco['numero'],
-            dados_endereco['complemento'],
-            dados_endereco['tipo_endereco'],
-            dados_endereco['cep']
+            dados_pessoais.rua.data,
+            dados_pessoais.bairro.data,
+            dados_pessoais.cidade.data,
+            dados_pessoais.estado.data,
+            dados_pessoais.pais.data,
+            dados_pessoais.numero.data,
+            dados_pessoais.complemento.data,
+            'C',
+            dados_pessoais.cep.data
         )
 
         pessoa.endereco.append(endereco)
@@ -94,24 +86,12 @@ class Pessoas(db.Model):
 
         return True
 
-    # @staticmethod
-    # def verifica_duplicidade_registro(dados_pessoais):
-    #
-    #     dados_pessoais_essenciais = ['registro_diverso', 'cpf', 'rg', 'email']
-    #
-    #     for key in dados_pessoais_essenciais:
-    #         if :
-    #
-    #             return False
-    #
-    #     return True
+
 
 
     # @staticmethod
     # def remove_pessoa():
 
-
-            # teste de inserção de pessoa no banco de dados -> Pessoas.adiciona_pessoa({'nome': 'Teste', 'email': 'teste@email.com', 'rg': 1111111111, 'cpf': 11111111111, 'registro_diverso': None, 'pais_do_registro_diverso': None, 'tipo': 'C', 'senha': '123'}, {'rua': 'Teste', 'bairro': 'Teste', 'cidade': 'Teste', 'estado': 'Teste', 'pais': 'teste', 'numero': 'Teste', 'complemento': 'Teste', 'tipo_endereco': 'R'})
 
 ################################ FIM Modelo Pessoas ##################################################
 
@@ -137,7 +117,7 @@ class Fornecedores(db.Model):
         self.email = email
 
     @staticmethod
-    def adiciona_fornecedor(dados_fornecedor:dict, dados_endereco:dict):
+    def adiciona_fornecedor(dados_fornecedor:dict):
 
         # if Pessoas.verifica_duplicidade_registro(dados_pessoais):  #or not Enderecos.verifica_possibilidade_endereco(dados_endereco)
 
@@ -149,16 +129,15 @@ class Fornecedores(db.Model):
         )
 
         endereco = Enderecos(
-            dados_endereco['rua'],
-            dados_endereco['bairro'],
-            dados_endereco['cidade'],
-            dados_endereco['estado'],
-            dados_endereco['pais'],
-            dados_endereco['numero'],
-            dados_endereco['complemento'],
-            dados_endereco['tipo_endereco'],
-            dados_endereco['cep']
-
+            dados_fornecedor['rua'],
+            dados_fornecedor['bairro'],
+            dados_fornecedor['cidade'],
+            dados_fornecedor['estado'],
+            dados_fornecedor['pais'],
+            dados_fornecedor['numero'],
+            dados_fornecedor['complemento'],
+            dados_fornecedor['tipo_endereco'],
+            dados_fornecedor['cep']
         )
 
         fornecedor.endereco.append(endereco)

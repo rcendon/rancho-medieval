@@ -5,7 +5,7 @@ from wtforms.validators import Email
 #Importa a variaveis APP e DB do "__init__.py" = (loja).
 from app import app, db, bcrypt
 
-from .forms import FormularioDadosPessoaisPrincipais, FormularioEndereco, LoginFormularioCli
+from .forms import FormularioDadosPessoais, LoginFormularioCli
 
 from .models import Pessoas
 
@@ -30,29 +30,21 @@ def minhaconta():
 
 @app.route('/registrocliente', methods=['GET', 'POST'])
 def registrocliente():
-    teste = FormularioEndereco()
-    form = FormularioDadosPessoaisPrincipais(request.form) #Retorna valores do forms.py
-    if request.method == "POST" and form.validate():
-        hash_password = bcrypt.generate_password_hash(form.senha.data).decode('utf-8')
 
-        user = Pessoas(
-            nome = form.nome.data,
-            email = form.email.data,
-            rg = int(form.rg.data),
-            cpf = int(form.cpf.data),
-            # registro_diverso= form.registro_diverso.data,
-            # pais_do_registro_diverso = form.pais_do_registro_diverso.data,
-            senha = hash_password,
-            tipo = 'C') # precisa alterar, junto com o frontend, para cadastrar os dados corretamente, além de adicionar nova variavel para cadastro do endereço que será outro formulario
+    form = FormularioDadosPessoais() #Retorna valores do forms.py
 
-        db.session.add(user)
-        db.session.commit() #Salva os dados no banco 
+    if request.method == "POST" and form.validate_on_submit():
+
+        user = Pessoas.adiciona_pessoa(form)
 
         #Menssagem flash
-        flash(f'{form.nome.data}, obrigado pelo registro, realize o login', 'success')        
+        flash(f'{form.nome.data}, obrigado pelo registro, realize o login', 'success')
         return redirect(url_for('logincliente'))
-        
-    return render_template('clientes/registrocliente.html', form=form, teste=teste)
+
+    # else:
+    #     flash('Deu errado')
+    #     return render_template('index.html')
+    return render_template('clientes/registrocliente.html', form=form)
 
 ######################################################################################
 
@@ -81,7 +73,7 @@ def logincliente():
 @app.route("/logoutcli")
 def logoutcli():
     session.pop('email')
-    return redirect(url_for('logincliente'))
+    return redirect(url_for('index.html'))
 
 ################## Rota Carrinho #############################################
 
