@@ -35,15 +35,10 @@ def registrocliente():
 
     if request.method == "POST" and form.validate_on_submit():
 
-        user = Pessoas.adiciona_pessoa(form)
-
-        #Menssagem flash
+        Pessoas.adiciona_pessoa(form)
         flash(f'{form.nome.data}, obrigado pelo registro, realize o login', 'success')
         return redirect(url_for('logincliente'))
 
-    # else:
-    #     flash('Deu errado')
-    #     return render_template('index.html')
     return render_template('clientes/registrocliente.html', form=form)
 
 ######################################################################################

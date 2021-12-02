@@ -1,8 +1,9 @@
 ##### CLIENTES ########
 
 from wtforms.fields import BooleanField, StringField, PasswordField, IntegerField, SelectField, SubmitField
-from wtforms.validators import length, InputRequired, NumberRange
+from wtforms.validators import length, InputRequired, NumberRange, ValidationError
 from flask_wtf import FlaskForm
+from app.pessoas.models import Pessoas
 
 #https://flask.palletsprojects.com/en/2.0.x/patterns/wtforms/ - The Forms
 
@@ -29,6 +30,25 @@ class FormularioDadosPessoais(FlaskForm):
     estado = SelectField('Estado', validators=[InputRequired()], choices=['-', 'Bahia', 'São Paulo'])
     pais = StringField('País', validators=[InputRequired(), length(min=1, max=40)])
     submit = SubmitField('Registrar')
+
+    def validate_email(self, email):
+        pessoa_instancia = Pessoas.query.filter_by(email=email.data).first()
+        if pessoa_instancia:
+            raise ValidationError("Já existe usuário com esse e-mail, por favor indique outro.")
+
+    def validate_cpf(self, cpf):
+        pessoa_instancia = Pessoas.query.filter_by(cpf=cpf.data).first()
+        if pessoa_instancia:
+            raise ValidationError("Já existe usuário com esse CPF, por favor indique outro.")
+
+    def validate_rg(self, rg):
+        pessoa_instancia = Pessoas.query.filter_by(rg=rg.data).first()
+        if pessoa_instancia:
+            raise ValidationError("Já existe usuário com esse RG, por favor indique outro.")
+
+
+
+
 
 
 ######################### Classe Form Login ##################################################
