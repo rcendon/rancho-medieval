@@ -212,6 +212,62 @@ class Produtos(db.Model):
 
             return False
 
+    @staticmethod
+    def lista_produtos_em_estoque():
+
+        lista_produtos_com_estoque = []
+
+        lista_produtos = Produtos.query.all()
+
+        if lista_produtos == None:
+
+            return False
+
+        else:
+
+            for produto in lista_produtos:
+
+                if Produtos.quantidade_em_estoque_do_produto(produto.nome) > 0:
+
+                    lista_produtos_com_estoque.append(produto)
+
+        return lista_produtos_com_estoque
+
+    @staticmethod
+    def lista_produtos_sem_estoque():
+
+        lista_produtos_com_estoque = []
+
+        lista_produtos = Produtos.query.all()
+
+        if lista_produtos == None:
+
+            return False
+
+        else:
+
+            for produto in lista_produtos:
+
+                if Produtos.quantidade_em_estoque_do_produto(produto.nome) == 0:
+
+                    lista_produtos_com_estoque.append(produto)
+
+        return lista_produtos_com_estoque
+
+    @staticmethod
+    def quantidade_em_estoque_do_produto(produto):
+
+        produto_instancia = Produtos.query.filter_by(nome=produto).first()
+
+        if produto_instancia == None:
+
+            return False
+
+        else:
+
+            return produto_instancia.quantidade_estoque_produto
+
+
 
 
 ############################### Fim Modelo Cadastro de Produtos #####################################################
