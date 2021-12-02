@@ -367,4 +367,40 @@ class Insumos(db.Model):
             db.session.commit()
             return True
 
+    @staticmethod
+    def lista_fornecedores_por_insumo(insumo, fornecedor=None):
+
+        lista_fornecedores = [insumo]
+        insumo_instancia = Insumos.query.filter_by(nome=insumo).first()
+
+        if fornecedor == None:
+
+            fornecedores = Fornecedores.query.all()
+
+        else:
+
+            fornecedores = Fornecedores.query.filter_by(nome=fornecedor).all()
+
+        if fornecedores == None or insumo_instancia == None:
+
+            return False
+
+        precos_insumo = Preco_insumo.query.filter_by(id_insumo=insumo_instancia.id).all()
+
+        if precos_insumo == None:
+
+            return False
+
+        else:
+
+            for preco_insumo in precos_insumo:
+
+                for fornecedor in fornecedores:
+
+                    if preco_insumo.id_fornecedor == fornecedor.id:
+                        lista_fornecedores.append(fornecedor)
+
+            return lista_fornecedores
+
+
 ############################### Fim Modelo Insumos #####################################################
