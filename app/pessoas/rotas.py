@@ -8,17 +8,22 @@ from app import app, db, bcrypt
 from .forms import FormularioDadosPessoais, LoginFormularioCli
 
 from .models import Pessoas
+from ..pedidos.models import Pedidos
 
 ##################### Rota Usuario ####################################################
 
 #Rota Usuario
 
 @app.route('/minhaconta')
-def minhaconta(): 
+def minhaconta():
+
     if 'email' not in session:
         flash(f'Olá, faça o login primeiro', 'danger')    
         return redirect(url_for('logincliente'))
-    return render_template('clientes/minhaconta.html')
+
+    cliente = Pessoas.query.filter_by(email=session['email']).first()
+
+    return render_template('clientes/minhaconta.html', cliente=cliente)
 
 ####################################################################################
 
@@ -62,7 +67,6 @@ def logincliente():
             flash(f'E-mail ou Senha incorretos', 'danger')  
     return render_template('clientes/logincliente.html', form=form)
 
-# redirect(request.args.get('next') or
 ######################################################################################
 
 @app.route("/logoutcli")
@@ -72,21 +76,10 @@ def logoutcli():
 
 ################## Rota Carrinho #############################################
 
-app.route("/carrinho")
-def carrinho():
-    if carrinho not in session:
-        return render_template("index.html")
-    return render_template("clientes/historico_de_pedidos.html")
+@app.route("/historico_de_pedidos")
+def historico_de_pedidos():
 
+    historico_pedidos = Pedidos.lista_pedidos(Pessoas.query.filter_by(email=session['email']).first().id)
 
-# admin = Pessoas(
-#     nome = 'Admin',
-#     email = 'admin@email.com',
-#     cpf = 1,
-#     senha = str(bcrypt.generate_password_hash("12345")).encode('utf-8'),
-#     tipo = 'A'
-# )
-#
-# db.session.add(admin)
-#
-# db.session.commit()
+    return render_template("clientes/historico_de_pedidos.html", historico_pedidos=historico_pedidos)
+
