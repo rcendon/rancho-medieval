@@ -50,8 +50,8 @@ def logincliente():
     if 'email' in session:         
         return redirect(url_for('minhaconta'))
 
-    form=LoginFormularioCli(request.form) #Retorna valores do forms.py
-    if request.method == "POST" and form.validate():
+    form=LoginFormularioCli() #Retorna valores do forms.py
+    if request.method == "POST": # and form.validate_on_submit():
         user = Pessoas.query.filter_by(email=form.email.data).first()
 
         if user and bcrypt.check_password_hash(user.senha, form.senha.data):
@@ -68,7 +68,7 @@ def logincliente():
 @app.route("/logoutcli")
 def logoutcli():
     session.pop('email')
-    return redirect(url_for('index.html'))
+    return redirect(url_for('minhaconta'))
 
 ################## Rota Carrinho #############################################
 

@@ -9,8 +9,6 @@
         <h2>Atendimento de Segunda à Domingo das 18h00 às 23h00</h2>                 
     </div>       
         
-    <div>
-
         <div class="form-group col-md-10">
 
             <h1><font color="#ffffff">Novo Cadastro</font></h1>
@@ -19,7 +17,7 @@
 
             {{ form.hidden_tag() }}
 
-{#        <div name="dados_principais" class="form-group col-md-6">#}
+        <div name="dados_principais" class="form-group col-md-6">
 
             {{ form.nome.label }}
             {{ form.nome(placeholder="Nome", class="form-control") }}
@@ -47,9 +45,9 @@
                 <p>{{ erro }}</p>
             {% endfor %}
 
-{#        </div>#}
+        </div>
 
-{#        <div name="endereco">#}
+        <div name="endereco">
 
             {{ form.rua.label }}
             {{ form.rua(placeholder="Rua", class="form-control") }}
@@ -92,13 +90,11 @@
                 <p>{{ erro }}</p>
             {% endfor %}
             {{ form.submit(class="form-group btn btn-success") }}
-{#        </div>#}
+        </div>
             <br>
             <a class="form-group btn btn-primary" href="/">Voltar</a>
         </form>
     </div>
 
-    <!--################# FIM form ADD Cliente ################--> 
-
-
+    <!--################# FIM form ADD Cliente ################-->
 {% endblock content %}

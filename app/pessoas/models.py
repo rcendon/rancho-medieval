@@ -1,4 +1,4 @@
-import bcrypt
+from app import bcrypt
 
 from app import db
 
@@ -64,8 +64,7 @@ class Pessoas(db.Model):
             dados_pessoais.rg.data,
             dados_pessoais.cpf.data,
             'C',
-            123
-            # bcrypt.generate_password_hash(dados_pessoais.senha.data).decode('utf-8')
+            bcrypt.generate_password_hash(dados_pessoais.senha.data).decode('utf-8')
         )
 
         endereco = Enderecos(

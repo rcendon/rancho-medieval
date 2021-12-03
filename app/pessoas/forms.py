@@ -1,9 +1,10 @@
 ##### CLIENTES ########
 
-from wtforms.fields import BooleanField, StringField, PasswordField, IntegerField, SelectField, SubmitField
+from wtforms.fields import StringField, PasswordField, IntegerField, SelectField, SubmitField
 from wtforms.validators import length, InputRequired, NumberRange, ValidationError
 from flask_wtf import FlaskForm
 from app.pessoas.models import Pessoas
+from app import bcrypt
 
 #https://flask.palletsprojects.com/en/2.0.x/patterns/wtforms/ - The Forms
 
@@ -54,18 +55,9 @@ class FormularioDadosPessoais(FlaskForm):
 
 class LoginFormularioCli(FlaskForm):
     email = StringField('E-mail', validators=[length(min=2, max=35)])
-    senha = PasswordField('senha', validators=[length(min=1, max=35)])
+    senha = PasswordField('Senha', validators=[length(min=1, max=35)])
+    submit = SubmitField("Login")
 
-
-# @staticmethod
-# def verifica_duplicidade_registro(dados_pessoais):
-#     if (
-#             Pessoas.query.filter_by(email=dados_pessoais['email']).first()
-#             or
-#             Pessoas.query.filter_by(cpf=dados_pessoais['cpf']).first()
-#             or
-#             Pessoas.query.filter_by(rg=dados_pessoais['rg']).first()
-#     ):
-#         return False
-#
-#     return True
+    def validate_senha(self, senha):
+        if len(senha.data) < 8:
+            raise ValidationError("A senha deve ter pelo menos 8 dígitos.")
