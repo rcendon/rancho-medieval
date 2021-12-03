@@ -42,7 +42,7 @@ class Pedidos(db.Model):
             if produto.nome in cookies.keys():
                 carrinho.append({
                     'nome': produto.nome,
-                    'quantidade': cookies[produto.nome],
+                    'quantidade': int(cookies[produto.nome]),
                     'valor_unitario': produto.valor,
                     'valor_total_do_item': int(cookies[produto.nome]) * produto.valor,
                     'produto': produto
@@ -50,7 +50,7 @@ class Pedidos(db.Model):
         return sorted(carrinho, key=lambda item: item['nome'])
 
     @staticmethod
-    def gera_pedido(cliente_id, carrinho:list):
+    def gera_pedido(dados_pedido:dict, carrinho:list):
 
         if len(carrinho) == 0:
 
@@ -59,19 +59,27 @@ class Pedidos(db.Model):
         else:
 
             pedido = Pedidos(
-                cliente_id,
+                dados_pedido['cliente_id'],
                 Pedidos.calcula_valor_total_do_carrinhho(carrinho),
                 'P',
                 'Aguardando confirmação do pagamento',
-                '27-11-2021 18:00:00'  # datetime.now() -> para testar depois
+                '2021-11-28 18:00:00'  # datetime.now() -> para testar depois
             )
 
-        for item in carrinho:
-            pedido.append(item['produto'])
+        for item_carrinho in carrinho:
+
+            if item_carrinho['quantidade'] > item_carrinho['produto'].quantidade_estoque_produto:
+
+                return False
+
+            else:
+
+                item_carrinho['produto'].reduz_quantidade_produto_estoque(item_carrinho['quantidade'])
+                db.session.add(item_carrinho['produto'])
 
         db.session.add(pedido)
         db.session.commit()
-        return True
+        return pedido
 
     @staticmethod
     def altera_status_pagamento(dados_pedido:dict, status_novo):
@@ -101,18 +109,6 @@ class Pedidos(db.Model):
             pedidos = Pedidos.query.filter_by(id_cliente=cliente_id).all()
 
         return pedidos
-
-    @staticmethod
-    def lista_itens_do_pedido(pedido):
-
-        itens = []
-
-        print(Pedidos.query.filter_by(id=pedido).first().produtos)
-
-
-
-
-
 
 ############################### Fim Modelo Pedidos #####################################################
 

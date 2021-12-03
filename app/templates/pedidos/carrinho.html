@@ -22,11 +22,11 @@
             </tr>
             </thead>
             <tbody>
-            {% for produto in carrinho %} <!--For percorre toda tabela-->
+            {% for produto in carrinho_com_itens %} <!--For percorre toda tabela-->
                 <tr>
                     <td>{{ produto['nome'] }}</td>
                     <td>{{ produto['quantidade'] }}</td>
-                    <td>R$ {{ produto['valor'] }}</td>
+                    <td>R$ {{ produto['valor_unitario'] }}</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -34,30 +34,38 @@
 
     </section>
 
-    <section name="Pagamento">
-    <div class="form-check pagamento" name="Opcoes de pagamento">
-        <form name="forma_de_pagamento" id="forma_de_pagamento" class="form-control-lg opcoes">
-            <div class="form-check">
-            <input class="form-check-input" type="radio" id="cartao_credito" name="opcoes_pagamento" value="Cartão de crédito" onclick="gera_formulario_para_insercao_de_dados_de_cartao()">
-            <label class="col-form-label-lg form-check-label" for="cartao_credito">Cartão de crédito</label>
-            </div>
-            <div class="form-check">
-            <input class="form-check-input" type="radio" id="cartao_debito" name="opcoes_pagamento" value="Cartão de débito" onclick="gera_formulario_para_insercao_de_dados_de_cartao()">
-            <label class="col-form-label-lg form-check-label" for="cartao_debito">Cartão de Débito</label>
-            </div>
-            <div class="form-check">
-            <input class="form-check-input" type="radio" id="boleto" name="opcoes_pagamento" value="Boleto" onclick="gera_formulario_para_insercao_de_dados_de_cartao()">
-            <label class="col-form-label-lg form-check-label" for="boleto">Boleto</label>
-            </div>
-            <div class="form-check">
-            <input class="form-check-input" type="radio" id="pix" name="opcoes_pagamento" value="Pix" onclick="gera_formulario_para_insercao_de_dados_de_cartao()">
-            <label class="col-form-label-lg form-check-label" for="pix">Pix</label>
-            </div>
-            <a href="/pedido"><button type="submit" id="envia_opcao_de_pagamento_escolhida" name="envia_opcao_de_pagamento_escolhida">Enviar</button></a>
-            <label for="envia_opcao_de_pagamento_escolhida"></label>
-        </form>
-    </div>
-    <div name="detalhes_cartao" id="detalhes_cartao"></div>
+    <section>
+    <form action="/carrinho" method="post" name="forma_de_pagamento" id="forma_de_pagamento" class="form-control-lg opcoes">
+        {{ form_opcoes_pagamento.opcoes_pagamento }}
+        {{ form_opcoes_pagamento.submit }}
+    </form>
+
+
+
+
+{#    <div class="form-check pagamento">#}
+{#        <form name="forma_de_pagamento" id="forma_de_pagamento" class="form-control-lg opcoes">#}
+{#            <div class="form-check">#}
+{#            <input class="form-check-input" type="radio" id="cartao_credito" name="opcoes_pagamento" value="Cartão de crédito" onclick="gera_formulario_para_insercao_de_dados_de_cartao()">#}
+{#            <label class="col-form-label-lg form-check-label" for="cartao_credito">Cartão de crédito</label>#}
+{#            </div>#}
+{#            <div class="form-check">#}
+{#            <input class="form-check-input" type="radio" id="cartao_debito" name="opcoes_pagamento" value="Cartão de débito" onclick="gera_formulario_para_insercao_de_dados_de_cartao()">#}
+{#            <label class="col-form-label-lg form-check-label" for="cartao_debito">Cartão de Débito</label>#}
+{#            </div>#}
+{#            <div class="form-check">#}
+{#            <input class="form-check-input" type="radio" id="boleto" name="opcoes_pagamento" value="Boleto" onclick="gera_formulario_para_insercao_de_dados_de_cartao()">#}
+{#            <label class="col-form-label-lg form-check-label" for="boleto">Boleto</label>#}
+{#            </div>#}
+{#            <div class="form-check">#}
+{#            <input class="form-check-input" type="radio" id="pix" name="opcoes_pagamento" value="Pix" onclick="gera_formulario_para_insercao_de_dados_de_cartao()">#}
+{#            <label class="col-form-label-lg form-check-label" for="pix">Pix</label>#}
+{#            </div>#}
+{#            <button type="submit" id="envia_opcao_de_pagamento_escolhida" name="envia_opcao_de_pagamento_escolhida">Enviar</button>#}
+{#            <label for="envia_opcao_de_pagamento_escolhida"></label>#}
+{#        </form>#}
+{#    </div>#}
+{#    <div id="detalhes_cartao"></div>#}
     </section>
 
 {% endblock %}

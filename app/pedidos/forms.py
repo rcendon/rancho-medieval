@@ -1,16 +1,17 @@
-from wtforms import Form, StringField, validators, IntegerField, DateField
+from wtforms.fields import StringField, IntegerField, SubmitField, DateField, RadioField
+from wtforms.validators import InputRequired, NumberRange, ValidationError
+from flask_wtf import FlaskForm
+from app.pessoas.models import Pessoas
 
 #https://flask.palletsprojects.com/en/2.0.x/patterns/wtforms/ - The Forms
 
-class valida_dados_pagamento(Form):
-    cartao_credito = StringField('Cartão de Crédito', [validators.Length(min=1, max=35)])
-    cartao_debito = StringField('Cartão de Débito', [validators.Length(min=1, max=10)])
-    boleto = StringField('Boleto', [validators.Length(min=1, max=35)])
-    pix = StringField('Pix', [validators.Length(min=1, max=35)])
+class dados_pagamento(FlaskForm):
+    opcoes_pagamento = RadioField(choices=['Cartão de crédito', 'Cartão de débito', 'Boleto', 'Pix'])
+    submit = SubmitField('Finalizar pedido')
 
-class valida_dados_cartao(Form):
-    cartao_numero = IntegerField('Número do cartão', [validators.Length(min=1, max=35)])
-    titular_cartao_nome = IntegerField('Titular do cartão', [validators.Length(min=1, max=35)])
-    titular_cartao_cpf = IntegerField('Cpf do titular do cartão', [validators.Length(min=1, max=35)])
-    cartao_data_validade = DateField('Data de validade do cartão', [validators.Length(min=1, max=35)], format='%m-%Y',)
-    cartao_cvc = IntegerField('CVC do cartão', [validators.Length(min=1, max=35)])
+class valida_dados_cartao(FlaskForm):
+    cartao_numero = IntegerField('Número do cartão', validators=[NumberRange(min=1000000000000000, max=9999999999999999)])
+    titular_cartao_nome = StringField('Titular do cartão')
+    titular_cartao_cpf = IntegerField('CPF', validators=[NumberRange(min=10000000000, max=99999999999)])
+    cartao_data_validade = DateField('Data de validade do cartão', format='%m-%Y',)
+    cartao_cvc = IntegerField('CVC do cartão', validators=[NumberRange(min=3, max=3)])

@@ -140,20 +140,18 @@ class Produtos(db.Model):
         db.session.commit()
         return True
 
-    @staticmethod
-    def reduz_quantidade_produto_estoque(produto, quantidade):
-        estoque = Produtos.query.filter_by(nome=produto).first()
+    def reduz_quantidade_produto_estoque(self, quantidade):
 
-        if estoque.quantidade_estoque_produto < quantidade:
+        if self.quantidade_estoque_produto < quantidade:
 
             return False
 
         else:
 
-            estoque.quantidade_estoque_produto -= quantidade
-            db.session.add(estoque)
-            db.session.commit()
-            return True
+            self.quantidade_estoque_produto -= quantidade
+            # db.session.add(self)
+            # db.session.commit()
+            # return True
 
     @staticmethod
     def altera_descricao_produto(produto, nova_descricao):

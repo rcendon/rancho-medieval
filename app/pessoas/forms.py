@@ -4,7 +4,6 @@ from wtforms.fields import StringField, PasswordField, IntegerField, SelectField
 from wtforms.validators import length, InputRequired, NumberRange, ValidationError
 from flask_wtf import FlaskForm
 from app.pessoas.models import Pessoas
-from app import bcrypt
 
 #https://flask.palletsprojects.com/en/2.0.x/patterns/wtforms/ - The Forms
 

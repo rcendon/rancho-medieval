@@ -2,41 +2,34 @@
 
 {% block content %}
 
-<h1>Pedidos</h1>
+<h1>Histórico de pedidos</h1>
 
     {% for pedido in lista_pedidos %}
-
+    <div>
         <table>
         <tr>
-            <th>Pedido: {{ pedido.id }}</th>
+            <th>Pedido</th>
+            <th>Data</th>
+            <th>Pagamento</th>
+            <th>Situação</th>
+            <th>Itens</th>
+            <th>Valor total</th>
         </tr>
         <tr>
-            <th></th>
+            <td>{{ pedido.id }}</td>
+            <td>{{ pedido.data }}</td>
+            <td>{{ pedido.status_pagamento }}</td>
+            <td>{{ pedido.status }}</td>
+            <td>{{ pedido.produtos }}</td>
+            <td>{{ pedido.valor }}</td>
         </tr>
         </table>
+    </div>
 
 
     {% endfor %}
 
 
-    <section name="Informacoes dos pedidos">
-        <h2 class="h2"> Resumo do pedido </h2>
-        <table>
-            <tr>
-                <th>Produto</th>
-                <th>Quantidade</th>
-                <th>Preço unitário</th>
-                <th>Preço</th>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                </td>
-            </tr>
-        </table>
-    </section>
-
-    <form action="/processa_pagamento" method="post">
 
     </form>
 
