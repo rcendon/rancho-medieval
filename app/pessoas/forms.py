@@ -46,10 +46,9 @@ class FormularioDadosPessoais(FlaskForm):
         if pessoa_instancia:
             raise ValidationError("Já existe usuário com esse RG, por favor indique outro.")
 
-
-
-
-
+    def validate_estado(self, estado):
+        if estado.data == '-':
+            raise ValidationError("Por favor, escolha alguma das opções na lista.")
 
 ######################### Classe Form Login ##################################################
 
