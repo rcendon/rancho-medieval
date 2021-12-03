@@ -51,7 +51,7 @@ def logincliente():
         return redirect(url_for('minhaconta'))
 
     form=LoginFormularioCli() #Retorna valores do forms.py
-    if request.method == "POST": # and form.validate_on_submit():
+    if request.method == "POST" and form.validate_on_submit():
         user = Pessoas.query.filter_by(email=form.email.data).first()
 
         if user and bcrypt.check_password_hash(user.senha, form.senha.data):
