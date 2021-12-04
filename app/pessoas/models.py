@@ -103,9 +103,9 @@ class Fornecedores(db.Model):
 
     id = db.Column(db.BigInteger, autoincrement=True, primary_key=True)
     nome = db.Column(db.VARCHAR(50))
-    cnpj = db.Column(db.BigInteger, unique=True)
+    cnpj = db.Column(db.BigInteger, unique=True, nullable=False)
     contato = db.Column(db.BigInteger)
-    email = db.Column(db.VARCHAR(256), unique=True)
+    email = db.Column(db.VARCHAR(256), unique=True, nullable=False)
     endereco = db.relationship('Enderecos', secondary=enderecos_fornecedores, cascade="all, delete", passive_deletes=True, lazy='select', uselist=True)
     preco_insumo = db.relationship('Preco_insumo', backref='preco_insumo', cascade="all, delete", passive_deletes=True)
 
@@ -167,6 +167,17 @@ class Fornecedores(db.Model):
             db.session.delete(fornecedor_instancia)
             db.session.commit()
             return True
+
+    @staticmethod
+    def lista_fornecedores():
+
+        lista_fornecedores = []
+
+        for fornecedor in Fornecedores.query.all():
+
+            lista_fornecedores.append(fornecedor.nome)
+
+        return sorted(lista_fornecedores)
 
 
 

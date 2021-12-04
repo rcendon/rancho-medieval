@@ -27,19 +27,20 @@ def processa_pedido(id_cliente, pedido_id):
 @app.route('/pedido/<int:cliente_id>/<int:pedido_id>', methods=['GET'])
 def pedido(cliente_id=None, pedido_id=None):
 
-    if cliente_id and pedido_id:
+   if 'email' in session:
 
-        return render_template('/pedidos/detalhes_do_pedido.html', pedido_pagamento=Pedidos.query.filter_by(id=pedido_id, id_cliente=cliente_id).all()[-1])
+        if cliente_id and pedido_id:
 
-    else:
+            return render_template('/pedidos/detalhes_do_pedido.html', pedido_pagamento=Pedidos.query.filter_by(id=pedido_id, id_cliente=cliente_id).all()[-1])
 
-        if 'email' in session:
+        else:
 
             return render_template('/pedidos/detalhes_do_pedido.html', pedido_consulta=Pedidos.query.filter_by(id_cliente=Pessoas.query.filter_by(email=session['email']).first().id).all()[-1])
 
-        else:
-            flash('Por favor, faça o login primeiro para verificar a situação de seu último pedido.', 'info')
-            return redirect(url_for('logincliente'))
+   else:
+
+        flash('Por favor, faça o login primeiro para verificar a situação de seu último pedido.', 'info')
+        return redirect(url_for('logincliente'))
 
 
 

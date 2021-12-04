@@ -89,7 +89,7 @@ class FormularioDadosFornecedor(FlaskForm):
     complemento = StringField('Complemento', validators=[length(min=0, max=50)])
     cep = IntegerField('CEP', validators=[InputRequired(), NumberRange(min=10000000, max=99999999)])
     cidade = StringField('Cidade', validators=[InputRequired(), length(min=1, max=50)])
-    estado = SelectField('Estado', validators=[InputRequired()], choices=['-', 'Bahia', 'São Paulo'])
+    estado = SelectField('Estado', validators=[InputRequired()], default='-', choices=['Bahia', 'São Paulo'])
     pais = StringField('País', validators=[InputRequired(), length(min=1, max=40)])
     submit = SubmitField('Registrar')
 

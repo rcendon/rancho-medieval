@@ -145,9 +145,9 @@ class Produtos(db.Model):
         else:
 
             self.quantidade_estoque_produto -= quantidade
-            # db.session.add(self)
-            # db.session.commit()
-            # return True
+            db.session.add(self)
+            db.session.commit()
+            return True
 
     def altera_descricao_produto(self, nova_descricao):
 
@@ -236,7 +236,7 @@ class Insumos(db.Model):
     __tablename__ = 'insumos'
 
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    nome = db.Column(db.VARCHAR(50))
+    nome = db.Column(db.VARCHAR(50), unique=True, nullable=False)
     quantidade_estoque_insumo = db.Column(db.Integer, nullable=False)
     preco_insumo = db.relationship('Preco_insumo', backref='preco_insumo_insumos', cascade="all, delete", passive_deletes=True)
 
@@ -415,6 +415,17 @@ class Insumos(db.Model):
                         lista_fornecedores.append(fornecedor)
 
             return lista_fornecedores
+
+    @staticmethod
+    def lista_insumos():
+
+        lista_insumos = []
+
+        for insumo in Insumos.query.all():
+
+            lista_insumos.append(insumo.nome)
+
+        return sorted(lista_insumos)
 
 
 ############################### Fim Modelo Insumos #####################################################

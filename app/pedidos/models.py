@@ -18,7 +18,6 @@ class Pedidos(db.Model):
     status_pagamento = db.Column(db.CHAR(1), nullable=False) # 1 - A ; # 2 - N ; # 3 - P
     status = db.Column(db.VARCHAR(40), nullable=False) # 1 - Aguardando confirmação do pagamento ; 2 - Em preparação ; 3 - Preparado ; 4 - A caminho ; 5 - Entregue
     data = db.Column(db.TIMESTAMP, nullable=False)
-    # cliente = db.relationship('Pessoas', backref='pedidos', lazy='select', uselist=True)
     produtos = db.relationship('Produtos', secondary=itens_do_pedido, backref='pedidos', lazy='select', uselist=True)
 
     def __init__(self, id_cliente, valor, status_pagamento, status, data):
@@ -74,7 +73,7 @@ class Pedidos(db.Model):
 
             else:
 
-                item_carrinho['produto'].reduz_quantidade_produto_estoque(item_carrinho['quantidade'])
+                item_carrinho['produto'].quantidade_estoque_produto -= item_carrinho['quantidade']
                 db.session.add(item_carrinho['produto'])
 
         db.session.add(pedido)
