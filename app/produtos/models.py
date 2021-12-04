@@ -27,7 +27,7 @@ class Produtos(db.Model):
     nome = db.Column(db.VARCHAR(40), unique=True, nullable=False)
     quantidade_estoque_produto = db.Column(db.Integer, nullable=False)
     valor = db.Column(db.Float, nullable=False)
-    descricao = db.Column(db.VARCHAR(40))
+    descricao = db.Column(db.VARCHAR(100))
     imagem = db.Column(db.Text)
     mimetype = db.Column(db.Text)
     receita = db.relationship('Receitas', backref='receita')
@@ -99,21 +99,17 @@ class Produtos(db.Model):
             db.session.commit()
             return produto
 
-    @staticmethod
-    def adiciona_quantidade_produto_estoque(produto, quantidade):
+    def adiciona_quantidade_produto_estoque(self, quantidade):
 
-        estoque_produto = Produtos.query.filter_by(nome=produto).first()
-        estoque_produto.quantidade_estoque_produto += quantidade
+        self.quantidade_estoque_produto += quantidade
         lista_insumos_utilizados = []
         lista_insumos_validados = []
 
-
         for insumo_utilizado in Receitas.query.all():
 
-            if insumo_utilizado.id_produto == estoque_produto.id_produto:
+            if insumo_utilizado.id_produto == self.id_produto:
 
                 lista_insumos_utilizados.append(insumo_utilizado)
-
 
         for item in range(0, quantidade):
 
@@ -136,7 +132,7 @@ class Produtos(db.Model):
                 Receitas.query.filter_by(id_insumo=insumo_validado.id).first().quantidade_insumo
             )
 
-        db.session.add(estoque_produto)
+        db.session.add(self)
         db.session.commit()
         return True
 
@@ -153,56 +149,29 @@ class Produtos(db.Model):
             # db.session.commit()
             # return True
 
-    @staticmethod
-    def altera_descricao_produto(produto, nova_descricao):
+    def altera_descricao_produto(self, nova_descricao):
 
-        produto_localizado = Produtos.query.filter_by(nome=produto).first()
+        self.descricao = nova_descricao
 
-        if produto_localizado:
+        db.session.add(self)
+        db.session.commit()
+        return True
 
-            produto_localizado.descricao = nova_descricao
+    def altera_imagem_produto(self, nova_imagem):
 
-            db.session.add(produto_localizado)
-            db.session.commit()
-            return True
+        self.imagem = nova_imagem
 
-        else:
+        db.session.add(self)
+        db.session.commit()
+        return True
 
-            return False
+    def altera_valor_produto(self, novo_valor):
 
-    @staticmethod
-    def altera_imagem_produto(produto, nova_imagem):
+        self.valor = novo_valor
 
-        produto_localizado = Produtos.query.filter_by(nome=produto).first()
-
-        if produto_localizado:
-
-            produto_localizado.imagem = nova_imagem
-
-            db.session.add(produto_localizado)
-            db.session.commit()
-            return True
-
-        else:
-
-            return False
-
-    @staticmethod
-    def altera_valor_produto(produto, novo_valor):
-
-        produto_localizado = Produtos.query.filter_by(nome=produto).first()
-
-        if produto_localizado:
-
-            produto_localizado.valor = novo_valor
-
-            db.session.add(produto_localizado)
-            db.session.commit()
-            return True
-
-        else:
-
-            return False
+        db.session.add(self)
+        db.session.commit()
+        return True
 
     @staticmethod
     def lista_produtos_em_estoque():

@@ -41,7 +41,7 @@ class Pessoas(db.Model):
     email = db.Column(db.VARCHAR(256), unique=True, nullable=False)
     rg = db.Column(db.BigInteger, unique=True)
     cpf = db.Column(db.BigInteger, unique=True)
-    tipo = db.Column(db.CHAR(1), nullable=False)
+    tipo = db.Column(db.CHAR(1), nullable=False) # Três tipos: "C" para clientes ; "F" para funcionarios ; "A" para administradores
     senha = db.Column(db.VARCHAR(256), nullable=False)
     endereco = db.relationship('Enderecos', secondary=enderecos, lazy='select', uselist=True)
     pedidos = db.relationship('Pedidos', backref='pessoa', lazy='select', uselist=True)

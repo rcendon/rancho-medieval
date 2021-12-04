@@ -1,15 +1,15 @@
-from wtforms import Form, StringField, validators
+from wtforms.fields import StringField, PasswordField, IntegerField, SelectField, SubmitField, FloatField
+from wtforms.validators import length, InputRequired, NumberRange, ValidationError
+from flask_wtf import FlaskForm
+from .models import Produtos
 
-#https://flask.palletsprojects.com/en/2.0.x/patterns/wtforms/ - The Forms
+######################### Classe Cadastro de Produtos ##################################################
 
-######################### Classe Form Login ##################################################
+class CadastroProdutos(FlaskForm):
 
-#self.nome = nome
-#self.quantidade_estoque = quantidade_estoque
-#self.valor = valor
-
-class CadastroProdutos(Form):    
-    nome = StringField('Nome', [validators.Length(min=2, max=35)])      
-    quantidade_estoque = StringField('Quantidade Estoque', [validators.Length(min=1, max=10)]) 
-    valor = StringField('Valor', [validators.Length(min=1, max=35)]) 
-    #Upload Imagem
+    nome = StringField('Nome', validators=[InputRequired(), length(min=1, max=256)])
+    quantidade_estoque_produto = IntegerField('Quantidade em estoque', validators=[InputRequired(), NumberRange(min=0, max=100)])
+    valor = FloatField('Contato', validators=[InputRequired(), NumberRange(min=0, max=500)])
+    descricao = StringField('Rua', validators=[InputRequired(), length(min=0, max=100)])
+    imagem = StringField('Rua', validators=[InputRequired(), length(min=1, max=100)])
+    mimetype = StringField('Rua', validators=[InputRequired(), length(min=1, max=100)])
