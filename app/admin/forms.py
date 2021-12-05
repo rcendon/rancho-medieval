@@ -19,6 +19,7 @@ class FormularioDadosPessoaisColaborador(FlaskForm):
     email = EmailField('E-mail', validators=[InputRequired(), length(min=2, max=35)])
     rg = IntegerField('RG', validators=[NumberRange(min=1000000000, max=9999999999)])
     cpf = IntegerField('CPF', validators=[NumberRange(min=10000000000, max=99999999999)])
+    tipo = SelectField('Tipo', default='-', choices=['-', 'Funcionário', 'Administrador'], validators=[InputRequired()])
     senha = PasswordField('Senha', validators=[InputRequired(), length(min=1, max=35)])
     rua = StringField('Rua', validators=[InputRequired(), length(min=1, max=100)])
     bairro = StringField('Bairro', validators=[InputRequired(), length(min=1, max=100)])
@@ -49,9 +50,56 @@ class FormularioDadosPessoaisColaborador(FlaskForm):
         if estado.data == '-':
             raise ValidationError("Por favor, escolha alguma das opções na lista.")
 
+    def validate_tipo(self, tipo):
+        if tipo.data == '-':
+            raise ValidationError("Por favor, escolha alguma das opções na lista.")
+
 ######################### Classe Form Login ##################################################
 
 class LoginFormularioCli(FlaskForm):
+    email = EmailField('E-mail', validators=[InputRequired(), length(min=2, max=35)])
+    senha = PasswordField('Senha', validators=[InputRequired(), length(min=8, max=35)])
+    submit = SubmitField("Login")
+
+    def validate_email(self, email):
+
+        pessoa_instancia = Pessoas.query.filter_by(email=email.data).first()
+
+        if pessoa_instancia:
+
+            if pessoa_instancia.tipo == 'C':
+
+                raise ValidationError("Apenas usuários de colaboradores podem realizar o acesso por esta página.")
+
+class FormularioEdicaoInsumos(FlaskForm):
+    email = EmailField('E-mail', validators=[InputRequired(), length(min=2, max=35)])
+    senha = PasswordField('Senha', validators=[InputRequired(), length(min=8, max=35)])
+    submit = SubmitField("Login")
+
+    def validate_email(self, email):
+
+        pessoa_instancia = Pessoas.query.filter_by(email=email.data).first()
+
+        if pessoa_instancia:
+
+            if pessoa_instancia.tipo == 'C':
+                raise ValidationError("Apenas usuários de colaboradores podem realizar o acesso por esta página.")
+
+class FormularioEdicaoProdutos(FlaskForm):
+    email = EmailField('E-mail', validators=[InputRequired(), length(min=2, max=35)])
+    senha = PasswordField('Senha', validators=[InputRequired(), length(min=8, max=35)])
+    submit = SubmitField("Login")
+
+    def validate_email(self, email):
+
+        pessoa_instancia = Pessoas.query.filter_by(email=email.data).first()
+
+        if pessoa_instancia:
+
+            if pessoa_instancia.tipo == 'C':
+                raise ValidationError("Apenas usuários de colaboradores podem realizar o acesso por esta página.")
+
+class FormularioEdicaoFornecedores(FlaskForm):
     email = EmailField('E-mail', validators=[InputRequired(), length(min=2, max=35)])
     senha = PasswordField('Senha', validators=[InputRequired(), length(min=8, max=35)])
     submit = SubmitField("Login")

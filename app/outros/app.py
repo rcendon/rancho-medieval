@@ -127,7 +127,7 @@ def add_cardapio():
         
         db.session.commit() #Salva os dados no banco 
         return redirect(url_for('index')) #Se o metodo POST for OK retornar para o INDEX
-    return render_template('addcardapio.html') #ELSE mostra pagina ADD
+    return render_template('manipulacao_cardapio.html') #ELSE mostra pagina ADD
 
 ########################################################################################################
 

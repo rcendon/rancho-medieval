@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 #Importa a variaveis APP e DB do "__init__.py" = (loja).
 from app import app, db, bcrypt
 
-from ..produtos.models import Produtos
+from ..produtos.models import Produtos, Insumos
 from ..pessoas.models import Pessoas
 
 from .forms import FormularioDadosPessoaisColaborador, LoginFormularioCli
@@ -24,12 +24,16 @@ def home():
 ##################### Rota Usuario ####################################################
 
 #Rota Usuario
-@app.route('/usuario')
-def usuario(): 
-    if 'cpf' not in session: ###Controle de Acesso###
+@app.route('/colaborador')
+def colaborador():
+
+    if 'email_colaborador' not in session: ###Controle de Acesso###
         flash(f'Olá, faça o login primeiro', 'danger')    
-        return redirect(url_for('login'))
-    return render_template('admin/usuario.html')
+        return redirect(url_for('login_colaborador'))
+
+    colaborador_instancia = Pessoas.query.filter_by(email=session['email_colaborador']).first()
+
+    return render_template('admin/area_colaborador.html', colaborador_instancia=colaborador_instancia)
 
 ####################################################################################
 
@@ -39,34 +43,34 @@ def usuario():
 
 #RegistrationForm
 
-@app.route('/registrar', methods=['GET', 'POST'])
-def registrar():
-    if 'cpf' not in session: ###Controle de Acesso###
+@app.route('/registrar_colaborador', methods=['GET', 'POST'])
+def registrar_colaborador():
+    if 'email_colaborador' not in session: ###Controle de Acesso###
         flash(f'Olá, faça o login primeiro', 'danger')    
         return redirect(url_for('login'))
 
-    form = RegistrationForm(request.form) #Retorna valores do forms.py
-    if request.method == "POST" and form.validate():
-        hash_password = bcrypt.generate_password_hash(form.senha.data).decode('utf-8')
+    form = FormularioDadosPessoaisColaborador() #Retorna valores do forms.py
 
-        user = Pessoas(
-            nome = form.nome.data,
-            email = form.email.data,
-            rg = int(form.rg.data),
-            cpf = int(form.cpf.data),
-            # registro_diverso= form.registro_diverso.data,
-            # pais_do_registro_diverso = form.pais_do_registro_diverso.data,
-            senha = hash_password,
-            tipo = 'F') # precisa alterar, junto com o frontend, para cadastrar os dados corretamente, além de adicionar nova variavel para cadastro do endereço que será outro formulario
+    if request.method == "POST" and form.validate_on_submit():
 
-        db.session.add(user)
-        db.session.commit() #Salva os dados no banco 
+        if form.tipo.data == 'Funcionário':
 
-        #Menssagem flash
-        flash(f'{form.nome.data}, obrigado pelo registro, realize o login', 'success')        
-        return redirect(url_for('login'))
-        
-    return render_template('admin/registrar.html', form=form)
+            form.tipo.data = 'F'
+
+        elif form.tipo.data == 'Administrador':
+
+            form.tipo.data = 'A'
+
+        else:
+
+            flash(f'O registro de não foi realizado, por favor verifique os dados inseridos.', 'danger')
+            return redirect(url_for('registrar_colaborador'))
+
+        Pessoas.adiciona_pessoa(form, form.tipo.data)
+        flash(f'O registro de {form.nome.data} foi realizado com sucesso.', 'success')
+        return redirect(url_for('colaborador'))
+
+    return render_template('admin/registrar_colaborador.html', form=form)
 
 ##################################################################################################
 
@@ -78,61 +82,90 @@ def registrar():
 @app.route('/login_colaborador', methods=['GET', 'POST'])
 def login_colaborador():
     if 'email_colaborador' in session: ###Controle de Acesso###
-        return redirect(url_for('usuario'))
+        return redirect(url_for('colaborador'))
 
-    form=LoginFormulario(request.form) #Retorna valores do forms.py
-    if request.method == "POST" and form.validate():
-        user = Pessoas.query.filter_by(cpf=form.cpf.data).first()
-        
-        if user and bcrypt.check_password_hash(user.senha, form.senha.data):
-        # if user and user.senha == form.senha.data:
-            session['cpf'] = form.cpf.data
-            flash(f'Bem Vindo CPF: {form.cpf.data}','success')
-            return redirect(request.args.get('next') or url_for('usuario'))
+    form = LoginFormularioCli() #Retorna valores do forms.py
+
+    if request.method == "POST" and form.validate_on_submit():
+
+        user = Pessoas.query.filter_by(email=form.email.data).first()
+
+        if (user and bcrypt.check_password_hash(user.senha, form.senha.data)) and user.tipo != 'C':
+
+            session['email_colaborador'] = form.email.data
+            flash(f'Bem Vindo {user.nome}', 'success')
+            return redirect(request.args.get('next') or url_for('colaborador'))
+
         else:
-            flash(f'CPF ou senha incorretos', 'danger')
-    return render_template('admin/login.html', form=form)
+
+            flash(f'E-mail ou Senha incorretos', 'danger')
+
+    return render_template('admin/login_colaborador.html', form=form)
 
 
 ###############################################################################################
 
 ##################### Rota Adicionar Produto ####################################################
 
-@app.route('/addcardapio', methods=['GET', 'POST'])
-def produtos():
-    if 'email_colaborador' not in session: ###Controle de Acesso###
-        flash(f'Olá, faça o login primeiro', 'danger')    
+@app.route('/manipulacao_cardapio', methods=['GET', 'POST'])
+def manipulacao_cardapio():
+
+    if 'email_colaborador' not in session:
+        flash(f'Olá, faça o login primeiro', 'info')
         return redirect(url_for('login_colaborador'))
 
-    form=CadastroProdutos(request.form) #Retorna valores do forms.py
-    if request.method == "POST": #SE POST  
+    return render_template('admin/manipulacao_cardapio.html', lista_produtos_sem_estoque=Produtos.lista_produtos_sem_estoque()) #ELSE mostra pagina ADD
 
-        ### iMG ##########################################
-        pic = request.files['pic']
-        filename = secure_filename(pic.filename)
-        mimetype = pic.mimetype
-        ##################################################
+@app.route('/manipulacao_insumos', methods=['GET', 'POST'])
+def manipulacao_insumos():
 
-        requestprodutos = Produtos(nome=form.nome.data,quantidade_estoque=form.quantidade_estoque.data,valor=form.valor.data,descricao=form.descricao.data,imagem=pic.read(),mimetype=mimetype)
-        
-        db.session.add(requestprodutos) #Recebe os dados restornados do POST      descricao   
-        db.session.commit() #Salva os dados no banco 
-        #Menssagem flash
-        flash(f'Produto cadastrado com sucesso ', 'success')  
-        return redirect(url_for('usuario')) #Se o metodo POST for OK retornar para o INDEX
+    if 'email_colaborador' not in session:
+        flash(f'Olá, faça o login primeiro', 'info')
+        return redirect(url_for('login_colaborador'))
 
-    return render_template('admin/addcardapio.html',form=form) #ELSE mostra pagina ADD
+    return render_template('admin/manipulacao_insumos.html', lista_insumos_sem_estoque=Insumos.lista_insumos_sem_estoque())
 
 ##################### Rota Logout ####################################################
 
-@app.route("/logout")
+@app.route("/logout_colaborador")
 def logout():
-    session.pop('cpf')
-    return redirect(url_for('login'))
+    session.pop('email_colaborador')
+    return redirect(url_for('login_colaborador'))
 
 ##################### Rota Exibir Imagem ####################################################
 
-@app.route("/<int:id>") 
-def get_img(id):
-    img = Produtos.query.filter_by(id=id).first()
-    return Response(img.imagem, mimetype=img.mimetype)
+# @app.route("/<int:id>")
+# def get_img(id):
+#     img = Produtos.query.filter_by(id=id).first()
+#
+#     if request.method == "POST":
+#         ### iMG ##########################################
+#         pic = request.files['pic']
+#         filename = secure_filename(pic.filename)
+#         mimetype = pic.mimetype
+#
+#     return Response(img.imagem, mimetype=img.mimetype)
+
+@app.route("/cadastro_produto", methods=['GET', 'POST'])
+def cadastro_produto():
+
+    if 'email_colaborador' not in session:
+        flash(f'Olá, faça o login primeiro', 'info')
+        return redirect(url_for('login_colaborador'))
+
+    form = CadastroProdutos()
+
+    if request.method == "POST" and form.validate_on_submit():
+
+        operacao = Produtos.adiciona_produto_cardapio_com_receita(form)
+
+        if operacao:
+
+            flash(f'Produto cadastrado com sucesso ', 'success')
+            return redirect(url_for('colaborador'))  # Se o metodo POST for OK retornar para o INDEX
+
+        else:
+
+            flash("Ocorreu um problema com o cadastro. Por favor, certifique-se que os dados foram inseridos corretamente.", "danger")
+
+    return redirect(url_for('cadastro_produto'))

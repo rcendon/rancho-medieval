@@ -53,19 +53,18 @@ class Produtos(db.Model):
             # return 'A inserção do produto não será possível pois já há um produto registrado com o mesmo nome.'
             return False
 
-        for insumo in dados_produto['insumos']:
+        for insumo in dados_produto['insumos_utilizados']:
 
             if insumo['nome'] == Insumos.query.filter_by(nome=insumo['nome']).first().nome:
 
-                    relacao = Receitas(
-                        Produtos.query.filter_by(nome=dados_produto['nome']).first().id_produto,
-                        Insumos.query.filter_by(nome=insumo['nome']).first().id,
-                        insumo['quantidade']
-                    )
+                relacao = Receitas(
+                    Produtos.query.filter_by(nome=dados_produto['nome']).first().id_produto,
+                    Insumos.query.filter_by(nome=insumo['nome']).first().id,
+                    insumo['quantidade']
+                )
 
             else:
 
-                # return 'A inserção do produto não será possível pois há insumos não cadastrados. Por favor, realize o cadastro e tente novamente.'
                 return False
 
             lista_relacoes_produto_insumos.append(relacao)
@@ -97,7 +96,7 @@ class Produtos(db.Model):
         else:
 
             db.session.add(produto)
-            db.session.commit()
+            # db.session.commit()
             return produto
 
     def adiciona_quantidade_produto_estoque(self, quantidade):
@@ -198,7 +197,7 @@ class Produtos(db.Model):
     @staticmethod
     def lista_produtos_sem_estoque():
 
-        lista_produtos_com_estoque = []
+        lista_produtos_sem_estoque = []
 
         lista_produtos = Produtos.query.all()
 
@@ -212,9 +211,9 @@ class Produtos(db.Model):
 
                 if Produtos.quantidade_em_estoque_do_produto(produto.nome) == 0:
 
-                    lista_produtos_com_estoque.append(produto)
+                    lista_produtos_sem_estoque.append(produto)
 
-        return lista_produtos_com_estoque
+        return lista_produtos_sem_estoque
 
     @staticmethod
     def quantidade_em_estoque_do_produto(produto):
@@ -428,5 +427,25 @@ class Insumos(db.Model):
 
         return sorted(lista_insumos)
 
+    @staticmethod
+    def lista_insumos_sem_estoque():
+
+        lista_insumos_sem_estoque = []
+
+        lista_insumos = Insumos.query.all()
+
+        if lista_insumos == None:
+
+            return False
+
+        else:
+
+            for insumo in lista_insumos:
+
+                if insumo.quantidade_estoque_insumo == 0:
+
+                    lista_insumos_sem_estoque.append(insumo)
+
+        return lista_insumos_sem_estoque
 
 ############################### Fim Modelo Insumos #####################################################

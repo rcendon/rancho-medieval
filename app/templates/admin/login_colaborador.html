@@ -1,0 +1,39 @@
+{% extends "layoutsadm.html" %}   
+
+{% block content %}  
+
+  <!--DIV texto-->
+  <!--5 cinco Colunas para englobar o texto-->
+  <!--d-flex justify-content-center align-items-center... = Comandos do bootstrap-->
+  <div class="form-group col-md-5 d-flex justify-content-between align-items-baseline flex-column">                
+      <h2>Login Painel Administrativo</h2>                 
+  </div>
+
+
+  <!--#### From Login ######################################-->
+
+    <form method="POST" enctype="multipart/form-data">
+        <div class="form-group col-md-6">
+            <h1><font color="#ffffff">Olá, faça seu login</font></h1>
+            <h4><font color="#ffffff">ou solicite acesso ao Administrador</font></h4>
+        </div>
+        <div class="form-group col-md-6">
+            {{ form.hidden_tag() }}
+            {{ form.email.label }}
+            {{ form.email(placeholder="E-mail", class="form-control") }}
+            {% for erro in form.email.errors %}
+                <p>{{ erro }}</p>
+            {% endfor %}
+            {{ form.senha.label }}
+            {{ form.senha(placeholder="Senha", class="form-control") }}
+            {% for erro in form.senha.errors %}
+                <p>{{ erro }}</p>
+            {% endfor %}
+            <br>
+            {{ form.submit(class="form-group btn btn-success") }}
+        </div>
+    </form>
+
+    <!--#### FIM From Login ######################################-->
+
+{% endblock content %}

@@ -1,0 +1,51 @@
+{% extends "layoutsadmlog.html" %}
+
+{% block content %}
+    <!--DIV texto-->
+    <!--5 cinco Colunas para englobar o texto-->
+    <!--d-flex justify-content-center align-items-center... = Comandos do bootstrap-->
+
+    <div class="form-group col-md-5 d-flex justify-content-between align-items-baseline flex-column">
+        <h2>Painel Administrativo</h2>
+    </div>
+
+    <form>
+    <h2>Ações possíveis</h2>
+        <div class="form-group col-md-6">
+            <a class="form-group btn btn-primary" href="/cadastro_produto">Cadastrar produto</a>
+        </div>
+        <br>
+        <div class="form-group col-md-6">
+            <a class="form-group btn btn-primary" href="/modificar_produto">Modificar produto</a>
+        </div>
+        <br>
+        <div class="form-group col-md-6">
+            <a class="form-group btn btn-primary" href="/desativar_produto">Desativar produto</a>
+        </div>
+        <br>
+
+        {% if lista_produtos_sem_estoque %}
+
+            <h2>Os seguintes produtos estão sem estoque e precisam ser repostos.</h2>
+        <div>
+            <table>
+                <tr>
+                    <th>Produto</th>
+                </tr>
+
+                {% for produto in lista_produtos_sem_estoque %}
+
+                    <tr>
+                        <td>{{ produto.nome }}</td>
+                    </tr>
+
+                {% endfor %}
+
+            </table>
+        </div>
+
+    {% endif %}
+
+    </form>
+
+{% endblock content %}

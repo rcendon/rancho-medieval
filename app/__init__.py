@@ -31,7 +31,7 @@ from app.erros import rotas #Importa da pasta app/erros o arquivo rotas.py
 
 migrate = Migrate(app, db)
 
-db.create_all()
+# db.create_all()
 
 
 
