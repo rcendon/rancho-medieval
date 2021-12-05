@@ -4,15 +4,22 @@
 
 <h1>Histórico de pedidos</h1>
 
-    {% for pedido in lista_pedidos %}
+    {% for pedido in historico_pedidos %}
+
     <div>
+        <div>
+            <h2>Pedido nº {{ pedido.id }}</h2>
+        </div>
+        <div>
+            <h2>Data: {{ pedido.data }}</h2>
+
+        </div>
         <table>
         <tr>
-            <th>Pedido</th>
-            <th>Data</th>
             <th>Pagamento</th>
             <th>Situação</th>
             <th>Itens</th>
+            <th>Valor Unitário</th>
             <th>Valor total</th>
         </tr>
         <tr>
@@ -20,13 +27,19 @@
             <td>{{ pedido.data }}</td>
             <td>{{ pedido.status_pagamento }}</td>
             <td>{{ pedido.status }}</td>
-            <td>{{ pedido.produtos }}</td>
+            <td>
+
+            {% for item in pedido.itens_do_pedido %}
+                <p>{{ item.produto.nome }}</p>
+                <p>{{ item.quantidade }}</p>
+            {% endfor %}
+
+            </td>
             <td>{{ pedido.valor }}</td>
         </tr>
         </table>
     </div>
 
-        {{ pedido.produtos }}
 
     {% endfor %}
 

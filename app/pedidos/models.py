@@ -1,11 +1,26 @@
 from app import db
 from datetime import datetime
 
-itens_do_pedido = db.Table(
-    'itens_do_pedido',
-    db.Column('id_pedido', db.Integer, db.ForeignKey('pedidos.id'), primary_key=True),
-    db.Column('id_produto', db.Integer, db.ForeignKey('cardapio.id_produto'), primary_key=True)
-)
+# itens_do_pedido = db.Table(
+#     'itens_do_pedido',
+#     db.Column('id_pedido', db.Integer, db.ForeignKey('pedidos.id'), primary_key=True),
+#     db.Column('id_produto', db.Integer, db.ForeignKey('cardapio.id_produto'), primary_key=True)
+# )
+
+class ItensDoPedido(db.Model):
+    __tablename__ = 'itens_do_pedido'
+
+    id_pedido = db.Column('id_pedido', db.Integer, db.ForeignKey('pedidos.id'), primary_key=True)
+    id_produto = db.Column('id_produto', db.Integer, db.ForeignKey('cardapio.id_produto'), primary_key=True)
+    quantidade = db.Column('quantidade', db.Integer, nullable=False)
+    valor_unitario = db.Column('valor_unitario', db.Float, nullable=False)
+    produto = db.relationship("Produtos", backref='iten_do_pedido')
+
+    def __init__(self, id_pedido, id_produto, quantidade, valor_unitario):
+        self.id_pedido = id_pedido
+        self.id_produto = id_produto
+        self.quantidade = quantidade
+        self.valor_unitario = valor_unitario
 
 ################################ Modelo Cadastro Pedidos ########################################################
 
@@ -18,7 +33,8 @@ class Pedidos(db.Model):
     status_pagamento = db.Column(db.CHAR(1), nullable=False) # 1 - A ; # 2 - N ; # 3 - P
     status = db.Column(db.VARCHAR(40), nullable=False) # 1 - Aguardando confirmação do pagamento ; 2 - Em preparação ; 3 - Preparado ; 4 - A caminho ; 5 - Entregue
     data = db.Column(db.TIMESTAMP, nullable=False)
-    produtos = db.relationship('Produtos', secondary=itens_do_pedido, backref='pedidos', lazy='select', uselist=True)
+    # produtos = db.relationship('Produtos', backref='pedidos', lazy='select', uselist=True)
+    itens_do_pedido = db.relationship('ItensDoPedido', backref='itens_do_pedido', cascade="all, delete", passive_deletes=True)
 
     def __init__(self, id_cliente, valor, status_pagamento, status, data):
         self.id_cliente = id_cliente
@@ -73,8 +89,16 @@ class Pedidos(db.Model):
 
             else:
 
+                item_do_pedido = ItensDoPedido(
+                    pedido.id,
+                    item_carrinho['produto'].id_produto,
+                    item_carrinho['quantidade'],
+                    item_carrinho['valor_unitario']
+                )
+
                 item_carrinho['produto'].quantidade_estoque_produto -= item_carrinho['quantidade']
                 db.session.add(item_carrinho['produto'])
+                pedido.itens_do_pedido.append(item_do_pedido)
 
         db.session.add(pedido)
         db.session.commit()

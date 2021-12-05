@@ -64,7 +64,7 @@
                     <td>{{ pedido_consulta.status_pagamento }}</td>
                     <td>{{ pedido_consulta.status }}</td>
                     <td>
-                        {% for produto in pedido_consulta.produtos %}
+                        {% for produto in pedido_consulta.itens_do_pedido %}
                             <p>{{ produto.nome }}</p>
                         {% endfor %}
                     </td>

@@ -32,6 +32,7 @@ class Produtos(db.Model):
     mimetype = db.Column(db.Text)
     receita = db.relationship('Receitas', backref='receita')
 
+
     def __init__(self, nome, quantidade_estoque_produto, valor, descricao, imagem, mimetype):
         self.nome = nome
         self.quantidade_estoque_produto = quantidade_estoque_produto
