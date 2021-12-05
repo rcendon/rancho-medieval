@@ -1,18 +1,15 @@
-import re
 from flask import render_template, session, request, redirect, url_for, flash
-from flask.helpers import flash
 from flask.wrappers import Response
 from werkzeug.utils import secure_filename
-#from wtforms.validators import Email 
 
 #Importa a variaveis APP e DB do "__init__.py" = (loja).
 from app import app, db, bcrypt
 
-from .forms import RegistrationForm, LoginFormulario, CadastroProdutos
-
 from ..produtos.models import Produtos
-
 from ..pessoas.models import Pessoas
+
+from .forms import FormularioDadosPessoaisColaborador, LoginFormularioCli
+from ..produtos.forms import CadastroProdutos, CadastroInsumos
 
 ##################### Rota Home ####################################################
 
@@ -78,9 +75,9 @@ def registrar():
 
 #LoginFormulario
 
-@app.route('/login_admin', methods=['GET', 'POST'])
-def login_admin():
-    if 'cpf' in session: ###Controle de Acesso###         
+@app.route('/login_colaborador', methods=['GET', 'POST'])
+def login_colaborador():
+    if 'email_colaborador' in session: ###Controle de Acesso###
         return redirect(url_for('usuario'))
 
     form=LoginFormulario(request.form) #Retorna valores do forms.py
@@ -103,9 +100,9 @@ def login_admin():
 
 @app.route('/addcardapio', methods=['GET', 'POST'])
 def produtos():
-    if 'cpf' not in session: ###Controle de Acesso###
+    if 'email_colaborador' not in session: ###Controle de Acesso###
         flash(f'Olá, faça o login primeiro', 'danger')    
-        return redirect(url_for('login'))
+        return redirect(url_for('login_colaborador'))
 
     form=CadastroProdutos(request.form) #Retorna valores do forms.py
     if request.method == "POST": #SE POST  

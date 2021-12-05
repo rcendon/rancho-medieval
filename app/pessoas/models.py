@@ -56,14 +56,14 @@ class Pessoas(db.Model):
 
 
     @staticmethod
-    def adiciona_pessoa(dados_pessoais):
+    def adiciona_pessoa(dados_pessoais, tipo):
 
         pessoa = Pessoas(
             dados_pessoais.nome.data,
             dados_pessoais.email.data,
             dados_pessoais.rg.data,
             dados_pessoais.cpf.data,
-            'C',
+            tipo,
             bcrypt.generate_password_hash(dados_pessoais.senha.data).decode('utf-8')
         )
 
@@ -75,7 +75,7 @@ class Pessoas(db.Model):
             dados_pessoais.pais.data,
             dados_pessoais.numero.data,
             dados_pessoais.complemento.data,
-            'C',
+            'R',
             dados_pessoais.cep.data
         )
 

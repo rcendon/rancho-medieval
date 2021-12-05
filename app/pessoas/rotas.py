@@ -40,7 +40,7 @@ def registro():
 
     if request.method == "POST" and form.validate_on_submit():
 
-        Pessoas.adiciona_pessoa(form)
+        Pessoas.adiciona_pessoa(form, 'C')
         flash(f'{form.nome.data}, obrigado pelo registro, realize o login', 'success')
         return redirect(url_for('login'))
 

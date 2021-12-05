@@ -24,14 +24,14 @@ def processa_pedido(id_cliente, pedido_id):
         return render_template('index.html')
 
 @app.route('/pedido')
-@app.route('/pedido/<int:cliente_id>/<int:pedido_id>', methods=['GET'])
-def pedido(cliente_id=None, pedido_id=None):
+@app.route('/pedido/<int:cliente_instancia_id>/<int:pedido_realizado_id>', methods=['GET'])
+def pedido(cliente_instancia=None, pedido_realizado=None):
 
    if 'email' in session:
 
-        if cliente_id and pedido_id:
+        if cliente_instancia and pedido_realizado:
 
-            return render_template('/pedidos/detalhes_do_pedido.html', pedido_pagamento=Pedidos.query.filter_by(id=pedido_id, id_cliente=cliente_id).all()[-1])
+            return render_template('/pedidos/detalhes_do_pedido.html', pedido_pagamento=Pedidos.query.filter_by(id=pedido_realizado.id, id_cliente=cliente_instancia.id).all()[-1])
 
         else:
 
@@ -40,7 +40,7 @@ def pedido(cliente_id=None, pedido_id=None):
    else:
 
         flash('Por favor, faça o login primeiro para verificar a situação de seu último pedido.', 'info')
-        return redirect(url_for('logincliente'))
+        return redirect(url_for('login'))
 
 
 
@@ -56,16 +56,23 @@ def carrinho():
         if 'email' not in session:
 
             flash('Por favor, faça o login em sua conta antes de finalizar a compra.', 'info')
-            return redirect(url_for('logincliente'))
+            return redirect(url_for('login'))
 
-        cliente = Pessoas.query.filter_by(email=session['email']).first()
+        cliente_instancia = Pessoas.query.filter_by(email=session['email']).first()
 
-        pedido = Pedidos.gera_pedido(
-            {'cliente_id': cliente.id, 'estoque': Produtos.lista_produtos_em_estoque()},
+        pedido_realizado = Pedidos.gera_pedido(
+            {'cliente_id': cliente_instancia.id, 'estoque': Produtos.lista_produtos_em_estoque()},
             Pedidos.gera_carrinho(request.cookies, Produtos.lista_produtos_em_estoque())
         )
 
-        return redirect(url_for('pedido', cliente_id=cliente.id, pedido_id=pedido.id,))
+        if type(pedido_realizado) == bool:
+
+            flash('Oops, pedimos desculpas mas, infelizmente, não poderemos finalizar seu pedido neste momento pois estamos momentaneamente com falta de estoque. Por favor, selecione outros itens ou uma quantidade menor dos já escolhidos.')
+            return redirect(url_for('carrinho'))
+
+        else:
+
+            return redirect(url_for('pedido', cliente_instancia_id=cliente_instancia.id, pedido_realizado_id=pedido_realizado.id))
 
     carrinho_com_itens = Pedidos.gera_carrinho(request.cookies, Produtos.lista_produtos_em_estoque())
     carrinho_valor_total = Pedidos.calcula_valor_total_do_carrinhho(carrinho_com_itens)
