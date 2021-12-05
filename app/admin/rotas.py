@@ -78,8 +78,8 @@ def registrar():
 
 #LoginFormulario
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
+@app.route('/login_admin', methods=['GET', 'POST'])
+def login_admin():
     if 'cpf' in session: ###Controle de Acesso###         
         return redirect(url_for('usuario'))
 

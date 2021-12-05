@@ -19,7 +19,7 @@ def minhaconta():
 
     if 'email' not in session:
         flash(f'Olá, faça o login primeiro', 'danger')    
-        return redirect(url_for('logincliente'))
+        return redirect(url_for('login'))
 
     cliente = Pessoas.query.filter_by(email=session['email']).first()
 
@@ -33,8 +33,8 @@ def minhaconta():
 
 #RegistrationForm
 
-@app.route('/registrocliente', methods=['GET', 'POST'])
-def registrocliente():
+@app.route('/registro', methods=['GET', 'POST'])
+def registro():
 
     form = FormularioDadosPessoais() #Retorna valores do forms.py
 
@@ -42,7 +42,7 @@ def registrocliente():
 
         Pessoas.adiciona_pessoa(form)
         flash(f'{form.nome.data}, obrigado pelo registro, realize o login', 'success')
-        return redirect(url_for('logincliente'))
+        return redirect(url_for('login'))
 
     return render_template('clientes/registrocliente.html', form=form)
 
@@ -50,8 +50,8 @@ def registrocliente():
 
 ################## Rota Login Formulario #############################################
 
-@app.route('/logincliente', methods=['GET', 'POST'])
-def logincliente():
+@app.route('/login', methods=['GET', 'POST'])
+def login():
     if 'email' in session:         
         return redirect(url_for('minhaconta'))
 
