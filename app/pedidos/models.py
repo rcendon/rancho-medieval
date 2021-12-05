@@ -22,6 +22,10 @@ class ItensDoPedido(db.Model):
         self.quantidade = quantidade
         self.valor_unitario = valor_unitario
 
+    def valor_total(self):
+
+        return self.valor_unitario * self.quantidade
+
 ################################ Modelo Cadastro Pedidos ########################################################
 
 class Pedidos(db.Model):
