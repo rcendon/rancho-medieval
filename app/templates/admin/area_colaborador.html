@@ -6,30 +6,93 @@
   <!--d-flex justify-content-center align-items-center... = Comandos do bootstrap-->
  
   <div class="form-group col-md-5 d-flex justify-content-between align-items-baseline flex-column">                
-    <h2>Painel Administrativo</h2>        
+    <h1>Painel Administrativo</h1>
   </div> 
   
   <form>
-    <div class="form-group col-md-6">
-      <a class="form-group btn btn-primary" href="/manipulacao_cardapio">Administrar cardápio</a>
-    </div>
-  <br>
+
       <div class="form-group col-md-6">
-          <a class="form-group btn btn-primary" href="/manipulacao_insumos">Administrar insumos</a>
+          <h2>Acompanhamento de pedidos</h2>
+
+          <div class="form-group col-md-6">
+              <a class="form-group btn btn-primary" href="/">Pedidos em aberto</a>
+          </div>
+          <br>
+
+      {% if colaborador_instancia.tipo == 'A'  %}
+
+          <div class="form-group col-md-6">
+              <a class="form-group btn btn-primary" href="/">Histórico de pedidos</a>
+          </div>
+          <br>
       </div>
-    <br>
+
+      {% endif %}
+
+  <br>
+
+    <div class="form-group col-md-6">
+      <h2>Gerenciamento do cardápio</h2>
+
+        <div class="form-group col-md-6">
+            <a class="form-group btn btn-primary" href="/cadastro_produto">Cadastrar produto</a>
+        </div>
+        <br>
+        <div class="form-group col-md-6">
+            <a class="form-group btn btn-primary" href="/modificar_produto">Modificar produto</a>
+        </div>
+        <br>
+    </div>
+
+  <br>
+
+  <div class="form-group col-md-6">
+      <h2>Gerenciamento de insumos</h2>
+      <div class="form-group col-md-6">
+          <a class="form-group btn btn-primary" href="/cadastro_insumo">Cadastrar insumo</a>
+      </div>
+      <br>
+      <div class="form-group col-md-6">
+          <a class="form-group btn btn-primary" href="/modificar_insumo">Modificar insumo</a>
+      </div>
+      <br>
+  </div>
+
+      <br>
 
       {% if colaborador_instancia.tipo == 'A' %}
 
           <div class="form-group col-md-6">
-              <a class="form-group btn btn-primary" href="/manipulacao_fornecedores">Administrar fornecedores</a>
+          <h2>Gerenciamento de fornecedores</h2>
+          <div class="form-group col-md-6">
+              <a class="form-group btn btn-primary" href="/manipulacao_fornecedores">Adicionar fornecedor</a>
           </div>
+              <br>
+              <div class="form-group col-md-6">
+                  <a class="form-group btn btn-primary" href="/manipulacao_fornecedores">Modificar fornecedor</a>
+              </div>
+              <br>
+              <div class="form-group col-md-6">
+                  <a class="form-group btn btn-primary" href="/manipulacao_fornecedores">Remover fornecedor</a>
+              </div>
+          </div>
+
           <br>
 
           <div class="form-group col-md-6">
-              <a class="form-group btn btn-primary" href="/registrar_colaborador">Cadastrar usuários</a>
+          <h2>Gerenciamento de colaboradores</h2>
+          <div class="form-group col-md-6">
+              <a class="form-group btn btn-primary" href="/registrar_colaborador">Cadastrar colaborador</a>
           </div>
           <br>
+          <div class="form-group col-md-6">
+              <a class="form-group btn btn-primary" href="/modificar_colaborador">Modificar colaborador</a>
+          </div>
+              <br>
+          <div class="form-group col-md-6">
+              <a class="form-group btn btn-primary" href="/modificar_colaborador">Remover colaborador</a>
+          </div>
+          </div>
 
 {#      <div class="form-group col-md-6">#}
 {#          <a class="form-group btn btn-primary" href="#">Histórico de vendas</a>#}
@@ -39,5 +102,113 @@
       {% endif %}
 
   </form>
+
+
+    {% if lista_produtos_sem_estoque %}
+
+    <div>
+    <h2>Os seguintes produtos estão sem estoque e precisam ser repostos.</h2>
+    <div>
+        <table>
+            <tr>
+                <th>Produto</th>
+            </tr>
+
+            {% for produto in lista_produtos_sem_estoque %}
+
+                <tr>
+                    <td>{{ produto.nome }}</td>
+                </tr>
+                </table>
+
+            {% endfor %}
+
+    </div>
+    </div>
+
+    {% endif %}
+
+    <br>
+
+    {% if lista_produtos_com_pouco_estoque %}
+
+        <div>
+            <h2>Os seguintes produtos estão com pouco estoque e precisam ser repostos.</h2>
+            <div>
+                <table>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                    </tr>
+
+                    {% for produto in lista_produtos_com_pouco_estoque %}
+
+                        <tr>
+                            <td>{{ produto.nome }}</td>
+                            <td>{{ produto.quantidade_estoque_produto }}</td>
+                        </tr>
+                        </table>
+
+                    {% endfor %}
+
+            </div>
+        </div>
+
+    {% endif %}
+
+    <br>
+
+    {% if lista_insumos_sem_estoque %}
+
+        <div>
+        <h2>Os seguintes insumos estão sem estoque e precisam ser repostos.</h2>
+        <div>
+            <table>
+                <tr>
+                    <th>Insumo</th>
+                </tr>
+
+                {% for insumo in lista_insumos_sem_estoque %}
+
+                    <tr>
+                        <td>{{ insumo.nome }}</td>
+                    </tr>
+
+                {% endfor %}
+
+            </table>
+        </div>
+        </div>
+
+    {% endif %}
+
+    <br>
+
+    {% if lista_insumos_com_pouco_estoque %}
+
+        <div>
+            <h2>Os seguintes insumos estão sem estoque e precisam ser repostos.</h2>
+            <div>
+                <table>
+                    <tr>
+                        <th>Insumo</th>
+                        <th>Quantidade</th>
+                    </tr>
+
+                    {% for insumo in lista_insumos_com_pouco_estoque %}
+
+                        <tr>
+                            <td>{{ insumo.nome }}</td>
+                            <td>{{ insumo.quantidade_estoque_insumo }}</td>
+                        </tr>
+
+                    {% endfor %}
+
+                </table>
+            </div>
+        </div>
+
+    {% endif %}
+
 
 {% endblock content %}

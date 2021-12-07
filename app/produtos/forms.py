@@ -9,12 +9,13 @@ from ..pessoas.models import Fornecedores
 class CadastroProdutos(FlaskForm):
 
     nome = StringField('Nome', validators=[InputRequired(), length(min=1, max=256)])
-    quantidade_estoque_produto = IntegerField('Quantidade em estoque', validators=[InputRequired(), NumberRange(min=0, max=100)])
+    quantidade_estoque_produto = IntegerField('Quantidade em estoque', validators=[InputRequired(), NumberRange(min=0, max=400)])
     valor = FloatField('Valor', validators=[InputRequired(), NumberRange(min=0, max=500)])
     descricao = StringField('Descrição', validators=[InputRequired(), length(min=0, max=100)])
     imagem = FileField('Imagem')
-    mimetype = StringField('Mimetype', validators=[length(min=1, max=100)])
-    insumos_utilizados = SelectMultipleField('Insumos utilizados', choices=Insumos.lista_insumos(), validators=[InputRequired()])
+    # mimetype = StringField('Mimetype', validators=[length(min=1, max=100)])
+    insumos_utilizados = SelectMultipleField('Insumos utilizados', choices=[(insumo, insumo) for insumo in Insumos.lista_insumos()], validators=[InputRequired()])
+    # quantidade_insumo_utilizado = SelectField('Quantidade')
     submit = SubmitField('Registrar')
 
     def validate_nome(self, nome):

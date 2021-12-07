@@ -33,7 +33,7 @@ class Produtos(db.Model):
     receita = db.relationship('Receitas', backref='receita')
 
 
-    def __init__(self, nome, quantidade_estoque_produto, valor, descricao, imagem, mimetype):
+    def __init__(self, nome, quantidade_estoque_produto, valor, descricao, imagem=None, mimetype=None):
         self.nome = nome
         self.quantidade_estoque_produto = quantidade_estoque_produto
         self.valor = valor
@@ -55,12 +55,12 @@ class Produtos(db.Model):
 
         for insumo in dados_produto['insumos_utilizados']:
 
-            if insumo['nome'] == Insumos.query.filter_by(nome=insumo['nome']).first().nome:
+            if insumo == Insumos.query.filter_by(nome=insumo).first().nome:
 
                 relacao = Receitas(
                     Produtos.query.filter_by(nome=dados_produto['nome']).first().id_produto,
-                    Insumos.query.filter_by(nome=insumo['nome']).first().id,
-                    insumo['quantidade']
+                    Insumos.query.filter_by(nome=insumo).first().id,
+                    1
                 )
 
             else:
@@ -86,7 +86,7 @@ class Produtos(db.Model):
             dados_produto['valor'],
             dados_produto['descricao'],
             dados_produto['imagem'],
-            dados_produto['mimetype']
+            'A'
         )
 
         if Produtos.query.filter_by(nome=dados_produto['nome']).first():
@@ -174,7 +174,7 @@ class Produtos(db.Model):
         return True
 
     @staticmethod
-    def lista_produtos_em_estoque():
+    def lista_produtos_em_estoque(quantidade_maxima_para_exibicao):
 
         lista_produtos_com_estoque = []
 
@@ -188,7 +188,7 @@ class Produtos(db.Model):
 
             for produto in lista_produtos:
 
-                if Produtos.quantidade_em_estoque_do_produto(produto.nome) > 0:
+                if produto.quantidade_estoque_produto > 0 and produto.quantidade_estoque_produto < quantidade_maxima_para_exibicao:
 
                     lista_produtos_com_estoque.append(produto)
 
@@ -447,5 +447,25 @@ class Insumos(db.Model):
                     lista_insumos_sem_estoque.append(insumo)
 
         return lista_insumos_sem_estoque
+
+    @staticmethod
+    def lista_insumos_em_estoque(quantidade_maxima_para_exibicao=0):
+
+        lista_insumos_com_estoque = []
+
+        lista_insumos = Insumos.query.all()
+
+        if lista_insumos == None:
+
+            return False
+
+        else:
+
+            for insumo in lista_insumos:
+
+                if insumo.quantidade_estoque_insumo > 0 and insumo.quantidade_estoque_insumo < quantidade_maxima_para_exibicao:
+                    lista_insumos_com_estoque.append(insumo)
+
+        return lista_insumos_com_estoque
 
 ############################### Fim Modelo Insumos #####################################################

@@ -33,7 +33,14 @@ def colaborador():
 
     colaborador_instancia = Pessoas.query.filter_by(email=session['email_colaborador']).first()
 
-    return render_template('admin/area_colaborador.html', colaborador_instancia=colaborador_instancia)
+    return render_template(
+        'admin/area_colaborador.html',
+        colaborador_instancia=colaborador_instancia,
+        lista_produtos_sem_estoque=Produtos.lista_produtos_sem_estoque(),
+        lista_produtos_com_pouco_estoque=Produtos.lista_produtos_em_estoque(10),
+        lista_insumos_sem_estoque=Insumos.lista_insumos_sem_estoque(),
+        lista_insumos_com_pouco_estoque=Insumos.lista_insumos_em_estoque(10)
+    )
 
 ####################################################################################
 
@@ -102,28 +109,7 @@ def login_colaborador():
 
     return render_template('admin/login_colaborador.html', form=form)
 
-
 ###############################################################################################
-
-##################### Rota Adicionar Produto ####################################################
-
-@app.route('/manipulacao_cardapio', methods=['GET', 'POST'])
-def manipulacao_cardapio():
-
-    if 'email_colaborador' not in session:
-        flash(f'Olá, faça o login primeiro', 'info')
-        return redirect(url_for('login_colaborador'))
-
-    return render_template('admin/manipulacao_cardapio.html', lista_produtos_sem_estoque=Produtos.lista_produtos_sem_estoque()) #ELSE mostra pagina ADD
-
-@app.route('/manipulacao_insumos', methods=['GET', 'POST'])
-def manipulacao_insumos():
-
-    if 'email_colaborador' not in session:
-        flash(f'Olá, faça o login primeiro', 'info')
-        return redirect(url_for('login_colaborador'))
-
-    return render_template('admin/manipulacao_insumos.html', lista_insumos_sem_estoque=Insumos.lista_insumos_sem_estoque())
 
 ##################### Rota Logout ####################################################
 
@@ -157,15 +143,24 @@ def cadastro_produto():
 
     if request.method == "POST" and form.validate_on_submit():
 
-        operacao = Produtos.adiciona_produto_cardapio_com_receita(form)
+        dados = {
+            'nome': form.nome.data,
+            'quantidade_estoque_produto': form.quantidade_estoque_produto.data,
+            'valor': form.valor.data,
+            'descricao': form.descricao.data,
+            'imagem': 'teste', # form.imagem.data,
+            'insumos_utilizados': form.insumos_utilizados.data
+        }
+
+        operacao = Produtos.adiciona_produto_cardapio_com_receita(dados)
 
         if operacao:
 
             flash(f'Produto cadastrado com sucesso ', 'success')
-            return redirect(url_for('colaborador'))  # Se o metodo POST for OK retornar para o INDEX
+            return redirect(url_for('colaborador'))
 
         else:
 
             flash("Ocorreu um problema com o cadastro. Por favor, certifique-se que os dados foram inseridos corretamente.", "danger")
 
-    return redirect(url_for('cadastro_produto'))
+    return render_template("/admin/cadastro_produto.html", form=form, insumos_quantidade=str(len(Insumos.lista_insumos())))
