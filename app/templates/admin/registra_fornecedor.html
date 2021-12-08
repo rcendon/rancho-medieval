@@ -11,7 +11,7 @@
 
     <div class="form-group col-md-10">
 
-        <h1><font color="#ffffff">Novo Cadastro</font></h1>
+        <h1><font color="#ffffff">Novo cadastro de fornecedor</font></h1>
 
         <form method="POST" enctype="multipart/form-data" >
 
@@ -29,24 +29,14 @@
                 {% for erro in form.email.errors %}
                     <p>{{ erro }}</p>
                 {% endfor %}
-                {{ form.rg.label }}
-                {{ form.rg(placeholder="RG", class="form-control") }}
-                {% for erro in form.rg.errors %}
+                {{ form.cnpj.label }}
+                {{ form.cnpj(placeholder="CNPJ", class="form-control") }}
+                {% for erro in form.cnpj.errors %}
                     <p>{{ erro }}</p>
                 {% endfor %}
-                {{ form.cpf.label }}
-                {{ form.cpf(placeholder="CPF", class="form-control") }}
-                {% for erro in form.cpf.errors %}
-                    <p>{{ erro }}</p>
-                {% endfor %}
-                {{ form.tipo.label }}
-                {{ form.tipo(placeholder="Tipo", class="form-control") }}
-                {% for erro in form.tipo.errors %}
-                    <p>{{ erro }}</p>
-                {% endfor %}
-                {{ form.senha.label }}
-                {{ form.senha(placeholder="Senha", class="form-control") }}
-                {% for erro in form.senha.errors %}
+                {{ form.contato.label }}
+                {{ form.contato(placeholder="Telefone para contato", class="form-control") }}
+                {% for erro in form.contato.errors %}
                     <p>{{ erro }}</p>
                 {% endfor %}
 

@@ -6,9 +6,10 @@ from werkzeug.utils import secure_filename
 from app import app, db, bcrypt
 
 from ..produtos.models import Produtos, Insumos
-from ..pessoas.models import Pessoas
+from ..pessoas.models import Pessoas, Fornecedores
 
 from .forms import FormularioDadosPessoaisColaborador, LoginFormularioCli
+from ..pessoas.forms import FormularioDadosFornecedor
 from ..produtos.forms import CadastroProdutos, CadastroInsumos, AdicionaProdutoEstoque, AdicionaInsumoEstoque
 
 ##################### Rota Home ####################################################
@@ -77,7 +78,7 @@ def registrar_colaborador():
         flash(f'O registro de {form.nome.data} foi realizado com sucesso.', 'success')
         return redirect(url_for('colaborador'))
 
-    return render_template('admin/registrar_colaborador.html', form=form)
+    return render_template('admin/registra_colaborador.html', form=form)
 
 ##################################################################################################
 
@@ -131,6 +132,51 @@ def logout():
 #         mimetype = pic.mimetype
 #
 #     return Response(img.imagem, mimetype=img.mimetype)
+
+@app.route("/registra_fornecedor", methods=['GET', 'POST'])
+def registra_fornecedor():
+
+    if 'email_colaborador' not in session:
+        flash(f'Olá, faça o login primeiro', 'info')
+        return redirect(url_for('login_colaborador'))
+
+    form = FormularioDadosFornecedor()
+
+    if request.method == "POST" and form.validate_on_submit():
+
+        dados = {
+            'nome': form.nome.data,
+            'cnpj': form.cnpj.data,
+            'contato': form.contato.data,
+            'email': form.email.data,
+            'rua': form.rua.data,
+            'bairro': form.bairro.data,
+            'cidade': form.cidade.data,
+            'estado': form.estado.data,
+            'pais': form.pais.data,
+            'numero': form.numero.data,
+            'complemento': form.complemento.data,
+            'tipo_endereco': 'C',
+            'cep': form.cep.data
+
+        }
+
+        operacao = Fornecedores.adiciona_fornecedor(dados)
+
+        if operacao:
+
+            flash(f'Fornecedor cadastrado com sucesso ', 'success')
+            return redirect(url_for('colaborador'))
+
+        else:
+
+            flash("Ocorreu um problema com o cadastro. Por favor, certifique-se que os dados foram inseridos corretamente.", "danger")
+
+    return render_template("/admin/registra_fornecedor.html", form=form)
+
+
+
+
 
 @app.route("/cadastro_produto", methods=['GET', 'POST'])
 def cadastro_produto():
@@ -236,23 +282,23 @@ def adiciona_insumo_estoque():
 
     if request.method == "POST" and form.validate_on_submit():
 
-        produto_instancia = Produtos.query.filter_by(nome=form.produto_nome.data).first()
+        insumo_instancia = Insumos.query.filter_by(nome=form.insumo_nome.data).first()
 
-        operacao = produto_instancia.adiciona_quantidade_produto_estoque(form.quantidade.data)
+        operacao = insumo_instancia.adiciona_quantidade_insumo_estoque(form.quantidade.data)
 
         if operacao and form.quantidade.data == 1:
 
-            flash(f'Obrigado, foi adicionada {form.quantidade.data} unidade do produto {form.produto_nome.data} ao estoque.', 'success')
+            flash(f'Obrigado, foi adicionada {form.quantidade.data} unidade do insumo {form.insumo_nome.data} ao estoque.', 'success')
             return redirect(url_for('colaborador'))
 
         if operacao and form.quantidade.data > 1:
 
-            flash(f'Obrigado, foram adicionadas {form.quantidade.data} unidades do produto {form.produto_nome.data} ao estoque.', 'success')
+            flash(f'Obrigado, foram adicionadas {form.quantidade.data} unidades do produto {form.insumo_nome.data} ao estoque.', 'success')
             return redirect(url_for('colaborador'))
 
         else:
 
             flash("Ocorreu um problema com a operação. Por favor, certifique-se que os dados foram inseridos corretamente e de que há insumos o suficiente no estoque.", "danger")
 
-    return render_template("/admin/adiciona_produto_estoque.html", form=form)
+    return render_template("/admin/adiciona_insumo_estoque.html", form=form)
 

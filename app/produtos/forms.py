@@ -48,7 +48,7 @@ class CadastroInsumos(FlaskForm):
             return ValidationError("Já existe um insumo cadastrado com esse nome.")
 
 class AdicionaInsumoEstoque(FlaskForm):
-    insumo_nome = SelectField('Produto', default='-', choices=[produto.nome for produto in Produtos.query.all()], validators=[InputRequired()])
+    insumo_nome = SelectField('Insumo', default='-', choices=[insumo.nome for insumo in Insumos.query.all()], validators=[InputRequired()])
     quantidade = IntegerField('Quantidade', validators=[InputRequired(), NumberRange(min=1, max=100)])
     submit = SubmitField('Adicionar')
 

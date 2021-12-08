@@ -257,28 +257,22 @@ class Insumos(db.Model):
         db.session.commit()
         return True
 
-    @staticmethod
-    def adiciona_quantidade_insumo_estoque(insumo, quantidade):
-
-        estoque = Insumos.query.filter_by(nome=insumo).first()
-        estoque.quantidade_estoque_insumo += quantidade
-        db.session.add(estoque)
+    def adiciona_quantidade_insumo_estoque(self, quantidade):
+        self.quantidade_estoque_insumo += quantidade
+        db.session.add(self)
         db.session.commit()
         return True
 
-    @staticmethod
-    def reduz_quantidade_insumo_estoque(insumo, quantidade):
+    def reduz_quantidade_insumo_estoque(self, quantidade):
 
-        estoque = Insumos.query.filter_by(nome=insumo).first()
-
-        if estoque.quantidade_estoque_insumo < quantidade:
+        if self.quantidade_estoque_insumo < quantidade:
 
             return False
 
         else:
 
-            estoque.quantidade_estoque_insumo -= quantidade
-            db.session.add(estoque)
+            self.quantidade_estoque_insumo -= quantidade
+            db.session.add(self)
             db.session.commit()
             return True
 
