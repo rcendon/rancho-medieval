@@ -9,7 +9,7 @@ from ..produtos.models import Produtos, Insumos
 from ..pessoas.models import Pessoas
 
 from .forms import FormularioDadosPessoaisColaborador, LoginFormularioCli
-from ..produtos.forms import CadastroProdutos, CadastroInsumos
+from ..produtos.forms import CadastroProdutos, CadastroInsumos, AdicionaProdutoEstoque, AdicionaInsumoEstoque
 
 ##################### Rota Home ####################################################
 
@@ -164,3 +164,95 @@ def cadastro_produto():
             flash("Ocorreu um problema com o cadastro. Por favor, certifique-se que os dados foram inseridos corretamente.", "danger")
 
     return render_template("/admin/cadastro_produto.html", form=form, insumos_quantidade=str(len(Insumos.lista_insumos())))
+
+@app.route("/adiciona_produto_estoque", methods=['GET', 'POST'])
+def adiciona_produto_estoque():
+
+    if 'email_colaborador' not in session:
+        flash(f'Olá, faça o login primeiro', 'info')
+        return redirect(url_for('login_colaborador'))
+
+    form = AdicionaProdutoEstoque()
+
+    if request.method == "POST" and form.validate_on_submit():
+
+        produto_instancia = Produtos.query.filter_by(nome=form.produto_nome.data).first()
+
+        operacao = produto_instancia.adiciona_quantidade_produto_estoque(form.quantidade.data)
+
+        if operacao and form.quantidade.data == 1:
+
+            flash(f'Obrigado, foi adicionada {form.quantidade.data} unidade do produto {form.produto_nome.data} ao estoque.', 'success')
+            return redirect(url_for('colaborador'))
+
+        if operacao and form.quantidade.data > 1:
+
+            flash(f'Obrigado, foram adicionadas {form.quantidade.data} unidades do produto {form.produto_nome.data} ao estoque.', 'success')
+            return redirect(url_for('colaborador'))
+
+        else:
+
+            flash("Ocorreu um problema com a operação. Por favor, certifique-se que os dados foram inseridos corretamente e de que há insumos o suficiente no estoque.", "danger")
+
+    return render_template("/admin/adiciona_produto_estoque.html", form=form)
+
+@app.route("/cadastro_insumo", methods=['GET', 'POST'])
+def cadastro_insumo():
+
+    if 'email_colaborador' not in session:
+        flash(f'Olá, faça o login primeiro', 'info')
+        return redirect(url_for('login_colaborador'))
+
+    form = CadastroInsumos()
+
+    if request.method == "POST" and form.validate_on_submit():
+
+        dados = {
+            'nome': form.nome.data,
+            'quantidade_estoque_insumo': form.quantidade_estoque_insumo.data
+        }
+
+        operacao = Insumos.cadastra_insumo_estoque(dados)
+
+        if operacao:
+
+            flash(f'Insumo cadastrado com sucesso ', 'success')
+            return redirect(url_for('colaborador'))
+
+        else:
+
+            flash("Ocorreu um problema com o cadastro. Por favor, certifique-se que os dados foram inseridos corretamente.", "danger")
+
+    return render_template("/admin/cadastro_insumo.html", form=form)
+
+@app.route("/adiciona_insumo_estoque", methods=['GET', 'POST'])
+def adiciona_insumo_estoque():
+
+    if 'email_colaborador' not in session:
+        flash(f'Olá, faça o login primeiro', 'info')
+        return redirect(url_for('login_colaborador'))
+
+    form = AdicionaInsumoEstoque()
+
+    if request.method == "POST" and form.validate_on_submit():
+
+        produto_instancia = Produtos.query.filter_by(nome=form.produto_nome.data).first()
+
+        operacao = produto_instancia.adiciona_quantidade_produto_estoque(form.quantidade.data)
+
+        if operacao and form.quantidade.data == 1:
+
+            flash(f'Obrigado, foi adicionada {form.quantidade.data} unidade do produto {form.produto_nome.data} ao estoque.', 'success')
+            return redirect(url_for('colaborador'))
+
+        if operacao and form.quantidade.data > 1:
+
+            flash(f'Obrigado, foram adicionadas {form.quantidade.data} unidades do produto {form.produto_nome.data} ao estoque.', 'success')
+            return redirect(url_for('colaborador'))
+
+        else:
+
+            flash("Ocorreu um problema com a operação. Por favor, certifique-se que os dados foram inseridos corretamente e de que há insumos o suficiente no estoque.", "danger")
+
+    return render_template("/admin/adiciona_produto_estoque.html", form=form)
+

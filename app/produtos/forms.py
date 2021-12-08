@@ -22,15 +22,38 @@ class CadastroProdutos(FlaskForm):
         if Produtos.query.filter_by(nome=nome.data).first():
             return ValidationError("Já existe um produto cadastrado com esse nome.")
 
+
+class AdicionaProdutoEstoque(FlaskForm):
+    produto_nome = SelectField('Produto', default='-', choices=[produto.nome for produto in Produtos.query.all()], validators=[InputRequired()])
+    quantidade = IntegerField('Quantidade', validators=[InputRequired(), NumberRange(min=1, max=100)])
+    submit = SubmitField('Adicionar')
+
+    def validate_quantidade(self, quantidade):
+
+        if quantidade.data <= 0:
+
+            raise ValidationError("Por favor, insira uma quantidade maior que 0.")
+
+
 class CadastroInsumos(FlaskForm):
 
     nome = StringField('Nome', validators=[InputRequired(), length(min=1, max=256)])
     quantidade_estoque_insumo = IntegerField('Quantidade em estoque', validators=[InputRequired(), NumberRange(min=0, max=100)])
-    valor = FloatField('Valor', validators=[InputRequired(), NumberRange(min=0, max=500)])
-    fornecedores = SelectMultipleField('Fornecedores', default='-', choices=Fornecedores.lista_fornecedores(), validators=[InputRequired()])
-    descricao = StringField('Descricao', validators=[length(min=0, max=100)])
+    # valor = FloatField('Valor', validators=[InputRequired(), NumberRange(min=0, max=500)])
+    # fornecedores = SelectMultipleField('Fornecedores', default='-', choices=Fornecedores.lista_fornecedores(), validators=[InputRequired()])
     submit = SubmitField('Registrar')
 
     def validate_nome(self, nome):
-        if Produtos.query.filter_by(nome=nome.data).first():
+        if Insumos.query.filter_by(nome=nome.data).first():
             return ValidationError("Já existe um insumo cadastrado com esse nome.")
+
+class AdicionaInsumoEstoque(FlaskForm):
+    insumo_nome = SelectField('Produto', default='-', choices=[produto.nome for produto in Produtos.query.all()], validators=[InputRequired()])
+    quantidade = IntegerField('Quantidade', validators=[InputRequired(), NumberRange(min=1, max=100)])
+    submit = SubmitField('Adicionar')
+
+    def validate_quantidade(self, quantidade):
+
+        if quantidade.data <= 0:
+
+            raise ValidationError("Por favor, insira uma quantidade maior que 0.")

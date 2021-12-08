@@ -245,15 +245,15 @@ class Insumos(db.Model):
         self.quantidade_estoque_insumo = quantidade
 
     @staticmethod
-    def cadastra_insumo_estoque(insumo):
+    def cadastra_insumo_estoque(insumo:dict):
 
-        if Insumos.query.filter_by(nome=insumo).first():
+        if Insumos.query.filter_by(nome=insumo['nome']).first():
 
             return False
 
-        insumo = Insumos(insumo, 0)
+        insumo_instancia = Insumos(insumo['nome'], insumo['quantidade_estoque_insumo'])
 
-        db.session.add(insumo)
+        db.session.add(insumo_instancia)
         db.session.commit()
         return True
 

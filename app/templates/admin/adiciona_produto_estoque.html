@@ -6,12 +6,12 @@
     <!--5 cinco Colunas para englobar o texto-->
     <!--d-flex justify-content-center align-items-center... = Comandos do bootstrap-->
     <div class="form-group col-md-5 d-flex justify-content-between align-items-baseline flex-column">
-        <h2>Gerenciamento de Insumos</h2>
+        <h2>Gerenciamento do cardápio</h2>
     </div>
 
     <div class="form-group col-md-10">
 
-        <h1><font color="#ffffff">Novo Cadastro</font></h1>
+        <h1><font color="#ffffff">Adicionar produto no estoque</font></h1>
 
         <form method="POST" enctype="multipart/form-data" >
 
@@ -19,17 +19,17 @@
 
             <div name="dados_principais" class="form-group col-md-6">
 
-                {{ form.nome.label }}
-                {{ form.nome(placeholder="Nome", class="form-control") }}
-                {% for erro in form.nome.errors %}
+                {{ form.produto_nome.label }}
+                {{ form.produto_nome(placeholder="Nome", class="form-control") }}
+                {% for erro in form.produto_nome.errors %}
                     <p>{{ erro }}</p>
                 {% endfor %}
-                {{ form.quantidade_estoque_insumo.label }}
-                {{ form.quantidade_estoque_insumo(placeholder="Quantidade de insumo em estoque", class="form-control") }}
-                {% for erro in form.quantidade_estoque_insumo.errors %}
+                {{ form.quantidade.label }}
+                {{ form.quantidade(placeholder="Quantidade", class="form-control") }}
+                {% for erro in form.quantidade.errors %}
                     <p>{{ erro }}</p>
                 {% endfor %}
-            {{ form.submit }}
+                {{ form.submit }}
 
             </div>
         </form>
