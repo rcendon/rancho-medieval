@@ -106,8 +106,8 @@ class Fornecedores(db.Model):
     cnpj = db.Column(db.BigInteger, unique=True, nullable=False)
     contato = db.Column(db.BigInteger)
     email = db.Column(db.VARCHAR(256), unique=True, nullable=False)
-    endereco = db.relationship('Enderecos', secondary=enderecos_fornecedores, cascade="all, delete", passive_deletes=True, lazy='select', uselist=True)
-    preco_insumo = db.relationship('Preco_insumo', backref='preco_insumo', cascade="all, delete", passive_deletes=True)
+    endereco = db.relationship('Enderecos', secondary=enderecos_fornecedores, cascade="all, delete", lazy='select', uselist=True)
+    preco_insumo = db.relationship('Preco_insumo', backref='preco_insumo', cascade="all, delete")
 
     def __init__(self, nome, cnpj, contato, email):
         self.nome = nome
@@ -145,28 +145,23 @@ class Fornecedores(db.Model):
 
         return True
 
-    @staticmethod
-    def remove_fornecedor(fornecedor):
+    def remove_fornecedor(self):
 
-        fornecedor_instancia = Fornecedores.query.filter_by(nome=fornecedor).first()
+        # for insumo in Preco_insumo.query.all():
+        #
+        #     if insumo.id_fornecedor == self.id:
+        #
+        #         self.preco_insumo.append(insumo)
 
-        if fornecedor_instancia == None:
-
-            return False
-
-        else:
-
-            for insumo in Preco_insumo.query.all():
-                if insumo.id_fornecedor == fornecedor_instancia.id:
-                    fornecedor_instancia.preco_insumo.append(insumo)
-
-            # for endereco in enderecos_fornecedores:
+            # for endereco in Enderecos.query.join(enderecos_fornecedores).filter(enderecos_fornecedores.c.ene:
             #
-            #     das
+            #     if endereco.fornecedor_id == self.id:
+            #
+            #         self.endereco.append(endereco)
 
-            db.session.delete(fornecedor_instancia)
-            db.session.commit()
-            return True
+        db.session.delete(self)
+        db.session.commit()
+        return True
 
     @staticmethod
     def lista_fornecedores():

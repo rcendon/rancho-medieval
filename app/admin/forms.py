@@ -1,10 +1,10 @@
 ######## USUÁRIOS INTERNOS ########
 
-from wtforms.fields import StringField, PasswordField, IntegerField, SelectField, SubmitField
+from wtforms.fields import StringField, PasswordField, IntegerField, SelectField, SubmitField, SelectMultipleField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import length, InputRequired, NumberRange, ValidationError
 from flask_wtf import FlaskForm
-from app.pessoas.models import Pessoas
+from app.pessoas.models import Pessoas, Fornecedores
 from app.pedidos.models import Pedidos
 
 ######################### Classe Form Cadastro ##################################################
@@ -112,3 +112,7 @@ class FormularioEdicaoFornecedores(FlaskForm):
 
             if pessoa_instancia.tipo == 'C':
                 raise ValidationError("Apenas usuários de colaboradores podem realizar o acesso por esta página.")
+
+class FormularioRemocaoFornecedores(FlaskForm):
+    fornecedores = SelectMultipleField('Fornecedor', choices=[(fornecedor.nome, fornecedor.nome) for fornecedor in Fornecedores.query.all()], validators=[InputRequired()])
+    submit = SubmitField("Remover")

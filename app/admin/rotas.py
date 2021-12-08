@@ -8,7 +8,7 @@ from app import app, db, bcrypt
 from ..produtos.models import Produtos, Insumos
 from ..pessoas.models import Pessoas, Fornecedores
 
-from .forms import FormularioDadosPessoaisColaborador, LoginFormularioCli
+from .forms import FormularioDadosPessoaisColaborador, LoginFormularioCli, FormularioRemocaoFornecedores
 from ..pessoas.forms import FormularioDadosFornecedor
 from ..produtos.forms import CadastroProdutos, CadastroInsumos, AdicionaProdutoEstoque, AdicionaInsumoEstoque
 
@@ -174,7 +174,32 @@ def registra_fornecedor():
 
     return render_template("/admin/registra_fornecedor.html", form=form)
 
+@app.route("/remove_fornecedor", methods=['GET', 'POST'])
+def remove_fornecedor():
 
+    if 'email_colaborador' not in session:
+        flash(f'Olá, faça o login primeiro', 'info')
+        return redirect(url_for('login_colaborador'))
+
+    form = FormularioRemocaoFornecedores()
+
+    if request.method == "POST" and form.validate_on_submit():
+
+        for fornecedor in form.fornecedores.data:
+
+            fornecedor_instancia = Fornecedores.query.filter_by(nome=fornecedor).first()
+            operacao = fornecedor_instancia.remove_fornecedor()
+
+        if operacao:
+
+            flash(f'Fornecedor(es) removido(s) com sucesso ', 'success')
+            return redirect(url_for('colaborador'))
+
+        else:
+
+            flash("Ocorreu um problema com a operação.", "danger")
+
+    return render_template("/admin/remove_fornecedor.html", form=form, quantidade_fornecedores=str(len(Fornecedores.query.all())))
 
 
 

@@ -34,15 +34,22 @@
     <div class="form-group col-md-6">
       <h2>Gerenciamento do cardápio</h2>
 
+        {% if colaborador_instancia.tipo == 'A' %}
+
         <div class="form-group col-md-6">
             <a class="form-group btn btn-primary" href="/cadastro_produto">Cadastrar produto</a>
         </div>
         <br>
+
+        {% endif %}
+
         <div class="form-group col-md-6">
             <a class="form-group btn btn-primary" href="/adiciona_produto_estoque">Adicionar produto ao estoque</a>
         </div>
         <br>
+
         {% if colaborador_instancia.tipo == 'A' %}
+
         <div class="form-group col-md-6">
             <a class="form-group btn btn-primary" href="/modificar_produto">Modificar produto</a>
         </div>
@@ -62,12 +69,20 @@
           <a class="form-group btn btn-primary" href="/adiciona_insumo_estoque">Adicionar insumo ao estoque</a>
       </div>
       <br>
+      <div class="form-group col-md-6">
+          <a class="form-group btn btn-primary" href="/">Lista insumos por fornecedor</a>
+      </div>
+      <br>
+
       {% if colaborador_instancia.tipo == 'A' %}
+
       <div class="form-group col-md-6">
           <a class="form-group btn btn-primary" href="/modificar_insumo">Modificar insumo</a>
       </div>
       <br>
+
       {% endif %}
+
   </div>
 
       <br>
@@ -85,7 +100,7 @@
               </div>
               <br>
               <div class="form-group col-md-6">
-                  <a class="form-group btn btn-primary" href="/manipulacao_fornecedores">Remover fornecedor</a>
+                  <a class="form-group btn btn-primary" href="/remove_fornecedor">Remover fornecedor</a>
               </div>
           </div>
 
