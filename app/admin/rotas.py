@@ -40,7 +40,7 @@ def colaborador():
         'admin/area_colaborador.html',
         colaborador_instancia=colaborador_instancia,
         lista_produtos_sem_estoque=Produtos.lista_produtos_sem_estoque(),
-        lista_produtos_com_pouco_estoque=Produtos.lista_produtos_em_estoque(10),
+        lista_produtos_com_pouco_estoque=[produto for produto in Produtos.query.all() if produto.quantidade_estoque_produto < 10 and produto.quantidade_estoque_produto > 0],
         lista_insumos_sem_estoque=Insumos.lista_insumos_sem_estoque(),
         lista_insumos_com_pouco_estoque=Insumos.lista_insumos_em_estoque(10)
     )

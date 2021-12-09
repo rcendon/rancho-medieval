@@ -1,4 +1,4 @@
-from flask import render_template, session, request, redirect, url_for, flash
+from flask import render_template, session, request, redirect, url_for, flash, make_response
 
 from app import app, db
 from ..produtos.models import Produtos
@@ -26,17 +26,25 @@ def processa_pedido(id_cliente, pedido_id):
 @app.route('/pedido/<int:cliente_instancia_id>/<int:pedido_realizado_id>', methods=['GET'])
 def pedido(cliente_instancia=None, pedido_realizado=None):
 
-   if 'email' in session:
+    if 'email' in session:
 
         if cliente_instancia and pedido_realizado:
 
-            return render_template('/pedidos/detalhes_do_pedido.html', pedido_pagamento=Pedidos.query.filter_by(id=pedido_realizado.id, id_cliente=cliente_instancia.id).all()[-1])
+            response = make_response(render_template('/pedidos/detalhes_do_pedido.html', pedido_pagamento=Pedidos.query.filter_by(id=pedido_realizado.id, id_cliente=cliente_instancia.id).all()[-1]))
+
+            for produto in Produtos.query.all():
+
+                if request.cookies.keys() == produto.nome:
+
+                    response.set_cookie(produto.nome, expires=0)
+
+            return response
 
         else:
 
             return render_template('/pedidos/detalhes_do_pedido.html', pedido_consulta=Pedidos.query.filter_by(id_cliente=Pessoas.query.filter_by(email=session['email']).first().id).all()[-1])
 
-   else:
+    else:
 
         flash('Por favor, faça o login primeiro para verificar a situação de seu último pedido.', 'info')
         return redirect(url_for('login'))
@@ -81,14 +89,7 @@ def carrinho():
         form_opcoes_pagamento=form_opcoes_pagamento
     )
 
-    # def verifica_pagamento_com_API_externa(dados_pedido:dict):
-    #
-    #     dados_pagamento =
-    #
-    #     if dados_pagamento.cartao_debito.data or valida_dados_pagamento.cartao_credito:
-    #         if valida_dados_cartao.cartao_numero == 404404404404:
-    #             return 'negado'
-    #         else:
-    #             return 'aprovado'
-    #     else:
-    #         return 'aprovado'
+
+
+
+

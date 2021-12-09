@@ -35,7 +35,7 @@ class Pedidos(db.Model):
     id_cliente = db.Column(db.Integer, db.ForeignKey('pessoas.id'), nullable=False)
     valor = db.Column(db.Float, nullable=False)
     status_pagamento = db.Column(db.CHAR(1), nullable=False) # 1 - A ; # 2 - N ; # 3 - P
-    status = db.Column(db.VARCHAR(40), nullable=False) # 1 - Aguardando confirmação do pagamento ; 2 - Em preparação ; 3 - Preparado ; 4 - A caminho ; 5 - Entregue
+    status = db.Column(db.VARCHAR(40), nullable=False) # 1 - Aguardando confirmação do pagamento ; 2 - Em preparação ; 3 - Preparado ; 4 - A caminho ; 5 - Entregue ; 6 - Negado por falta de pagamento
     data = db.Column(db.TIMESTAMP, nullable=False)
     # produtos = db.relationship('Produtos', backref='pedidos', lazy='select', uselist=True)
     itens_do_pedido = db.relationship('ItensDoPedido', backref='itens_do_pedido', cascade="all, delete", passive_deletes=True)
@@ -136,6 +136,17 @@ class Pedidos(db.Model):
             pedidos = Pedidos.query.filter_by(id_cliente=cliente_id).all()
 
         return pedidos
+
+    @staticmethod
+    def verifica_pagamento_com_api_externa(pedido_id):
+
+        pedido = Pedidos.query.filter_by(id=pedido_id).first()
+        pedido.status_pagamento = 'N'
+        pedido.status = 'Negado por falta de pagamento'
+
+        db.session.add(pedido)
+        db.session.commit()
+        return True
 
 ############################### Fim Modelo Pedidos #####################################################
 
