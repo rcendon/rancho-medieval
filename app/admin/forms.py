@@ -6,7 +6,7 @@ from wtforms.validators import length, InputRequired, NumberRange, ValidationErr
 from flask_wtf import FlaskForm
 from app.pessoas.models import Pessoas, Fornecedores
 from app.pedidos.models import Pedidos
-from app.produtos.models import Produtos, Insumos
+from app.produtos.models import Produtos, Insumos, Receitas
 
 ######################### Classe Form Cadastro ##################################################
 
@@ -109,9 +109,24 @@ class FormularioDesassociaInsumoFornecedor(FlaskForm):
         self.fornecedor.choices = [(fornecedor.nome, fornecedor.nome) for fornecedor in Fornecedores.query.all()]
         self.insumo.choices = [(insumo.nome, insumo.nome) for insumo in Insumos.query.all()]
 
-class FormularioEdicaoProdutos(FlaskForm):
-    produto = SelectField('Produto', default='-', choices=[(produto.nome, produto.nome) for produto in Produtos.query.all()], validators=[InputRequired()])
+class FormularioBuscaProdutos(FlaskForm):
+    produto = SelectField('Produto', validators=[InputRequired()])
     submit = SubmitField('Buscar')
+
+    def __init__(self):
+        super(FormularioBuscaProdutos, self).__init__()
+        self.produto.choices = [(produto.nome, produto.nome) for produto in Produtos.query.all()]
+
+class FormularioEdicaoProdutos(FlaskForm):
+
+    insumo = SelectField('Insumo', validators=[InputRequired()])
+    quantidade = IntegerField('Quantidade', validators=[NumberRange(min=1, max=30)])
+    submit = SubmitField('Registrar quantidade na receita')
+
+    def __init__(self, produto_id=None):
+        super(FormularioEdicaoProdutos, self).__init__()
+        self.insumo.choices = [(insumo, insumo) for insumo in Produtos.lista_insumos_de_receita(produto_id)]
+
 
 class FormularioEdicaoFornecedores(FlaskForm):
     email = EmailField('E-mail', validators=[InputRequired(), length(min=2, max=35)])
@@ -133,7 +148,7 @@ class FormularioRemocaoFornecedores(FlaskForm):
 
     def __init__(self):
         super(FormularioRemocaoFornecedores, self).__init__()
-        self.fornecedor.choices = [(fornecedor.nome, fornecedor.nome) for fornecedor in Fornecedores.query.all()]
+        self.fornecedores.choices = [(fornecedor.nome, fornecedor.nome) for fornecedor in Fornecedores.query.all()]
 
 class FormularioRemocaoColaboradores(FlaskForm):
     colaborador = SelectField('Colaborador', choices=[(colaborador.nome, colaborador.nome) for colaborador in Pessoas.query.filter_by(tipo='F').all()], validators=[InputRequired()])

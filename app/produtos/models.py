@@ -99,26 +99,26 @@ class Produtos(db.Model):
             # db.session.commit()
             return produto
 
-    def atualiza_dados_produto(self, dados:dict):
-
-        self.quantidade_estoque_produto = dados['quantidade_estoque_produto']
-        self.valor = dados['valor']
-        self.descricao = dados['descricao']
-        self.imagem = dados['imagem']
-
-        for insumo_utilizado in Receitas.query.filter_by(id_produto=Produtos.query.filter_by(nome=dados['nome']).first().id):
-
-            db.session.delete(insumo_utilizado)
-            db.session.commit()
-
-        for insumo in dados['insumos_utilizados']:
-
-            insumo_instancia = Insumos.query.filter_by(nome=insumo).first().nome
-            self.receita.append(insumo_instancia)
-
-        db.session.add(self)
-        db.session.commit()
-        return True
+    # def atualiza_dados_produto(self, dados:dict):
+    #
+    #     self.quantidade_estoque_produto = dados['quantidade_estoque_produto']
+    #     self.valor = dados['valor']
+    #     self.descricao = dados['descricao']
+    #     self.imagem = dados['imagem']
+    #
+    #     for insumo_utilizado in Receitas.query.filter_by(id_produto=Produtos.query.filter_by(nome=dados['nome']).first().id):
+    #
+    #         db.session.delete(insumo_utilizado)
+    #         db.session.commit()
+    #
+    #     for insumo in dados['insumos_utilizados']:
+    #
+    #         insumo_instancia = Insumos.query.filter_by(nome=insumo).first().nome
+    #         self.receita.append(insumo_instancia)
+    #
+    #     db.session.add(self)
+    #     db.session.commit()
+    #     return True
 
     def adiciona_quantidade_produto_estoque(self, quantidade):
 
@@ -224,6 +224,18 @@ class Produtos(db.Model):
         else:
 
             return produto_instancia.quantidade_estoque_produto
+
+    @staticmethod
+    def lista_insumos_de_receita(produto_id):
+
+        lista_insumos = []
+        receita = Receitas.query.filter_by(id_produto=produto_id).all()
+
+        for insumo in receita:
+
+            lista_insumos.append(Insumos.query.filter_by(id=insumo.id_insumo).first().nome)
+
+        return lista_insumos
 
 ############################### Fim Modelo Cadastro de Produtos #####################################################
 

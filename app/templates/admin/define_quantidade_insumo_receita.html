@@ -1,0 +1,39 @@
+{% extends "layoutsadmlog.html" %}
+
+{% block content %}
+
+    <!--DIV texto-->
+    <!--5 cinco Colunas para englobar o texto-->
+    <!--d-flex justify-content-center align-items-center... = Comandos do bootstrap-->
+    <div class="form-group col-md-5 d-flex justify-content-between align-items-baseline flex-column">
+        <h2>Gerenciamento do cardápio</h2>
+    </div>
+
+    <div class="form-group col-md-10">
+
+        <h1><font color="#ffffff">Escolha o insumo e a quantidade a ser utilizada na receita.</font></h1>
+
+        <form method="POST" enctype="multipart/form-data" >
+
+            {{ form_edicao_produtos.hidden_tag() }}
+
+            <div name="dados_principais" class="form-group col-md-6">
+
+                {{ form_edicao_produtos.insumo.label }}
+                {{ form_edicao_produtos.insumo(placeholder="Insumo", class="form-control", size=produtos_quantidade) }}
+                {% for erro in form_edicao_produtos.insumo.errors %}
+                    <p>{{ erro }}</p>
+                {% endfor %}
+                {{ form_edicao_produtos.quantidade.label }}
+                {{ form_edicao_produtos.quantidade(placeholder="Quantidade", class="form-control", size=produtos_quantidade) }}
+                {% for erro in form_edicao_produtos.quantidade.errors %}
+                    <p>{{ erro }}</p>
+                {% endfor %}
+                {{ form_edicao_produtos.submit }}
+
+            </div>
+        </form>
+
+    </div>
+
+{% endblock content %}

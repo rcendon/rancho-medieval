@@ -5,14 +5,14 @@ from werkzeug.utils import secure_filename
 #Importa a variaveis APP e DB do "__init__.py" = (loja).
 from app import app, db, bcrypt
 
-from ..produtos.models import Produtos, Insumos
+from ..produtos.models import Produtos, Insumos, Receitas
 from ..pessoas.models import Pessoas, Fornecedores, Preco_insumo
 from ..pedidos.models import Pedidos
 
 from .forms import FormularioDadosPessoaisColaborador, LoginFormularioCli, FormularioRemocaoFornecedores
 from ..pessoas.forms import FormularioDadosFornecedor
 from ..produtos.forms import CadastroProdutos, CadastroInsumos, AdicionaProdutoEstoque, AdicionaInsumoEstoque
-from .forms import FormularioEdicaoProdutos, FormularioRemocaoColaboradores, FormularioAssociaInsumoFornecedor, FormularioDesassociaInsumoFornecedor
+from .forms import FormularioBuscaProdutos, FormularioEdicaoProdutos, FormularioRemocaoColaboradores, FormularioAssociaInsumoFornecedor, FormularioDesassociaInsumoFornecedor
 
 ##################### Rota Home ####################################################
 
@@ -246,67 +246,56 @@ def cadastro_produto():
 
     return render_template("/admin/cadastro_produto.html", form=form, insumos_quantidade=str(len(Insumos.lista_insumos())))
 
-# @app.route("/modifica_produto", methods=["GET", "POST"])
-# def modifica_produto():
+@app.route("/busca_receita", methods=["GET", "POST"])
+def busca_receita():
 
-    # if 'email_colaborador' not in session:
-    #     flash(f'Olá, faça o login primeiro', 'info')
-    #     return redirect(url_for('login_colaborador'))
-    #
-    # if Pessoas.query.filter_by(email=session['email_colaborador']).first().tipo != 'A':
-    #
-    #     flash(f'Olá, apenas administradores podem acessar essa página.', 'info')
-    #     return redirect(url_for('login_colaborador'))
-#
-#     form = CadastroProdutos()
-#     form_edicao = FormularioEdicaoProdutos()
-#
-#     if request.method == "POST" and form_edicao.validate_on_submit():
-#
-#         if form.nome.data == None:
-#
-#             produto_instancia = Produtos.query.filter_by(nome=form_edicao.produto.data).first()
-#
-#             form = CadastroProdutos(obj=produto_instancia)
-#
-#             # form.nome.data = produto_instancia.nome
-#             # form.descricao.data = produto_instancia.descricao
-#             # form.valor.data = produto_instancia.valor
-#             # form.imagem.data = produto_instancia.imagem
-#             # form.quantidade_estoque_produto = produto_instancia.quantidade_estoque_produto
-#
-#             render_template("/admin/modifica_produto.html", form=form, edicao=True, form_edicao=form_edicao, produto_instancia=produto_instancia)
-#
-#     else:
-#
-#         if request.method == "POST" and form.validate_on_submit():
-#
-#             dados = {
-#                 'nome': form.nome.data,
-#                 'quantidade_estoque_produto': form.quantidade_estoque_produto.data,
-#                 'valor': form.valor.data,
-#                 'descricao': form.descricao.data,
-#                 'imagem': 'teste',  # form.imagem.data,
-#                 'insumos_utilizados': form.insumos_utilizados.data
-#             }
-#
-#             operacao = Produtos.atualiza_dados_produto(dados)
-#
-#             if operacao:
-#
-#                 flash(f'Produto modificado com sucesso ', 'success')
-#                 return redirect(url_for('colaborador'))
-#
-#             else:
-#
-#                 flash(
-#                     "Ocorreu um problema com a modificação. Por favor, certifique-se que os dados foram inseridos corretamente.",
-#                     "danger")
-#
-#         return render_template("/admin/modifica_produto.html", form=form, edicao=True, form_edicao=form_edicao,
-#                                insumos_quantidade=str(len(Insumos.lista_insumos())))
-#
-#     return render_template("/admin/modifica_produto.html", form=form, form_edicao=form_edicao, edicao=False, insumos_quantidade=str(len(Insumos.lista_insumos())))
+    if 'email_colaborador' not in session:
+        flash(f'Olá, faça o login primeiro', 'info')
+        return redirect(url_for('login_colaborador'))
+
+    if Pessoas.query.filter_by(email=session['email_colaborador']).first().tipo != 'A':
+
+        flash(f'Olá, apenas administradores podem acessar essa página.', 'info')
+        return redirect(url_for('login_colaborador'))
+
+    form_busca_produtos = FormularioBuscaProdutos()
+
+    if request.method == "POST" and form_busca_produtos.validate_on_submit():
+
+        return redirect(url_for('modifica_quantidade_insumo_receita', nome_produto=form_busca_produtos.produto.data))
+
+    return render_template("/admin/busca_receita.html", form_busca_produtos=form_busca_produtos, produtos_quantidade=str(len(Produtos.query.all())))
+
+@app.route('/modifica_quantidade_insumo_receita/<nome_produto>', methods=['GET', 'POST'])
+def modifica_quantidade_insumo_receita(nome_produto):
+
+    if 'email_colaborador' not in session:
+        flash(f'Olá, faça o login primeiro', 'info')
+        return redirect(url_for('login_colaborador'))
+
+    if Pessoas.query.filter_by(email=session['email_colaborador']).first().tipo != 'A':
+
+        flash(f'Olá, apenas administradores podem acessar essa página.', 'info')
+        return redirect(url_for('login_colaborador'))
+
+    form_edicao_produtos = FormularioEdicaoProdutos(Produtos.query.filter_by(nome=nome_produto).first().id_produto)
+
+    if request.method == "POST" and form_edicao_produtos.validate_on_submit():
+
+        insumo = Insumos.query.filter_by(nome=form_edicao_produtos.insumo.data).first()
+        quantidade = form_edicao_produtos.quantidade.data
+
+        ingrediente_receita = Receitas.query.filter_by(id_insumo=insumo.id).first()
+
+        ingrediente_receita.quantidade_insumo = quantidade
+
+        db.session.add(ingrediente_receita)
+        db.session.commit()
+
+        flash("Alteração realizada com sucesso", "success")
+        return redirect(url_for('login_colaborador'))
+
+    return render_template('/admin/define_quantidade_insumo_receita.html', form_edicao_produtos=form_edicao_produtos)
 
 @app.route("/adiciona_produto_estoque", methods=['GET', 'POST'])
 def adiciona_produto_estoque():
