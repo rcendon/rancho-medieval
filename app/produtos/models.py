@@ -170,30 +170,6 @@ class Produtos(db.Model):
             db.session.commit()
             return True
 
-    # def altera_descricao_produto(self, nova_descricao):
-    #
-    #     self.descricao = nova_descricao
-    #
-    #     db.session.add(self)
-    #     db.session.commit()
-    #     return True
-    #
-    # def altera_imagem_produto(self, nova_imagem):
-    #
-    #     self.imagem = nova_imagem
-    #
-    #     db.session.add(self)
-    #     db.session.commit()
-    #     return True
-    #
-    # def altera_valor_produto(self, novo_valor):
-    #
-    #     self.valor = novo_valor
-    #
-    #     db.session.add(self)
-    #     db.session.commit()
-    #     return True
-
     @staticmethod
     def lista_produtos_em_estoque(quantidade_maxima_para_exibicao):
 
@@ -396,40 +372,40 @@ class Insumos(db.Model):
             db.session.commit()
             return True
 
-    @staticmethod
-    def lista_fornecedores_por_insumo(insumo, fornecedor=None):
-
-        lista_fornecedores = [insumo]
-        insumo_instancia = Insumos.query.filter_by(nome=insumo).first()
-
-        if fornecedor == None:
-
-            fornecedores = Fornecedores.query.all()
-
-        else:
-
-            fornecedores = Fornecedores.query.filter_by(nome=fornecedor).all()
-
-        if fornecedores == None or insumo_instancia == None:
-
-            return False
-
-        precos_insumo = Preco_insumo.query.filter_by(id_insumo=insumo_instancia.id).all()
-
-        if precos_insumo == None:
-
-            return False
-
-        else:
-
-            for preco_insumo in precos_insumo:
-
-                for fornecedor in fornecedores:
-
-                    if preco_insumo.id_fornecedor == fornecedor.id:
-                        lista_fornecedores.append(fornecedor)
-
-            return lista_fornecedores
+    # @staticmethod
+    # def lista_fornecedores_por_insumo(insumo, fornecedor=None):
+    #
+    #     lista_fornecedores = [insumo]
+    #     insumo_instancia = Insumos.query.filter_by(nome=insumo).first()
+    #
+    #     if fornecedor == None:
+    #
+    #         fornecedores = Fornecedores.query.all()
+    #
+    #     else:
+    #
+    #         fornecedores = Fornecedores.query.filter_by(nome=fornecedor).all()
+    #
+    #     if fornecedores == None or insumo_instancia == None:
+    #
+    #         return False
+    #
+    #     precos_insumo = Preco_insumo.query.filter_by(id_insumo=insumo_instancia.id).all()
+    #
+    #     if precos_insumo == None:
+    #
+    #         return False
+    #
+    #     else:
+    #
+    #         for preco_insumo in precos_insumo:
+    #
+    #             for fornecedor in fornecedores:
+    #
+    #                 if preco_insumo.id_fornecedor == fornecedor.id:
+    #                     lista_fornecedores.append(fornecedor)
+    #
+    #         return lista_fornecedores
 
     @staticmethod
     def lista_insumos():
@@ -483,4 +459,15 @@ class Insumos(db.Model):
 
         return lista_insumos_com_estoque
 
+    @staticmethod
+    def lista_fornecedores_por_insumo():
+        lista_fornecedor_insumo = []
+        lista_fornecedores = Fornecedores.query.all()
+
+        for fornecedor in lista_fornecedores:
+
+            if fornecedor.preco_insumo:
+                lista_fornecedor_insumo.append([fornecedor.nome, ((Insumos.query.filter_by(id=preco_insumo.id_insumo).first().nome, preco_insumo.valor) for preco_insumo in fornecedor.preco_insumo)])
+
+        return lista_fornecedor_insumo
 ############################### Fim Modelo Insumos #####################################################

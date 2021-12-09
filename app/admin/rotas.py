@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 from app import app, db, bcrypt
 
 from ..produtos.models import Produtos, Insumos
-from ..pessoas.models import Pessoas, Fornecedores
+from ..pessoas.models import Pessoas, Fornecedores, Preco_insumo
 from ..pedidos.models import Pedidos
 
 from .forms import FormularioDadosPessoaisColaborador, LoginFormularioCli, FormularioRemocaoFornecedores
@@ -137,9 +137,6 @@ def remove_colaborador():
 
     return render_template("/admin/remove_colaborador.html", form=form)
 
-
-
-
 @app.route("/registra_fornecedor", methods=['GET', 'POST'])
 def registra_fornecedor():
 
@@ -249,17 +246,17 @@ def cadastro_produto():
 
     return render_template("/admin/cadastro_produto.html", form=form, insumos_quantidade=str(len(Insumos.lista_insumos())))
 
-@app.route("/modifica_produto", methods=["GET", "POST"])
-def modifica_produto():
+# @app.route("/modifica_produto", methods=["GET", "POST"])
+# def modifica_produto():
 
-    if 'email_colaborador' not in session:
-        flash(f'Olá, faça o login primeiro', 'info')
-        return redirect(url_for('login_colaborador'))
-
-    if Pessoas.query.filter_by(email=session['email_colaborador']).first().tipo != 'A':
-
-        flash(f'Olá, apenas administradores podem acessar essa página.', 'info')
-        return redirect(url_for('login_colaborador'))
+    # if 'email_colaborador' not in session:
+    #     flash(f'Olá, faça o login primeiro', 'info')
+    #     return redirect(url_for('login_colaborador'))
+    #
+    # if Pessoas.query.filter_by(email=session['email_colaborador']).first().tipo != 'A':
+    #
+    #     flash(f'Olá, apenas administradores podem acessar essa página.', 'info')
+    #     return redirect(url_for('login_colaborador'))
 #
 #     form = CadastroProdutos()
 #     form_edicao = FormularioEdicaoProdutos()
@@ -310,7 +307,6 @@ def modifica_produto():
 #                                insumos_quantidade=str(len(Insumos.lista_insumos())))
 #
 #     return render_template("/admin/modifica_produto.html", form=form, form_edicao=form_edicao, edicao=False, insumos_quantidade=str(len(Insumos.lista_insumos())))
-
 
 @app.route("/adiciona_produto_estoque", methods=['GET', 'POST'])
 def adiciona_produto_estoque():
@@ -426,6 +422,17 @@ def historico_vendas():
 def pedidos_em_aberto():
 
     return render_template('/admin/pedidos_em_aberto.html', lista_pedidos=Pedidos.query.filter_by(status='Em preparação' or 'Preparado' or 'A caminho').all())
+
+@app.route('/lista_insumos')
+def lista_insumos():
+
+    lista_insumos_por_fornecedor = Insumos.lista_fornecedores_por_insumo()
+
+    return render_template('/admin/lista_insumos_por_fornecedor.html', lista_insumos_por_fornecedor=lista_insumos_por_fornecedor)
+
+
+
+
 
 
 

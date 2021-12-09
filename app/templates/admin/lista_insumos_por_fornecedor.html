@@ -1,0 +1,36 @@
+{% extends "layoutsadmlog.html" %}
+
+{% block content %}
+
+    <h1>Lista de insumos por fornecedor</h1>
+
+    {% for relacao in lista_insumos_por_fornecedor %}
+
+        <div>
+            <table>
+                <tr>
+                    <th>Fornecedor</th>
+                </tr>
+                <tr>
+                    <td>{{ relacao[0] }}</td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <th>Insumo</th>
+                    <th>Valor</th>
+                </tr>
+                {% for insumo in relacao[1] %}
+                    <tr>
+                        <td>{{ insumo[0] }}</td>
+                        <td>{{ insumo[1] }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+    {% endfor %}
+
+{% endblock content %}
