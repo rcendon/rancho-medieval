@@ -12,7 +12,7 @@ from ..pedidos.models import Pedidos
 from .forms import FormularioDadosPessoaisColaborador, LoginFormularioCli, FormularioRemocaoFornecedores
 from ..pessoas.forms import FormularioDadosFornecedor
 from ..produtos.forms import CadastroProdutos, CadastroInsumos, AdicionaProdutoEstoque, AdicionaInsumoEstoque
-from .forms import FormularioBuscaProdutos, FormularioEdicaoInsumosEmReceita, FormularioRemocaoColaboradores, FormularioAssociaInsumoFornecedor, FormularioDesassociaInsumoFornecedor, FormularioEdicaoProdutos
+from .forms import FormularioBuscaProdutos, FormularioEdicaoInsumosEmReceita, FormularioRemocaoColaboradores, FormularioAssociaInsumoFornecedor, FormularioDesassociaInsumoFornecedor, FormularioEdicaoProdutos, FormularioAlteraStatusPedido
 
 ##################### Rota Home ####################################################
 
@@ -320,6 +320,15 @@ def busca_produto_para_modificar_dados():
 @app.route('/modifica_dados_produto/<nome_produto>', methods=['GET', 'POST'])
 def modifica_dados_produto(nome_produto):
 
+    if 'email_colaborador' not in session:
+        flash(f'Olá, faça o login primeiro', 'info')
+        return redirect(url_for('login_colaborador'))
+
+    if Pessoas.query.filter_by(email=session['email_colaborador']).first().tipo != 'A':
+
+        flash(f'Olá, apenas administradores podem acessar essa página.', 'info')
+        return redirect(url_for('login_colaborador'))
+
     form = FormularioEdicaoProdutos()
 
     if request.method == 'POST' and form.validate_on_submit():
@@ -524,6 +533,39 @@ def lista_insumos():
     lista_insumos_por_fornecedor = Insumos.lista_fornecedores_por_insumo()
 
     return render_template('/admin/lista_insumos_por_fornecedor.html', lista_insumos_por_fornecedor=lista_insumos_por_fornecedor)
+
+@app.route('/altera_status_pedido', methods=['GET', 'POST'])
+def altera_status_pedido():
+
+    if 'email_colaborador' not in session:
+        flash(f'Olá, faça o login primeiro', 'info')
+        return redirect(url_for('login_colaborador'))
+
+    form = FormularioAlteraStatusPedido()
+
+    if request.method == 'POST' and form.validate_on_submit():
+
+        pedido_instancia = Pedidos.query.filter_by(id=form.pedido_em_aberto.data).first()
+        pedido_instancia.status = form.status.data
+
+        if form.status.data == 'Negado por falta de pagamento':
+
+            pedido_instancia.status_pagamento = 'N'
+
+        else:
+
+            pedido_instancia.status_pagamento = 'A'
+
+        db.session.add(pedido_instancia)
+        db.session.commit()
+
+        flash("Pedido alterado com sucesso.", "success")
+        return redirect(url_for('login_colaborador'))
+
+    return render_template('/admin/altera_status_pedido.html', form=form, size_status='5', size_pedidos=str(len(Pedidos.query.filter_by(status='Aguardando confirmação do pagamento' or 'Em preparação' or 'Preparado' or 'A caminho').all())))
+
+
+
 
 
 

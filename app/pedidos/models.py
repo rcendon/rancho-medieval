@@ -34,7 +34,7 @@ class Pedidos(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     id_cliente = db.Column(db.Integer, db.ForeignKey('pessoas.id'), nullable=False)
     valor = db.Column(db.Float, nullable=False)
-    status_pagamento = db.Column(db.CHAR(1), nullable=False) # 1 - A ; # 2 - N ; # 3 - P
+    status_pagamento = db.Column(db.CHAR(1), nullable=False) # 1 - A - Aprovado ; # 2 - N - Negado ; # 3 - P - Pendente
     status = db.Column(db.VARCHAR(40), nullable=False) # 1 - Aguardando confirmação do pagamento ; 2 - Em preparação ; 3 - Preparado ; 4 - A caminho ; 5 - Entregue ; 6 - Negado por falta de pagamento
     data = db.Column(db.TIMESTAMP, nullable=False)
     # produtos = db.relationship('Produtos', backref='pedidos', lazy='select', uselist=True)
