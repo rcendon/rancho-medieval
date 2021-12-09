@@ -138,11 +138,11 @@ class Pedidos(db.Model):
         return pedidos
 
     @staticmethod
-    def verifica_pagamento_com_api_externa(pedido_id):
+    def verifica_pagamento_com_api_externa(pedido_id, status):
 
         pedido = Pedidos.query.filter_by(id=pedido_id).first()
         pedido.status_pagamento = 'N'
-        pedido.status = 'Negado por falta de pagamento'
+        pedido.status = status
 
         db.session.add(pedido)
         db.session.commit()

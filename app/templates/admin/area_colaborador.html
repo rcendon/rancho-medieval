@@ -41,7 +41,11 @@
         </div>
         <br>
         <div class="form-group col-md-6">
-            <a class="form-group btn btn-primary" href="/busca_receita">Modificar quantidade de insumo em receita de produto</a>
+            <a class="form-group btn btn-primary" href="/busca_produto_para_modificao_de_insumos_na_receita">Modificar quantidade de insumo em receita de produto</a>
+        </div>
+        <br>
+        <div class="form-group col-md-6">
+            <a class="form-group btn btn-primary" href="/busca_produto_para_modificar_dados">Modifica produto</a>
         </div>
         <br>
 
@@ -176,10 +180,10 @@
                             <td>{{ produto.nome }}</td>
                             <td>{{ produto.quantidade_estoque_produto }}</td>
                         </tr>
-                        </table>
 
                     {% endfor %}
 
+                </table>
             </div>
         </div>
 

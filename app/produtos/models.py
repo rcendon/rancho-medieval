@@ -491,4 +491,11 @@ class Insumos(db.Model):
                 lista_fornecedor_insumo.append([fornecedor.nome, ((Insumos.query.filter_by(id=preco_insumo.id_insumo).first().nome, preco_insumo.valor) for preco_insumo in fornecedor.preco_insumo)])
 
         return lista_fornecedor_insumo
+
+    # @staticmethod
+    # def lista_fornecedores_associados_a_insumo(insumo_id):
+    #
+    #     for
+
+
 ############################### Fim Modelo Insumos #####################################################

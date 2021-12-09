@@ -15,7 +15,6 @@ class CadastroProdutos(FlaskForm):
     imagem = FileField('Imagem')
     # mimetype = StringField('Mimetype', validators=[length(min=1, max=100)])
     insumos_utilizados = SelectMultipleField('Insumos utilizados', choices=[(insumo, insumo) for insumo in Insumos.lista_insumos()], validators=[InputRequired()])
-    # quantidade_insumo_utilizado = SelectField('Quantidade')
     submit = SubmitField('Registrar')
 
     def validate_nome(self, nome):

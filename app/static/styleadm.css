@@ -265,4 +265,20 @@ i.menu-mobile
     to {
       transform: translateX(0);
     }
-  } 
+  }
+
+h1 {
+    color: #ffffff;
+}
+
+td {
+    color: #ffffff;
+}
+
+th {
+    color: #ffffff;
+}
+
+p {
+    color: #ffffff;
+}
