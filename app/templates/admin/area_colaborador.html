@@ -15,14 +15,14 @@
           <h2>Acompanhamento de pedidos</h2>
 
           <div class="form-group col-md-6">
-              <a class="form-group btn btn-primary" href="/">Pedidos em aberto</a>
+              <a class="form-group btn btn-primary" href="/pedidos_em_aberto">Pedidos em aberto</a>
           </div>
           <br>
 
       {% if colaborador_instancia.tipo == 'A'  %}
 
           <div class="form-group col-md-6">
-              <a class="form-group btn btn-primary" href="/">Histórico de vendas</a>
+              <a class="form-group btn btn-primary" href="/historico_vendas">Histórico de vendas</a>
           </div>
           <br>
       </div>
@@ -40,6 +40,10 @@
             <a class="form-group btn btn-primary" href="/cadastro_produto">Cadastrar produto</a>
         </div>
         <br>
+        <div class="form-group col-md-6">
+            <a class="form-group btn btn-primary" href="/modifica_produto">Modificar produto</a>
+        </div>
+        <br>
 
         {% endif %}
 
@@ -48,23 +52,26 @@
         </div>
         <br>
 
-        {% if colaborador_instancia.tipo == 'A' %}
-
-        <div class="form-group col-md-6">
-            <a class="form-group btn btn-primary" href="/modificar_produto">Modificar produto</a>
-        </div>
-        <br>
-        {% endif %}
     </div>
 
   <br>
 
   <div class="form-group col-md-6">
       <h2>Gerenciamento de insumos</h2>
-      <div class="form-group col-md-6">
-          <a class="form-group btn btn-primary" href="/cadastro_insumo">Cadastrar insumo</a>
-      </div>
-      <br>
+
+      {% if colaborador_instancia.tipo == 'A' %}
+
+          <div class="form-group col-md-6">
+              <a class="form-group btn btn-primary" href="/cadastro_insumo">Cadastrar insumo</a>
+          </div>
+          <br>
+          <div class="form-group col-md-6">
+              <a class="form-group btn btn-primary" href="/modificar_insumo">Modificar insumo</a>
+          </div>
+          <br>
+
+      {% endif %}
+
       <div class="form-group col-md-6">
           <a class="form-group btn btn-primary" href="/adiciona_insumo_estoque">Adicionar insumo ao estoque</a>
       </div>
@@ -73,15 +80,6 @@
           <a class="form-group btn btn-primary" href="/">Lista insumos por fornecedor</a>
       </div>
       <br>
-
-      {% if colaborador_instancia.tipo == 'A' %}
-
-      <div class="form-group col-md-6">
-          <a class="form-group btn btn-primary" href="/modificar_insumo">Modificar insumo</a>
-      </div>
-      <br>
-
-      {% endif %}
 
   </div>
 

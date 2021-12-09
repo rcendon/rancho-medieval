@@ -1,0 +1,48 @@
+{% extends "layoutsadmlog.html" %}
+
+{% block content %}
+
+    <h1>Histórico de vendas</h1>
+
+    {% for pedido in lista_pedidos %}
+
+        <div>
+            <table>
+                <tr>
+                    <th>Número do Pedido</th>
+                    <th>Data</th>
+                    <th>Pagamento</th>
+                    <th>Situação</th>
+                    <th>Valor total</th>
+                </tr>
+                <tr>
+                    <td>{{ pedido.id }}</td>
+                    <td>{{ pedido.data }}</td>
+                    <td>{{ pedido.status_pagamento }}</td>
+                    <td>{{ pedido.status }}</td>
+                    <td>{{ pedido.valor }}</td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <th>Item</th>
+                    <th>Valor unitário</th>
+                    <th>Quantidade</th>
+                    <th>Valor total</th>
+                </tr>
+                {% for item in pedido.itens_do_pedido %}
+                    <tr>
+                        <td>{{ item.produto.nome }}</td>
+                        <td>{{ item.valor_unitario }}</td>
+                        <td>{{ item.quantidade }}</td>
+                        <td>{{ item.valor_total() }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+    {% endfor %}
+
+{% endblock content %}

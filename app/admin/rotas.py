@@ -7,10 +7,12 @@ from app import app, db, bcrypt
 
 from ..produtos.models import Produtos, Insumos
 from ..pessoas.models import Pessoas, Fornecedores
+from ..pedidos.models import Pedidos
 
 from .forms import FormularioDadosPessoaisColaborador, LoginFormularioCli, FormularioRemocaoFornecedores
 from ..pessoas.forms import FormularioDadosFornecedor
 from ..produtos.forms import CadastroProdutos, CadastroInsumos, AdicionaProdutoEstoque, AdicionaInsumoEstoque
+from .forms import FormularioEdicaoProdutos
 
 ##################### Rota Home ####################################################
 
@@ -119,20 +121,6 @@ def logout():
     session.pop('email_colaborador')
     return redirect(url_for('login_colaborador'))
 
-##################### Rota Exibir Imagem ####################################################
-
-# @app.route("/<int:id>")
-# def get_img(id):
-#     img = Produtos.query.filter_by(id=id).first()
-#
-#     if request.method == "POST":
-#         ### iMG ##########################################
-#         pic = request.files['pic']
-#         filename = secure_filename(pic.filename)
-#         mimetype = pic.mimetype
-#
-#     return Response(img.imagem, mimetype=img.mimetype)
-
 @app.route("/registra_fornecedor", methods=['GET', 'POST'])
 def registra_fornecedor():
 
@@ -201,13 +189,15 @@ def remove_fornecedor():
 
     return render_template("/admin/remove_fornecedor.html", form=form, quantidade_fornecedores=str(len(Fornecedores.query.all())))
 
-
-
 @app.route("/cadastro_produto", methods=['GET', 'POST'])
 def cadastro_produto():
 
     if 'email_colaborador' not in session:
         flash(f'Olá, faça o login primeiro', 'info')
+        return redirect(url_for('login_colaborador'))
+
+    if Pessoas.query.filter_by(email=session['email_colaborador']).first().tipo != 'A':
+        flash(f'Olá, apenas administradores podem acessar essa página.', 'info')
         return redirect(url_for('login_colaborador'))
 
     form = CadastroProdutos()
@@ -235,6 +225,69 @@ def cadastro_produto():
             flash("Ocorreu um problema com o cadastro. Por favor, certifique-se que os dados foram inseridos corretamente.", "danger")
 
     return render_template("/admin/cadastro_produto.html", form=form, insumos_quantidade=str(len(Insumos.lista_insumos())))
+
+# @app.route("/modifica_produto", methods=["GET", "POST"])
+# def modifica_produto():
+#
+#     if 'email_colaborador' not in session:
+#         flash(f'Olá, faça o login primeiro', 'info')
+#         return redirect(url_for('login_colaborador'))
+#
+#     if Pessoas.query.filter_by(email=session['email_colaborador']).first().tipo != 'A':
+#
+#         flash(f'Olá, apenas administradores podem acessar essa página.', 'info')
+#         return redirect(url_for('login_colaborador'))
+#
+#     form = CadastroProdutos()
+#     form_edicao = FormularioEdicaoProdutos()
+#
+#     if request.method == "POST" and form_edicao.validate_on_submit():
+#
+#         if form.nome.data == None:
+#
+#             produto_instancia = Produtos.query.filter_by(nome=form_edicao.produto.data).first()
+#
+#             form = CadastroProdutos(obj=produto_instancia)
+#
+#             # form.nome.data = produto_instancia.nome
+#             # form.descricao.data = produto_instancia.descricao
+#             # form.valor.data = produto_instancia.valor
+#             # form.imagem.data = produto_instancia.imagem
+#             # form.quantidade_estoque_produto = produto_instancia.quantidade_estoque_produto
+#
+#             render_template("/admin/modifica_produto.html", form=form, edicao=True, form_edicao=form_edicao, produto_instancia=produto_instancia)
+#
+#     else:
+#
+#         if request.method == "POST" and form.validate_on_submit():
+#
+#             dados = {
+#                 'nome': form.nome.data,
+#                 'quantidade_estoque_produto': form.quantidade_estoque_produto.data,
+#                 'valor': form.valor.data,
+#                 'descricao': form.descricao.data,
+#                 'imagem': 'teste',  # form.imagem.data,
+#                 'insumos_utilizados': form.insumos_utilizados.data
+#             }
+#
+#             operacao = Produtos.atualiza_dados_produto(dados)
+#
+#             if operacao:
+#
+#                 flash(f'Produto modificado com sucesso ', 'success')
+#                 return redirect(url_for('colaborador'))
+#
+#             else:
+#
+#                 flash(
+#                     "Ocorreu um problema com a modificação. Por favor, certifique-se que os dados foram inseridos corretamente.",
+#                     "danger")
+#
+#         return render_template("/admin/modifica_produto.html", form=form, edicao=True, form_edicao=form_edicao,
+#                                insumos_quantidade=str(len(Insumos.lista_insumos())))
+#
+#     return render_template("/admin/modifica_produto.html", form=form, form_edicao=form_edicao, edicao=False, insumos_quantidade=str(len(Insumos.lista_insumos())))
+
 
 @app.route("/adiciona_produto_estoque", methods=['GET', 'POST'])
 def adiciona_produto_estoque():
@@ -326,4 +379,17 @@ def adiciona_insumo_estoque():
             flash("Ocorreu um problema com a operação. Por favor, certifique-se que os dados foram inseridos corretamente e de que há insumos o suficiente no estoque.", "danger")
 
     return render_template("/admin/adiciona_insumo_estoque.html", form=form)
+
+@app.route("/historico_vendas")
+def historico_vendas():
+
+    return render_template('/admin/historico_de_vendas.html', lista_pedidos=Pedidos.query.all())
+
+@app.route('/pedidos_em_aberto')
+def pedidos_em_aberto():
+
+    return render_template('/admin/pedidos_em_aberto.html', lista_pedidos=Pedidos.query.filter_by(status='Em preparação' or 'Preparado' or 'A caminho').all())
+
+
+
 

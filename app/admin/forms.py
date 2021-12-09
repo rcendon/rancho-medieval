@@ -6,6 +6,7 @@ from wtforms.validators import length, InputRequired, NumberRange, ValidationErr
 from flask_wtf import FlaskForm
 from app.pessoas.models import Pessoas, Fornecedores
 from app.pedidos.models import Pedidos
+from app.produtos.models import Produtos
 
 ######################### Classe Form Cadastro ##################################################
 
@@ -86,18 +87,8 @@ class FormularioEdicaoInsumos(FlaskForm):
                 raise ValidationError("Apenas usuários de colaboradores podem realizar o acesso por esta página.")
 
 class FormularioEdicaoProdutos(FlaskForm):
-    email = EmailField('E-mail', validators=[InputRequired(), length(min=2, max=35)])
-    senha = PasswordField('Senha', validators=[InputRequired(), length(min=8, max=35)])
-    submit = SubmitField("Login")
-
-    def validate_email(self, email):
-
-        pessoa_instancia = Pessoas.query.filter_by(email=email.data).first()
-
-        if pessoa_instancia:
-
-            if pessoa_instancia.tipo == 'C':
-                raise ValidationError("Apenas usuários de colaboradores podem realizar o acesso por esta página.")
+    produto = SelectField('Produto', default='-', choices=[(produto.nome, produto.nome) for produto in Produtos.query.all()], validators=[InputRequired()])
+    submit = SubmitField('Buscar')
 
 class FormularioEdicaoFornecedores(FlaskForm):
     email = EmailField('E-mail', validators=[InputRequired(), length(min=2, max=35)])
