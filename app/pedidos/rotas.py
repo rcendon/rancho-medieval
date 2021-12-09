@@ -7,7 +7,6 @@ from ..pessoas.models import Pessoas
 
 from ..pedidos.forms import dados_pagamento, valida_dados_cartao
 
-
 ##################### Rota Área de Entrega ####################################################
 
 @app.route('/entrega')
@@ -42,9 +41,6 @@ def pedido(cliente_instancia=None, pedido_realizado=None):
         flash('Por favor, faça o login primeiro para verificar a situação de seu último pedido.', 'info')
         return redirect(url_for('login'))
 
-
-
-
 @app.route('/carrinho', methods=['GET', 'POST'])
 def carrinho():
 
@@ -61,8 +57,8 @@ def carrinho():
         cliente_instancia = Pessoas.query.filter_by(email=session['email']).first()
 
         pedido_realizado = Pedidos.gera_pedido(
-            {'cliente_id': cliente_instancia.id, 'estoque': Produtos.lista_produtos_em_estoque()},
-            Pedidos.gera_carrinho(request.cookies, Produtos.lista_produtos_em_estoque())
+            {'cliente_id': cliente_instancia.id, 'estoque': Produtos.lista_produtos_em_estoque(0)},
+            Pedidos.gera_carrinho(request.cookies, Produtos.lista_produtos_em_estoque(0))
         )
 
         if type(pedido_realizado) == bool:
@@ -72,9 +68,9 @@ def carrinho():
 
         else:
 
-            return redirect(url_for('pedido', cliente_instancia_id=cliente_instancia.id, pedido_realizado_id=pedido_realizado.id))
+            return redirect(url_for('pedido', cliente_instancia=cliente_instancia, pedido_realizado=pedido_realizado))
 
-    carrinho_com_itens = Pedidos.gera_carrinho(request.cookies, Produtos.lista_produtos_em_estoque())
+    carrinho_com_itens = Pedidos.gera_carrinho(request.cookies, Produtos.lista_produtos_em_estoque(0))
     carrinho_valor_total = Pedidos.calcula_valor_total_do_carrinhho(carrinho_com_itens)
 
     return render_template(
@@ -84,8 +80,6 @@ def carrinho():
         form_valida_cartao=form_valida_cartao,
         form_opcoes_pagamento=form_opcoes_pagamento
     )
-
-
 
     # def verifica_pagamento_com_API_externa(dados_pedido:dict):
     #

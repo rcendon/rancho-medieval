@@ -9,7 +9,7 @@ from .models import Produtos
 
 @app.route('/cardapio')
 def cardapio():
-    cardapio = Produtos.lista_produtos_em_estoque()
+    cardapio = Produtos.lista_produtos_em_estoque(5)
     return render_template('produtos/cardapio.html',cardapio=cardapio)
 
 

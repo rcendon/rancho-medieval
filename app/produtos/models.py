@@ -171,7 +171,7 @@ class Produtos(db.Model):
             return True
 
     @staticmethod
-    def lista_produtos_em_estoque(quantidade_maxima_para_exibicao):
+    def lista_produtos_em_estoque(quantidade_minima_para_exibicao):
 
         lista_produtos_com_estoque = []
 
@@ -185,7 +185,7 @@ class Produtos(db.Model):
 
             for produto in lista_produtos:
 
-                if produto.quantidade_estoque_produto > 0 and produto.quantidade_estoque_produto < quantidade_maxima_para_exibicao:
+                if produto.quantidade_estoque_produto > 0 and produto.quantidade_estoque_produto > quantidade_minima_para_exibicao:
 
                     lista_produtos_com_estoque.append(produto)
 
