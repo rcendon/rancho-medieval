@@ -107,3 +107,7 @@ class FormularioEdicaoFornecedores(FlaskForm):
 class FormularioRemocaoFornecedores(FlaskForm):
     fornecedores = SelectMultipleField('Fornecedor', choices=[(fornecedor.nome, fornecedor.nome) for fornecedor in Fornecedores.query.all()], validators=[InputRequired()])
     submit = SubmitField("Remover")
+
+class FormularioRemocaoColaboradores(FlaskForm):
+    colaborador = SelectField('Colaborador', choices=[(colaborador.nome, colaborador.nome) for colaborador in Pessoas.query.filter_by(tipo='F').all()], validators=[InputRequired()])
+    submit = SubmitField("Remover")

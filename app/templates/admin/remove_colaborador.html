@@ -1,0 +1,34 @@
+{% extends "layoutsadmlog.html" %}
+
+{% block content %}
+
+    <!--DIV texto-->
+    <!--5 cinco Colunas para englobar o texto-->
+    <!--d-flex justify-content-center align-items-center... = Comandos do bootstrap-->
+    <div class="form-group col-md-5 d-flex justify-content-between align-items-baseline flex-column">
+        <h2>Atendimento de Segunda à Domingo das 18h00 às 23h00</h2>
+    </div>
+
+    <div class="form-group col-md-10">
+
+        <h1><font color="#ffffff">Remoção de colaborador</font></h1>
+
+        <form method="POST" enctype="multipart/form-data" >
+
+            {{ form.hidden_tag() }}
+
+            <div name="dados_principais" class="form-group col-md-6">
+
+                {{ form.colaborador.label }}
+                {{ form.colaborador(placeholder="Colaborador", class="form-control") }}
+                {% for erro in form.colaborador.errors %}
+                    <p>{{ erro }}</p>
+                {% endfor %}
+                {{ form.submit }}
+
+            </div>
+
+        </form>
+    </div>
+
+{% endblock content %}

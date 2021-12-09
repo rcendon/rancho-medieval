@@ -12,7 +12,7 @@ from ..pedidos.models import Pedidos
 from .forms import FormularioDadosPessoaisColaborador, LoginFormularioCli, FormularioRemocaoFornecedores
 from ..pessoas.forms import FormularioDadosFornecedor
 from ..produtos.forms import CadastroProdutos, CadastroInsumos, AdicionaProdutoEstoque, AdicionaInsumoEstoque
-from .forms import FormularioEdicaoProdutos
+from .forms import FormularioEdicaoProdutos, FormularioRemocaoColaboradores
 
 ##################### Rota Home ####################################################
 
@@ -47,16 +47,42 @@ def colaborador():
 
 ####################################################################################
 
-################## Rota Registrar ##################################################   
+@app.route('/login_colaborador', methods=['GET', 'POST'])
+def login_colaborador():
+    if 'email_colaborador' in session: ###Controle de Acesso###
+        return redirect(url_for('colaborador'))
 
-#https://flask.palletsprojects.com/en/2.0.x/patterns/wtforms/ - In the View
+    form = LoginFormularioCli() #Retorna valores do forms.py
 
-#RegistrationForm
+    if request.method == "POST" and form.validate_on_submit():
+
+        user = Pessoas.query.filter_by(email=form.email.data).first()
+
+        if (user and bcrypt.check_password_hash(user.senha, form.senha.data)) and user.tipo != 'C':
+
+            session['email_colaborador'] = form.email.data
+            flash(f'Bem Vindo {user.nome}', 'success')
+            return redirect(request.args.get('next') or url_for('colaborador'))
+
+        else:
+
+            flash(f'E-mail ou Senha incorretos', 'danger')
+
+    return render_template('admin/login_colaborador.html', form=form)
+
+##################### Rota Logout ####################################################
+
+@app.route("/logout_colaborador")
+def logout():
+    session.pop('email_colaborador')
+    return redirect(url_for('login_colaborador'))
+
+###############################################################################################
 
 @app.route('/registrar_colaborador', methods=['GET', 'POST'])
 def registrar_colaborador():
     if 'email_colaborador' not in session: ###Controle de Acesso###
-        flash(f'Olá, faça o login primeiro', 'danger')    
+        flash(f'Olá, faça o login primeiro', 'danger')
         return redirect(url_for('login'))
 
     form = FormularioDadosPessoaisColaborador() #Retorna valores do forms.py
@@ -82,44 +108,37 @@ def registrar_colaborador():
 
     return render_template('admin/registra_colaborador.html', form=form)
 
-##################################################################################################
+@app.route('/remove_colaborador', methods=['GET', 'POST'])
+def remove_colaborador():
 
+    if 'email_colaborador' not in session:
+        flash(f'Olá, faça o login primeiro', 'info')
+        return redirect(url_for('login_colaborador'))
 
-################## Rota Login Formulario ########################################################
+    if Pessoas.query.filter_by(email=session['email_colaborador']).first().tipo != 'A':
+        flash(f'Olá, apenas administradores podem acessar essa página.', 'info')
+        return redirect(url_for('login_colaborador'))
 
-#LoginFormulario
-
-@app.route('/login_colaborador', methods=['GET', 'POST'])
-def login_colaborador():
-    if 'email_colaborador' in session: ###Controle de Acesso###
-        return redirect(url_for('colaborador'))
-
-    form = LoginFormularioCli() #Retorna valores do forms.py
+    form = FormularioRemocaoColaboradores()
 
     if request.method == "POST" and form.validate_on_submit():
 
-        user = Pessoas.query.filter_by(email=form.email.data).first()
+        colaborador_instancia = Pessoas.query.filter_by(nome=form.colaborador.data).first()
+        operacao = colaborador_instancia.remove_pessoa()
 
-        if (user and bcrypt.check_password_hash(user.senha, form.senha.data)) and user.tipo != 'C':
+        if operacao:
 
-            session['email_colaborador'] = form.email.data
-            flash(f'Bem Vindo {user.nome}', 'success')
-            return redirect(request.args.get('next') or url_for('colaborador'))
+            flash(f'Coladorador removido com sucesso ', 'success')
+            return redirect(url_for('colaborador'))
 
         else:
 
-            flash(f'E-mail ou Senha incorretos', 'danger')
+            flash("Ocorreu um problema com a operação.", "danger")
 
-    return render_template('admin/login_colaborador.html', form=form)
+    return render_template("/admin/remove_colaborador.html", form=form)
 
-###############################################################################################
 
-##################### Rota Logout ####################################################
 
-@app.route("/logout_colaborador")
-def logout():
-    session.pop('email_colaborador')
-    return redirect(url_for('login_colaborador'))
 
 @app.route("/registra_fornecedor", methods=['GET', 'POST'])
 def registra_fornecedor():
@@ -167,6 +186,10 @@ def remove_fornecedor():
 
     if 'email_colaborador' not in session:
         flash(f'Olá, faça o login primeiro', 'info')
+        return redirect(url_for('login_colaborador'))
+
+    if Pessoas.query.filter_by(email=session['email_colaborador']).first().tipo != 'A':
+        flash(f'Olá, apenas administradores podem acessar essa página.', 'info')
         return redirect(url_for('login_colaborador'))
 
     form = FormularioRemocaoFornecedores()
@@ -226,17 +249,17 @@ def cadastro_produto():
 
     return render_template("/admin/cadastro_produto.html", form=form, insumos_quantidade=str(len(Insumos.lista_insumos())))
 
-# @app.route("/modifica_produto", methods=["GET", "POST"])
-# def modifica_produto():
-#
-#     if 'email_colaborador' not in session:
-#         flash(f'Olá, faça o login primeiro', 'info')
-#         return redirect(url_for('login_colaborador'))
-#
-#     if Pessoas.query.filter_by(email=session['email_colaborador']).first().tipo != 'A':
-#
-#         flash(f'Olá, apenas administradores podem acessar essa página.', 'info')
-#         return redirect(url_for('login_colaborador'))
+@app.route("/modifica_produto", methods=["GET", "POST"])
+def modifica_produto():
+
+    if 'email_colaborador' not in session:
+        flash(f'Olá, faça o login primeiro', 'info')
+        return redirect(url_for('login_colaborador'))
+
+    if Pessoas.query.filter_by(email=session['email_colaborador']).first().tipo != 'A':
+
+        flash(f'Olá, apenas administradores podem acessar essa página.', 'info')
+        return redirect(url_for('login_colaborador'))
 #
 #     form = CadastroProdutos()
 #     form_edicao = FormularioEdicaoProdutos()
@@ -327,6 +350,11 @@ def cadastro_insumo():
         flash(f'Olá, faça o login primeiro', 'info')
         return redirect(url_for('login_colaborador'))
 
+    if Pessoas.query.filter_by(email=session['email_colaborador']).first().tipo != 'A':
+
+        flash(f'Olá, apenas administradores podem acessar essa página.', 'info')
+        return redirect(url_for('login_colaborador'))
+
     form = CadastroInsumos()
 
     if request.method == "POST" and form.validate_on_submit():
@@ -382,6 +410,15 @@ def adiciona_insumo_estoque():
 
 @app.route("/historico_vendas")
 def historico_vendas():
+
+    if 'email_colaborador' not in session:
+        flash(f'Olá, faça o login primeiro', 'info')
+        return redirect(url_for('login_colaborador'))
+
+    if Pessoas.query.filter_by(email=session['email_colaborador']).first().tipo != 'A':
+
+        flash(f'Olá, apenas administradores podem acessar essa página.', 'info')
+        return redirect(url_for('login_colaborador'))
 
     return render_template('/admin/historico_de_vendas.html', lista_pedidos=Pedidos.query.all())
 

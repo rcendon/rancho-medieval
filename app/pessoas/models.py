@@ -43,7 +43,7 @@ class Pessoas(db.Model):
     cpf = db.Column(db.BigInteger, unique=True)
     tipo = db.Column(db.CHAR(1), nullable=False) # Três tipos: "C" para clientes ; "F" para funcionarios ; "A" para administradores
     senha = db.Column(db.VARCHAR(256), nullable=False)
-    endereco = db.relationship('Enderecos', secondary=enderecos, lazy='select', uselist=True)
+    endereco = db.relationship('Enderecos', secondary=enderecos, cascade="all, delete", lazy='select', uselist=True)
     pedidos = db.relationship('Pedidos', backref='pessoa', lazy='select', uselist=True)
 
     def __init__(self, nome, email, rg, cpf, tipo, senha):
@@ -86,6 +86,11 @@ class Pessoas(db.Model):
         return True
 
 
+    def remove_pessoa(self):
+
+        db.session.delete(self)
+        db.session.commit()
+        return True
 
 
     # @staticmethod
@@ -146,18 +151,6 @@ class Fornecedores(db.Model):
         return True
 
     def remove_fornecedor(self):
-
-        # for insumo in Preco_insumo.query.all():
-        #
-        #     if insumo.id_fornecedor == self.id:
-        #
-        #         self.preco_insumo.append(insumo)
-
-            # for endereco in Enderecos.query.join(enderecos_fornecedores).filter(enderecos_fornecedores.c.ene:
-            #
-            #     if endereco.fornecedor_id == self.id:
-            #
-            #         self.endereco.append(endereco)
 
         db.session.delete(self)
         db.session.commit()
