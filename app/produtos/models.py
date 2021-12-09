@@ -303,6 +303,8 @@ class Insumos(db.Model):
     @staticmethod
     def desassocia_fornecedor_a_insumo(insumo, fornecedor):
 
+        resultado = False
+
         if (
             Fornecedores.query.filter_by(nome=fornecedor).first() == None
             or
@@ -319,10 +321,17 @@ class Insumos(db.Model):
                     preco_insumo.id_fornecedor == Fornecedores.query.filter_by(nome=fornecedor).first().id
             ):
 
+                resultado = True
                 db.session.delete(preco_insumo)
-                db.session.commit()
 
-        return True
+        if resultado:
+
+            db.session.commit()
+            return True
+
+        else:
+
+            return False
 
     @staticmethod
     def altera_valor_insumo_por_fornecedor(dados_insumo:dict, fornecedor):

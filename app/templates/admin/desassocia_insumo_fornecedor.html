@@ -1,0 +1,38 @@
+{% extends "layoutsadmlog.html" %}
+
+{% block content %}
+
+    <!--DIV texto-->
+    <!--5 cinco Colunas para englobar o texto-->
+    <!--d-flex justify-content-center align-items-center... = Comandos do bootstrap-->
+    <div class="form-group col-md-5 d-flex justify-content-between align-items-baseline flex-column">
+        <h2>Gerenciamento de Insumos</h2>
+    </div>
+
+    <div class="form-group col-md-10">
+
+        <h1><font color="#ffffff">Desvinculação de insumo a um fornecedor</font></h1>
+
+        <form method="POST" enctype="multipart/form-data" >
+
+            {{ form.hidden_tag() }}
+
+            <div name="dados_principais" class="form-group col-md-6">
+
+                {{ form.insumo.label }}
+                {{ form.insumo(placeholder="Insumo", class="form-control") }}
+                {% for erro in form.insumo.errors %}
+                    <p>{{ erro }}</p>
+                {% endfor %}
+                {{ form.fornecedor.label }}
+                {{ form.fornecedor(placeholder="Fornecedor", class="form-control") }}
+                {% for erro in form.fornecedor.errors %}
+                    <p>{{ erro }}</p>
+                {% endfor %}
+                {{ form.submit }}
+
+            </div>
+        </form>
+    </div>
+
+{% endblock content %}

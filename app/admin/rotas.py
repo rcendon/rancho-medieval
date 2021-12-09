@@ -12,7 +12,7 @@ from ..pedidos.models import Pedidos
 from .forms import FormularioDadosPessoaisColaborador, LoginFormularioCli, FormularioRemocaoFornecedores
 from ..pessoas.forms import FormularioDadosFornecedor
 from ..produtos.forms import CadastroProdutos, CadastroInsumos, AdicionaProdutoEstoque, AdicionaInsumoEstoque
-from .forms import FormularioEdicaoProdutos, FormularioRemocaoColaboradores
+from .forms import FormularioEdicaoProdutos, FormularioRemocaoColaboradores, FormularioAssociaInsumoFornecedor, FormularioDesassociaInsumoFornecedor
 
 ##################### Rota Home ####################################################
 
@@ -403,6 +403,61 @@ def adiciona_insumo_estoque():
             flash("Ocorreu um problema com a operação. Por favor, certifique-se que os dados foram inseridos corretamente e de que há insumos o suficiente no estoque.", "danger")
 
     return render_template("/admin/adiciona_insumo_estoque.html", form=form)
+
+@app.route("/associa_insumo_a_fornecedor", methods=['GET', 'POST'])
+def associa_insumo_a_fornecedor():
+
+    if 'email_colaborador' not in session:
+        flash(f'Olá, faça o login primeiro', 'info')
+        return redirect(url_for('login_colaborador'))
+
+    if Pessoas.query.filter_by(email=session['email_colaborador']).first().tipo != 'A':
+
+        flash(f'Olá, apenas administradores podem acessar essa página.', 'info')
+        return redirect(url_for('login_colaborador'))
+
+    form = FormularioAssociaInsumoFornecedor()
+
+    if request.method == 'POST' and form.validate_on_submit():
+
+        dados_insumo = {'nome': form.insumo.data, 'valor': form.valor.data}
+
+        Insumos.associa_fornecedor_a_insumo(dados_insumo, form.fornecedor.data)
+
+        flash("Associação feita com sucesso.", "success")
+        return redirect(url_for('colaborador'))
+
+    return render_template("/admin/associa_insumo_fornecedor.html", form=form)
+
+@app.route("/desassocia_insumo_a_fornecedor", methods=['GET', 'POST'])
+def desassocia_insumo_a_fornecedor():
+
+    if 'email_colaborador' not in session:
+        flash(f'Olá, faça o login primeiro', 'info')
+        return redirect(url_for('login_colaborador'))
+
+    if Pessoas.query.filter_by(email=session['email_colaborador']).first().tipo != 'A':
+
+        flash(f'Olá, apenas administradores podem acessar essa página.', 'info')
+        return redirect(url_for('login_colaborador'))
+
+    form = FormularioDesassociaInsumoFornecedor()
+
+    if request.method == 'POST' and form.validate_on_submit():
+
+        resultado = Insumos.desassocia_fornecedor_a_insumo(form.insumo.data, form.fornecedor.data)
+
+        if resultado:
+
+            flash("Desassociação feita com sucesso.", "success")
+            return redirect(url_for('colaborador'))
+
+        else:
+
+            flash("Ocorreu um erro com a desassociação. Por favor, certifique-se que o fornecedor indicado está associado ao insumo selecionado.", "danger")
+            return redirect(url_for('colaborador'))
+
+    return render_template("/admin/desassocia_insumo_fornecedor.html", form=form)
 
 @app.route("/historico_vendas")
 def historico_vendas():

@@ -1,12 +1,12 @@
 ######## USUÁRIOS INTERNOS ########
 
-from wtforms.fields import StringField, PasswordField, IntegerField, SelectField, SubmitField, SelectMultipleField
+from wtforms.fields import StringField, PasswordField, IntegerField, SelectField, SubmitField, SelectMultipleField, FloatField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import length, InputRequired, NumberRange, ValidationError
 from flask_wtf import FlaskForm
 from app.pessoas.models import Pessoas, Fornecedores
 from app.pedidos.models import Pedidos
-from app.produtos.models import Produtos
+from app.produtos.models import Produtos, Insumos
 
 ######################### Classe Form Cadastro ##################################################
 
@@ -86,6 +86,29 @@ class FormularioEdicaoInsumos(FlaskForm):
             if pessoa_instancia.tipo == 'C':
                 raise ValidationError("Apenas usuários de colaboradores podem realizar o acesso por esta página.")
 
+class FormularioAssociaInsumoFornecedor(FlaskForm):
+
+    insumo = SelectField('Insumo', validators=[InputRequired()])
+    fornecedor = SelectField('Fornecedor', validators=[InputRequired()])
+    valor = FloatField('Valor', validators=[InputRequired(), NumberRange(min=0, max=300)])
+    submit = SubmitField('Registrar')
+
+    def __init__(self):
+        super(FormularioAssociaInsumoFornecedor, self).__init__()
+        self.fornecedor.choices = [(fornecedor.nome, fornecedor.nome) for fornecedor in Fornecedores.query.all()]
+        self.insumo.choices = [(insumo.nome, insumo.nome) for insumo in Insumos.query.all()]
+
+class FormularioDesassociaInsumoFornecedor(FlaskForm):
+
+    insumo = SelectField('Insumo', validators=[InputRequired()])
+    fornecedor = SelectField('Fornecedor', validators=[InputRequired()])
+    submit = SubmitField('Desvincular')
+
+    def __init__(self):
+        super(FormularioDesassociaInsumoFornecedor, self).__init__()
+        self.fornecedor.choices = [(fornecedor.nome, fornecedor.nome) for fornecedor in Fornecedores.query.all()]
+        self.insumo.choices = [(insumo.nome, insumo.nome) for insumo in Insumos.query.all()]
+
 class FormularioEdicaoProdutos(FlaskForm):
     produto = SelectField('Produto', default='-', choices=[(produto.nome, produto.nome) for produto in Produtos.query.all()], validators=[InputRequired()])
     submit = SubmitField('Buscar')
@@ -105,9 +128,14 @@ class FormularioEdicaoFornecedores(FlaskForm):
                 raise ValidationError("Apenas usuários de colaboradores podem realizar o acesso por esta página.")
 
 class FormularioRemocaoFornecedores(FlaskForm):
-    fornecedores = SelectMultipleField('Fornecedor', choices=[(fornecedor.nome, fornecedor.nome) for fornecedor in Fornecedores.query.all()], validators=[InputRequired()])
+    fornecedores = SelectMultipleField('Fornecedor', validators=[InputRequired()])
     submit = SubmitField("Remover")
+
+    def __init__(self):
+        super(FormularioRemocaoFornecedores, self).__init__()
+        self.fornecedor.choices = [(fornecedor.nome, fornecedor.nome) for fornecedor in Fornecedores.query.all()]
 
 class FormularioRemocaoColaboradores(FlaskForm):
     colaborador = SelectField('Colaborador', choices=[(colaborador.nome, colaborador.nome) for colaborador in Pessoas.query.filter_by(tipo='F').all()], validators=[InputRequired()])
     submit = SubmitField("Remover")
+
