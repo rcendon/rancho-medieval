@@ -14,16 +14,20 @@ class CadastroProdutos(FlaskForm):
     descricao = StringField('Descrição', validators=[InputRequired(), length(min=0, max=100)])
     imagem = FileField('Imagem')
     # mimetype = StringField('Mimetype', validators=[length(min=1, max=100)])
-    insumos_utilizados = SelectMultipleField('Insumos utilizados', choices=[(insumo, insumo) for insumo in Insumos.lista_insumos()], validators=[InputRequired()])
+    insumos_utilizados = SelectMultipleField('Insumos utilizados', validators=[InputRequired()])
     submit = SubmitField('Registrar')
 
     def validate_nome(self, nome):
         if Produtos.query.filter_by(nome=nome.data).first():
             return ValidationError("Já existe um produto cadastrado com esse nome.")
 
+    def __init__(self):
+        super(CadastroProdutos, self).__init__()
+        self.insumos_utilizados.choices = [(insumo, insumo) for insumo in Insumos.lista_insumos()]
+
 
 class AdicionaProdutoEstoque(FlaskForm):
-    produto_nome = SelectField('Produto', default='-', choices=[produto.nome for produto in Produtos.query.all()], validators=[InputRequired()])
+    produto_nome = SelectField('Produto', default='-', validators=[InputRequired()])
     quantidade = IntegerField('Quantidade', validators=[InputRequired(), NumberRange(min=1, max=100)])
     submit = SubmitField('Adicionar')
 
@@ -32,6 +36,10 @@ class AdicionaProdutoEstoque(FlaskForm):
         if quantidade.data <= 0:
 
             raise ValidationError("Por favor, insira uma quantidade maior que 0.")
+
+    def __init__(self):
+        super(AdicionaProdutoEstoque, self).__init__()
+        self.produto_nome.choices = [produto.nome for produto in Produtos.query.all()]
 
 
 class CadastroInsumos(FlaskForm):
@@ -47,7 +55,7 @@ class CadastroInsumos(FlaskForm):
             return ValidationError("Já existe um insumo cadastrado com esse nome.")
 
 class AdicionaInsumoEstoque(FlaskForm):
-    insumo_nome = SelectField('Insumo', default='-', choices=[insumo.nome for insumo in Insumos.query.all()], validators=[InputRequired()])
+    insumo_nome = SelectField('Insumo', default='-', validators=[InputRequired()])
     quantidade = IntegerField('Quantidade', validators=[InputRequired(), NumberRange(min=1, max=100)])
     submit = SubmitField('Adicionar')
 
@@ -56,3 +64,7 @@ class AdicionaInsumoEstoque(FlaskForm):
         if quantidade.data <= 0:
 
             raise ValidationError("Por favor, insira uma quantidade maior que 0.")
+
+    def __init__(self):
+        super(AdicionaInsumoEstoque, self).__init__()
+        self.insumo_nome.choices = [insumo.nome for insumo in Insumos.query.all()]
