@@ -246,7 +246,7 @@ i.menu-mobile
   /*########### Configurações lista temporária dos pessoas ###########################*/
 
 .lista-cli {
-    background: #ffffff;
+    background: #333131;
     opacity: 0.85;    
 }  
 
@@ -314,6 +314,7 @@ i.menu-mobile
 
 .opcoes {
     opacity: 1.0;
+    color: #ffffff;
 }
 
 .h2 {
