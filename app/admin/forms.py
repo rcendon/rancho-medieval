@@ -182,17 +182,22 @@ class FormularioRemocaoColaboradores(FlaskForm):
         super(FormularioRemocaoColaboradores, self).__init__()
         self.colaborador.choices = [(colaborador.nome, colaborador.nome) for colaborador in Pessoas.query.filter_by(tipo='F').all()]
 
-# class FormularioAlteraStatusPagamento:
-#     pedido_em_aberto:
-#     status_pagamento
-
 
 class FormularioAlteraStatusPedido(FlaskForm):
+    pedido_em_aberto = SelectField('Pedido', validators=[InputRequired()])
+    status = SelectField('Status', choices=['Em preparação', 'Preparado', 'A caminho', 'Entregue'])
+    submit = SubmitField('Registrar')
+
+    def __init__(self):
+        super(FormularioAlteraStatusPedido, self).__init__()
+        self.pedido_em_aberto.choices = [(pedido.id, pedido.id) for pedido in Pedidos.query.filter(Pedidos.status.in_(['Aguardando confirmação do pagamento', 'Em preparação', 'Preparado', 'A caminho'])).all() if pedido.status_pagamento == 'A']
+
+
+class FormularioAlteraStatusPedidoParaBanca(FlaskForm):
     pedido_em_aberto = SelectField('Pedido', validators=[InputRequired()])
     status = SelectField('Status', choices=['Em preparação', 'Preparado', 'A caminho', 'Entregue', 'Negado por falta de pagamento'])
     submit = SubmitField('Registrar')
 
-    def __init__(self, produto_id=None):
-        super(FormularioAlteraStatusPedido, self).__init__()
-        self.pedido_em_aberto.choices = [(pedido.id, pedido.id) for pedido in Pedidos.query.filter_by(status='Aguardando confirmação do pagamento' or 'Em preparação' or 'Preparado' or 'A caminho').all()]
-
+    def __init__(self):
+        super(FormularioAlteraStatusPedidoParaBanca, self).__init__()
+        self.pedido_em_aberto.choices = [(pedido.id, pedido.id) for pedido in Pedidos.query.filter(Pedidos.status.in_(['Aguardando confirmação do pagamento', 'Em preparação', 'Preparado', 'A caminho'])).all() if (pedido.status_pagamento == 'P' or pedido.status_pagamento == 'A')]

@@ -12,7 +12,7 @@ from ..pedidos.models import Pedidos
 from .forms import FormularioDadosPessoaisColaborador, LoginFormularioCli, FormularioRemocaoFornecedores
 from ..pessoas.forms import FormularioDadosFornecedor
 from ..produtos.forms import CadastroProdutos, CadastroInsumos, AdicionaProdutoEstoque, AdicionaInsumoEstoque
-from .forms import FormularioBuscaProdutos, FormularioEdicaoInsumosEmReceita, FormularioRemocaoColaboradores, FormularioAssociaInsumoFornecedor, FormularioDesassociaInsumoFornecedor, FormularioEdicaoProdutos, FormularioAlteraStatusPedido
+from .forms import FormularioBuscaProdutos, FormularioEdicaoInsumosEmReceita, FormularioRemocaoColaboradores, FormularioAssociaInsumoFornecedor, FormularioDesassociaInsumoFornecedor, FormularioEdicaoProdutos, FormularioAlteraStatusPedido, FormularioAlteraStatusPedidoParaBanca
 
 ##################### Rota Home ####################################################
 
@@ -548,6 +548,24 @@ def altera_status_pedido():
         pedido_instancia = Pedidos.query.filter_by(id=form.pedido_em_aberto.data).first()
         pedido_instancia.status = form.status.data
 
+        db.session.add(pedido_instancia)
+        db.session.commit()
+
+        flash("Pedido alterado com sucesso.", "success")
+        return redirect(url_for('login_colaborador'))
+
+    return render_template('/admin/altera_status_pedido.html', form=form, size_status='4', size_pedidos=str(len([(pedido.id, pedido.id) for pedido in Pedidos.query.filter(Pedidos.status.in_(['Aguardando confirmação do pagamento', 'Em preparação', 'Preparado', 'A caminho'])).all() if pedido.status_pagamento == 'A'])))
+
+@app.route('/altera_status_pedido_para_banca', methods=['GET', 'POST'])
+def altera_status_pedido_para_banca():
+
+    form = FormularioAlteraStatusPedidoParaBanca()
+
+    if request.method == 'POST' and form.validate_on_submit():
+
+        pedido_instancia = Pedidos.query.filter_by(id=form.pedido_em_aberto.data).first()
+        pedido_instancia.status = form.status.data
+
         if form.status.data == 'Negado por falta de pagamento':
 
             pedido_instancia.status_pagamento = 'N'
@@ -562,15 +580,4 @@ def altera_status_pedido():
         flash("Pedido alterado com sucesso.", "success")
         return redirect(url_for('login_colaborador'))
 
-    return render_template('/admin/altera_status_pedido.html', form=form, size_status='5', size_pedidos=str(len(Pedidos.query.filter_by(status='Aguardando confirmação do pagamento' or 'Em preparação' or 'Preparado' or 'A caminho').all())))
-
-
-
-
-
-
-
-
-
-
-
+    return render_template('/admin/altera_status_pedido.html', form=form, size_status='5', size_pedidos=str(len([(pedido.id, pedido.id) for pedido in Pedidos.query.filter(Pedidos.status.in_(['Aguardando confirmação do pagamento', 'Em preparação', 'Preparado', 'A caminho'])).all() if (pedido.status_pagamento == 'P' or pedido.status_pagamento == 'A')])))
