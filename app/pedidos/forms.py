@@ -6,7 +6,7 @@ from app.pessoas.models import Pessoas
 #https://flask.palletsprojects.com/en/2.0.x/patterns/wtforms/ - The Forms
 
 class dados_pagamento(FlaskForm):
-    opcoes_pagamento = RadioField(choices=['Cartão de crédito', 'Cartão de débito', 'Boleto', 'Pix'])
+    opcoes_pagamento = RadioField(choices=['Cartão de crédito', 'Cartão de débito', 'Dinheiro', 'Pix'])
     submit = SubmitField('Finalizar pedido')
 
 class valida_dados_cartao(FlaskForm):
