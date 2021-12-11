@@ -471,10 +471,19 @@ def associa_insumo_a_fornecedor():
 
         dados_insumo = {'nome': form.insumo.data, 'valor': form.valor.data}
 
-        Insumos.associa_fornecedor_a_insumo(dados_insumo, form.fornecedor.data)
 
-        flash("Associação feita com sucesso.", "success")
-        return redirect(url_for('colaborador'))
+
+        operacao = Insumos.associa_fornecedor_a_insumo(dados_insumo, form.fornecedor.data)
+
+        if operacao:
+
+            flash("Associação feita com sucesso.", "success")
+            return redirect(url_for('colaborador'))
+
+        else:
+
+            flash(f'Olá, esse insumo já possui associação com o fornecedor escolhido, por favor tente novamente', 'danger')
+            return redirect(url_for('associa_insumo_a_fornecedor'))
 
     return render_template("/admin/associa_insumo_fornecedor.html", form=form)
 
@@ -525,7 +534,7 @@ def historico_vendas():
 @app.route('/pedidos_em_aberto')
 def pedidos_em_aberto():
 
-    return render_template('/admin/pedidos_em_aberto.html', lista_pedidos=Pedidos.query.filter_by(status='Em preparação' or 'Preparado' or 'A caminho').all())
+    return render_template('/admin/pedidos_em_aberto.html', lista_pedidos=[(pedido.id, pedido.id) for pedido in Pedidos.query.filter(Pedidos.status.in_(['Aguardando confirmação do pagamento', 'Em preparação', 'Preparado', 'A caminho'])).all() if pedido.status_pagamento == 'A'])
 
 @app.route('/lista_insumos')
 def lista_insumos():

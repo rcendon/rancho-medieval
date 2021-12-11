@@ -1,0 +1,39 @@
+{% extends "layoutsadmlog.html" %}
+
+{% block content %}
+
+    <!--DIV texto-->
+    <!--5 cinco Colunas para englobar o texto-->
+    <!--d-flex justify-content-center align-items-center... = Comandos do bootstrap-->
+    <div class="form-group col-md-5 d-flex justify-content-between align-items-baseline flex-column">
+        <h2>Gerenciamento de pedidos</h2>
+    </div>
+
+    <div class="form-group col-md-10">
+
+        <h1><font color="#ffffff">Selecione o pedido e a nova situação deste</font></h1>
+
+        <form method="POST" enctype="multipart/form-data" >
+
+            {{ form.hidden_tag() }}
+
+            <div name="dados_principais" class="form-group col-md-6">
+
+                {{ form.pedido_em_aberto.label }}
+                {{ form.pedido_em_aberto(placeholder="Pedido", class="form-control", size=size_pedidos) }}
+                {% for erro in form.pedido_em_aberto.errors %}
+                    <p>{{ erro }}</p>
+                {% endfor %}
+                {{ form.status.label }}
+                {{ form.status(placeholder="Status", class="form-control", size=size_status) }}
+                {% for erro in form.status.errors %}
+                    <p>{{ erro }}</p>
+                {% endfor %}
+                {{ form.submit }}
+
+            </div>
+        </form>
+
+    </div>
+
+{% endblock content %}

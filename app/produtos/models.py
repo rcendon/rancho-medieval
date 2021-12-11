@@ -292,11 +292,16 @@ class Insumos(db.Model):
 
         insumo_instancia = Insumos.query.filter_by(nome=dados_insumo['nome']).first()
 
+
         if not fornecedor_instancia:
 
             return False
 
         if not insumo_instancia:
+
+            return False
+
+        if Preco_insumo.query.filter_by(id_fornecedor=fornecedor_instancia.id, id_insumo=insumo_instancia.id).first():
 
             return False
 
