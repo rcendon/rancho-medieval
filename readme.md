@@ -12,7 +12,7 @@ na disciplina OPE-1 do curso de ADS da Faculdade Impacta de Tecnologia.
 1. Daniel Avilla
 2. Daniel Cabral
 4. Rafael Cendon
-5. Vitor
+5. Vitor  Pereira
 
 ### Descrição
 
