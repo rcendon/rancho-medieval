@@ -3,8 +3,7 @@
 ---
 
 Trabalho realizado pelo Grupo AlphaSoftwares para fins de aprovação
-na disciplina OPE-1 do curso de ADS da Faculdade Impacta de Tecno-
-logia.
+na disciplina OPE-1 do curso de ADS da Faculdade Impacta de Tecnologia.
 
 ### Integrantes
 
@@ -12,7 +11,6 @@ logia.
 
 1. Daniel Avilla
 2. Daniel Cabral
-3. Midilane
 4. Rafael Cendon
 5. Vitor
 
@@ -31,25 +29,35 @@ seu ciclo de vida.
 Nesse esteio, o sistema foi implementado como um site (web app) in-  
 terativo.
 
-### Observações 
+O aplicativo foi dividido em duas seções, uma para os clientes e outra para os administradores e funcionários. 
 
-Não ensquecer de instalar os requerimentos:   
-pip install flask
-pip install flask_sqlalchemy
+Para acessar a aplicação online, na seção dos clientes, acesse o link https://rancho-medieval.herokuapp.com/ .
 
-pip install flask_migrate
+Para acessar a aplicação online, na seção dos funcinoários e administradores, acesse o link https://rancho-medieval.herokuapp.com/login_colaborador .
 
-pip install psycopg2
+### Instalação 
 
-pip install flask-wtf
-pip install flask-bcrypt
+Caso se busque instalar o aplicativo localmente, favor clonar esse repositório e 
 
-https://github.com/rcendon/rancho-medieval
+É pré-requisito para o funcionamento da aplicação que a linguagem de programação Python (versão 3.9) esteja instalada em seu computador e que se utilize um banco de dados PostgreSQL.
 
-#No Git Bash: https://git-scm.com/downloads
+Além disso, devem ser instalados os módulos indicados no arquivo "requirements.txt, a partir do seguinte comando no terminal":
 
-#git config --global user.name SEU_USUARIO
-#git config --global user.email SEU_EMAIL
-#git config --global github.token SEU_TOKEN
-#git clone https://github.com/rcendon/rancho-medieval.git .
+~~~
+
+pip install -r requirements.txt
+
+~~~
+
+Por fim, deve-se criar arquivo chamado ".env" dentro do diretório "app", contendo as seguintes informações:
+
+~~~
+
+DATABASE_URL=''
+
+SECRET_KEY=''
+
+~~~
+
+
 
