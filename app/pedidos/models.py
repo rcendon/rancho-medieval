@@ -82,7 +82,7 @@ class Pedidos(db.Model):
                 Pedidos.calcula_valor_total_do_carrinhho(carrinho),
                 'P',
                 'Aguardando confirmação do pagamento',
-                datetime.today().strftime("%d/%m/%Y %H:%M:%S")
+                datetime.today().strftime("%m/%d/%Y %H:%M:%S")
             )
 
         for item_carrinho in carrinho:
