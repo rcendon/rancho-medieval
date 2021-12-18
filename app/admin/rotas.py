@@ -534,7 +534,7 @@ def historico_vendas():
 @app.route('/pedidos_em_aberto')
 def pedidos_em_aberto():
 
-    return render_template('/admin/pedidos_em_aberto.html', lista_pedidos=[(pedido.id, pedido.id) for pedido in Pedidos.query.filter(Pedidos.status.in_(['Aguardando confirmação do pagamento', 'Em preparação', 'Preparado', 'A caminho'])).all() if pedido.status_pagamento == 'A'])
+    return render_template('/admin/pedidos_em_aberto.html', lista_pedidos=[pedido for pedido in Pedidos.query.filter(Pedidos.status.in_(['Aguardando confirmação do pagamento', 'Em preparação', 'Preparado', 'A caminho'])).all() if pedido.status_pagamento == 'A'])
 
 @app.route('/lista_insumos')
 def lista_insumos():

@@ -11,14 +11,12 @@
         <tr>
             <th>Número do Pedido</th>
             <th>Data</th>
-            <th>Pagamento</th>
             <th>Situação</th>
             <th>Valor total</th>
         </tr>
         <tr>
             <td>{{ pedido.id }}</td>
-            <td>{{ pedido.data }}</td>
-            <td>{{ pedido.status_pagamento }}</td>
+            <td>{{ pedido.data.strftime("%d/%m/%Y %H:%M:%S") }}</td>
             <td>{{ pedido.status }}</td>
             <td>{{ pedido.valor }}</td>
         </tr>

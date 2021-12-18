@@ -15,7 +15,7 @@
                 </tr>
                 <tr>
                     <td>{{ pedido.id }}</td>
-                    <td>{{ pedido.data }}</td>
+                    <td>{{ pedido.data.strftime("%d/%m/%Y %H:%M:%S") }}</td>
                     <td>{{ pedido.status }}</td>
                 </tr>
             </table>

@@ -18,7 +18,7 @@
                 </tr>
                 <tr>
                     <td>{{ pedido_pagamento.id }}</td>
-                    <td>{{ pedido_pagamento.data }}</td>
+                    <td>{{ pedido_pagamento.data.strftime("%d/%m/%Y %H:%M:%S") }}</td>
                     <td>{{ pedido_pagamento.status }}</td>
                     <td>
                     {% for produto in pedido_pagamento.produtos %}
@@ -57,7 +57,7 @@
                 </tr>
                 <tr>
                     <td>{{ pedido_consulta.id }}</td>
-                    <td>{{ pedido_consulta.data }}</td>
+                    <td>{{ pedido_consulta.data.strftime("%d/%m/%Y %H:%M:%S") }}</td>
                     <td>{{ pedido_consulta.status }}</td>
                     <td>
                         {% for produto in pedido_consulta.itens_do_pedido %}
