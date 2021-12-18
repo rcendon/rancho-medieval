@@ -52,7 +52,7 @@ class Pedidos(db.Model):
         valor_total_do_carrinho = 0
         for item in carrinho:
             valor_total_do_carrinho += item['valor_total_do_item']
-        return valor_total_do_carrinho
+        return round(valor_total_do_carrinho, 2)
 
     @staticmethod
     def gera_carrinho(cookies, lista_produtos_com_estoque):
