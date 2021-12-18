@@ -29,9 +29,10 @@
               <td>{{i.valor}}</td>
               <td>{{i.descricao}}</td>
               <td>
-                  <p name="{{ i.nome }}" id="{{ i.id }}" onload="define_quantidade_produto()"></p>
-                  <button style="display: inline" onclick="adiciona_produto_carrinho('{{ i.nome }}', '{{ i.id }}')">+</button>
-                  <button style="display: inline" onclick="remove_item_carrinho('{{ i.nome }}', '{{ i.id }}')">-</button>
+                  <p name="{{ i.nome }}" id="{{ i.id_produto }}" onload="define_quantidade_produto('{{ i.nome }}', '{{ i.id_produto }}')"></p>
+                  <button style="display: inline" onclick="adiciona_produto_carrinho('{{ i.nome }}', '{{ i.id_produto }}')">+</button>
+                  <button style="display: inline" onclick="remove_item_carrinho('{{ i.nome }}', '{{ i.id_produto }}')">-</button>
+                  <button style="display: inline" onclick="remove_item_carrinho('{{ i.nome }}', '{{ i.id_produto }}', 'eliminar')">Remover item</button>
               </td>
               <td>
                 <img src="/static/img/ham.jpg" alt="Imagem do Produto" id="container-da-imagem">

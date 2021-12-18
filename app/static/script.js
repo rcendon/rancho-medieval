@@ -76,7 +76,7 @@ function gera_formulario_para_insercao_de_dados_de_cartao() {
 /* ######## carrega a função quando do carregamento da página ####### */
 
 function adiciona_produto_carrinho(produto, produto_id) {
-    if (valor_cookie(produto) > 0) {
+    if (valor_cookie(produto) >= 0) {
         let valor = parseInt(valor_cookie(produto)) + 1;
         document.cookie = produto + "=" +  valor.toString() + ";";
     } else {
@@ -85,19 +85,30 @@ function adiciona_produto_carrinho(produto, produto_id) {
     define_quantidade_produto(produto, produto_id)
 }
 
-function remove_item_carrinho(produto, produto_id) {
-    if (valor_cookie(produto) > 1) {
-        let valor = parseInt(valor_cookie(produto)) - 1;
-        document.cookie = produto + "=" +  valor.toString() + ";";
-    } else {
-        document.cookie = produto + "=0; expires=Fri, 5 Oct 2018 14:28:00 GMT;";
-    }
+function remove_item_carrinho(produto, produto_id, eliminar) {
 
-    if (valor_cookie(produto) === undefined ) {
-        let produto_contador = document.getElementById(produto_id);
-        produto_contador.innerHTML = '0';
+    if (eliminar === "eliminar") {
+
+        document.cookie = produto + "=; expires=Thu, 05 Oct 2018 14:28:00 UTC;";
+        let produto_quantidade = document.getElementById(produto_id);
+        produto_quantidade.innerHTML = "0";
+
     } else {
-        define_quantidade_produto(produto, produto_id)
+
+        if (valor_cookie(produto) > 1) {
+            let valor = parseInt(valor_cookie(produto)) - 1;
+            document.cookie = produto + "=" + valor.toString() + ";";
+        } else {
+            document.cookie = produto + "=; expires=Thu, 01 Oct 2018 14:28:00 UTC;";
+        }
+
+        if (valor_cookie(produto) === undefined) {
+            let produto_contador = document.getElementById(produto_id);
+            produto_contador.innerHTML = '0';
+        } else {
+            define_quantidade_produto(produto, produto_id)
+        }
+
     }
 }
 
@@ -117,6 +128,16 @@ function define_quantidade_produto(produto_nome, produto_id) {
     produto.innerHTML = valor_cookie(produto_nome)
 }
 
+function remove_item_do_carrinho(produto_nome, produto_id) {
+
+    const cookie_decoded = decodeURIComponent(document.cookie);
+
+
+
+}
+
+
+// function apaga_carrinho():
 
 
 window.onload = gera_formulario_para_insercao_de_dados_de_cartao();

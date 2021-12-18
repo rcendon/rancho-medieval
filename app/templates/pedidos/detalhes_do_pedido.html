@@ -11,7 +11,6 @@
                 <tr>
                     <th>Pedido</th>
                     <th>Data</th>
-                    <th>Pagamento</th>
                     <th>Situação</th>
                     <th>Itens</th>
                     <th>Valores unitários</th>
@@ -20,7 +19,6 @@
                 <tr>
                     <td>{{ pedido_pagamento.id }}</td>
                     <td>{{ pedido_pagamento.data }}</td>
-                    <td>{{ pedido_pagamento.status_pagamento }}</td>
                     <td>{{ pedido_pagamento.status }}</td>
                     <td>
                     {% for produto in pedido_pagamento.produtos %}
@@ -52,7 +50,6 @@
                 <tr>
                     <th>Pedido</th>
                     <th>Data</th>
-                    <th>Pagamento</th>
                     <th>Situação</th>
                     <th>Itens</th>
                     <th>Valores unitários</th>
@@ -61,7 +58,6 @@
                 <tr>
                     <td>{{ pedido_consulta.id }}</td>
                     <td>{{ pedido_consulta.data }}</td>
-                    <td>{{ pedido_consulta.status_pagamento }}</td>
                     <td>{{ pedido_consulta.status }}</td>
                     <td>
                         {% for produto in pedido_consulta.itens_do_pedido %}
