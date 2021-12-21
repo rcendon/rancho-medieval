@@ -7,8 +7,8 @@
     {% for pedido in historico_pedidos %}
 
     <div>
-        <table>
-        <tr>
+        <table id="cabeçalho" width="1000" cellpaddinf="1" cellspacing="5">
+        <tr class="even">
             <th>Número do Pedido</th>
             <th>Data</th>
             <th>Situação</th>
@@ -23,8 +23,8 @@
         </table>
     </div>
         <div>
-            <table>
-                <tr>
+            <table id="linhas" width="1000" cellpadding="1" cellspacing="5">
+                <tr class="rover">
                     <th>Item</th>
                     <th>Valor unitário</th>
                     <th>Quantidade</th>

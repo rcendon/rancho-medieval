@@ -338,12 +338,49 @@ h1 {
     color: #ffffff;
 }
 
+tr.hover{
+    background-color: #363333;
+}
+
 td {
     color: #ffffff;
+    text-align: left;
+    padding: 1px;
+    border-bottom-width: 1px;
+    background-color: #1d1717;
+    opacity: 0.85;
+    
+}
+
+tr.even {
+    background-color: #363333;
+    
+}
+
+table#cabeçalho{
+    border: 1px solid #606060;
+}
+
+table#cabeçalho th, td{
+    border: 1px solid #606060;
+}
+
+tr{
+    background-color: #363333;
+    opacity: 0.85;
+
 }
 
 th {
     color: #ffffff;
+    padding: 1px;
+    text-transform: uppercase;
+    letter-spacing: 0.0em;
+    font-size: 80%;
+    border-bottom: 1px solid #111111;
+    border-top: 1px solid #999;
+    text-align: left;
+    border: 1px solid #606060;
 }
 
 p {
