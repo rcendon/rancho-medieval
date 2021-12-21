@@ -10,10 +10,21 @@ html, body /*Aplica em todo o HTML e BODY os comandos abaixo*/
 {
     font-family: Oswald, Arial; /*Define a fonte*/
     width: 100%; /*Altura da página*/
-    height: 100%; /*argura da página*/
+    height: 100%; /*Largura da página*/
 }
 
 /*###################################################################################*/
+body
+{
+    background-image: url("./img/Foto_Fundo.jpg"); 
+    background-repeat: no-repeat; /*não repdetir a imagem*/
+    background-size: cover; /*Imagem ocupar todo o espaço*/
+    background-attachment: fixed; /*Fixa a imagem*/
+    background-position: center;
+    width: 100%;
+    height: 100%; /*Independentemente do tamanho da tela a imagem ira ocupar 100%*/
+}
+
 
 /*#################### menu aside header ##############################################*/
 
@@ -124,15 +135,15 @@ section#principal
     background-attachment: fixed; /*Fixa a imagem*/
     background-position: center;
     width: 100%;
-    height: 100vh; /*Independentemente do tamanho da tela a imagem ira ocupar 100%*/
+    height: 100%; /*Independentemente do tamanho da tela a imagem ira ocupar 100%*/
 }
 
 /*Configurações do h2 da section principal do main - DIV Texto*/
 section#principal h2
 {
     font-size: 21px;
-    color: rgb(255, 255, 255);
-    padding-top: 4rem;
+    color: rgb(243, 177, 0, 1);
+    text-shadow: 3px 4px 2px #000;
 }
 
 section#principal div#arraste {
@@ -253,7 +264,8 @@ i.menu-mobile
  /*###################################################################################*/
 
 .form-group {
-    animation: go-back 1s
+    animation: go-back 1s;
+    color: #fff;
 }
 
 /*########### Animação go-back ###########################*/
@@ -273,10 +285,25 @@ h1 {
 
 td {
     color: #ffffff;
+    text-align: left;
+    padding: 1px;
+    border-bottom-width: 1px;
+    background-color: #1d1717;
+    opacity: 0.85;
+    border: 1px solid #606060;
 }
 
 th {
     color: #ffffff;
+    padding: 1px;
+    text-transform: uppercase;
+    letter-spacing: 0.0em;
+    font-size: 80%;
+    border-bottom: 1px solid #111111;
+    border-top: 1px solid #999;
+    text-align: left;
+    border: 1px solid #606060;
+    background-color: #222;
 }
 
 p {
