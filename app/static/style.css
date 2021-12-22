@@ -9,6 +9,7 @@ https://fonts.google.com/specimen/Oswald#standard-styles
 html, body /*Aplica em todo o HTML e BODY os comandos abaixo*/
 {
     font-family: Oswald, Arial; /*Define a fonte*/
+    color: white;
     width: 100%; /*Altura da página*/
     height: 100%; /*argura da página*/
 }
@@ -139,9 +140,9 @@ section#principal
 /*Configurações do h2 da section principal do main - DIV Texto*/
 section#principal h2
 {
-    font-size: 21px;
-    color: rgb(255, 255, 255);
-    padding-top: 4rem;
+    font-size: 23px;
+    color: rgb(243, 177, 0, 1);
+    text-shadow:3px 4px 2px rgb(3, 3, 3);
 }
 
 section#principal div#arraste {
@@ -324,6 +325,7 @@ i.menu-mobile
 .opcoes {
     opacity: 1.0;
     color: #ffffff;
+    text-shadow: 3px 4px 2px #000;
 }
 
 .h2 {
@@ -357,7 +359,7 @@ td {
     padding: 1px;
     border-bottom-width: 1px;
     background-color: #1d1717;
-    opacity: 0.85;
+    
     
 }
 
